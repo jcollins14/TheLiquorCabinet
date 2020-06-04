@@ -25,11 +25,11 @@ namespace TheLiquorCabinet.Models
         public Ingredient(string APItext)
         {
             JObject parse = JObject.Parse(APItext);
-            this.ID = parse.Property("idIngredient").ToObject<int>();
-            this.Name = parse.Property("strIngredient").ToObject<string>();
-            this.Description = parse.Property("strDescription").ToObject<string>();
-            this.Type = parse.Property("strType").ToObject<string>();
-            if (parse.Property("strAlcohol").ToObject<string>() == "Yes")
+            this.ID = (int)parse["ingredients"][0]["idIngredient"];
+            this.Name = (string)parse["ingredients"][0]["strIngredient"];
+            this.Description = (string)parse["ingredients"][0]["strDescription"];
+            this.Type = (string)parse["ingredients"][0]["strType"];
+            if ((string)parse["ingredients"][0]["strAlcohol"] == "Yes")
             {
                 this.IsAlcoholic = true;
             }
@@ -37,7 +37,7 @@ namespace TheLiquorCabinet.Models
             {
                 this.IsAlcoholic = false;
             }
-            this.ABV = parse.Property("strABV").ToObject<int>();
+            this.ABV = (int)parse["ingredients"][0]["strABV"];
         }
     }
 }
