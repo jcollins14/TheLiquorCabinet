@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 
 namespace TheLiquorCabinet.Models
 {
-    public class DrinksResponse
+    public class IngredViewModel
     {
-        public List<Drink> Drinks { get; set; }
     }
 }
