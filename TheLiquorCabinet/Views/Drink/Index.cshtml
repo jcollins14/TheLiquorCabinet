@@ -1,0 +1,16 @@
+﻿<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="Drink" asp-action="GetDrink">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label name="DrinkId" class="control-label">Drink Id</label>
+                <input type="text" name="DrinkId" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input asp-controller="Drink" asp-action="GetDrink"
+                       asp-route-drinkId="drinkId"
+                       type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
