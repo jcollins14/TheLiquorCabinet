@@ -37,7 +37,14 @@ namespace TheLiquorCabinet.Models
             {
                 this.IsAlcoholic = false;
             }
-            this.ABV = (int)parse["ingredients"][0]["strABV"];
+
+            //Null check because non-alcoholic ingredients don't have an ABV
+
+            if (!string.IsNullOrEmpty(parse["ingredients"][0]["strABV"].ToString()))
+            {
+                this.ABV = (int)parse["ingredients"][0]["strABV"];
+            }
+            
         }
     }
 }
