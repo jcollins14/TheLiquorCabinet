@@ -2,64 +2,67 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace TheLiquorCabinet.Models
 {
     public class Drink
     {
-        public string idDrink { get; set; }
-        public string strDrink { get; set; }
-        public object strDrinkAlternate { get; set; }
-        public object strDrinkES { get; set; }
-        public object strDrinkDE { get; set; }
-        public object strDrinkFR { get; set; }
-        public object strDrinkZHHANS { get; set; }
-        public object strDrinkZHHANT { get; set; }
-        public object strTags { get; set; }
-        public object strVideo { get; set; }
-        public string strCategory { get; set; }
-        public object strIBA { get; set; }
-        public string strAlcoholic { get; set; }
-        public string strGlass { get; set; }
-        public string strInstructions { get; set; }
-        public object strInstructionsES { get; set; }
-        public string strInstructionsDE { get; set; }
-        public object strInstructionsFR { get; set; }
-        public object strInstructionsZHHANS { get; set; }
-        public object strInstructionsZHHANT { get; set; }
-        public string strDrinkThumb { get; set; }
-        public string strIngredient1 { get; set; }
-        public string strIngredient2 { get; set; }
-        public string strIngredient3 { get; set; }
-        public object strIngredient4 { get; set; }
-        public object strIngredient5 { get; set; }
-        public object strIngredient6 { get; set; }
-        public object strIngredient7 { get; set; }
-        public object strIngredient8 { get; set; }
-        public object strIngredient9 { get; set; }
-        public object strIngredient10 { get; set; }
-        public object strIngredient11 { get; set; }
-        public object strIngredient12 { get; set; }
-        public object strIngredient13 { get; set; }
-        public object strIngredient14 { get; set; }
-        public object strIngredient15 { get; set; }
-        public string strMeasure1 { get; set; }
-        public object strMeasure2 { get; set; }
-        public object strMeasure3 { get; set; }
-        public object strMeasure4 { get; set; }
-        public object strMeasure5 { get; set; }
-        public object strMeasure6 { get; set; }
-        public object strMeasure7 { get; set; }
-        public object strMeasure8 { get; set; }
-        public object strMeasure9 { get; set; }
-        public object strMeasure10 { get; set; }
-        public object strMeasure11 { get; set; }
-        public object strMeasure12 { get; set; }
-        public object strMeasure13 { get; set; }
-        public object strMeasure14 { get; set; }
-        public object strMeasure15 { get; set; }
-        public string strCreativeCommonsConfirmed { get; set; }
-        public string dateModified { get; set; }
-    }
+        [JsonProperty("idDrink")]
+        public int ID { get; set; }
+        [JsonProperty("strDrink")]
+        public string Name { get; set; }
+        public string Category { get; set; }
+        public string IBA { get; set; }
+        [JsonProperty("strAlcoholic")]
+        public bool IsAlcoholic { get; set; }
+        public string Glass { get; set; }
+        [JsonProperty("strInstructions")]
+        public string Instructions { get; set; }
+        [JsonProperty("strDrinkThumb")]
+        public string PictureLink { get; set; }
+        public List<string> Ingredients { get; set; }
+        public List<string> Measurements { get; set; }
+        public string DateModified { get; set; }
 
+        public Drink(string APItext)
+        {
+            this.Ingredients = new List<string>();
+            this.Measurements = new List<string>();
+            JObject parse = JObject.Parse(APItext);
+            this.ID = (int)parse["drinks"][0]["idDrink"];
+            this.Name = (string)parse["drinks"][0]["strDrink"];
+            this.Category = (string)parse["drinks"][0]["strCategory"];
+            this.IBA = (string)parse["drinks"][0]["strIBA"];
+            if ((string)parse["drinks"][0]["strAlcoholic"] == "Alcoholic")
+            {
+                this.IsAlcoholic = true;
+            }
+            else
+            {
+                this.IsAlcoholic = false;
+            }
+            this.Glass = (string)parse["drinks"][0]["strGlass"];
+            this.Instructions = (string)parse["drinks"][0]["strInstructions"];
+            this.PictureLink = (string)parse["drinks"][0]["strDrinkThumb"];
+            for (int i = 0; i < 15; i++)
+            {
+                string ingredient = (string)parse["drinks"][0]["strIngredient" + i];
+                if (ingredient != null)
+                {
+                    this.Ingredients.Add(ingredient);
+                }
+            }
+            for (int i = 0; i < this.Ingredients.Count; i++)
+            {
+                string measure = (string)parse["drinks"][0]["strMeasure" + i];
+                if (measure != null)
+                {
+                    this.Measurements.Add(measure);
+                }
+            }
+            this.DateModified = (string)parse["drinks"][0]["dateModified"];
+        }
+    }
 }
