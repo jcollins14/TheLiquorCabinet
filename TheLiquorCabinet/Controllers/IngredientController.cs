@@ -20,9 +20,9 @@ namespace TheLiquorCabinet.Controllers
         public async Task<IActionResult> GetIngredient(string ingredientId)
         {
             var client = new HttpClient();
-            client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v1/");
+            client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/");
             //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
-            var response = await client.GetStringAsync("1/lookup.php?iid=" + ingredientId);
+            var response = await client.GetStringAsync("9973533/lookup.php?iid=" + ingredientId);
             Ingredient result = new Ingredient(response);
             return View(result);
         }
