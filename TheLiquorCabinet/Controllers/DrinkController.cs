@@ -16,11 +16,11 @@ namespace TheLiquorCabinet.Controllers
             await GetDrink(11007);
             return View();
         }
-        string apiKey = "1";
+        string apiKey = "9973533";
         public async Task<IActionResult> GetDrink(int drinkId)
         {
             var client = new HttpClient();
-            client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v1/");
+            client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/");
             //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
             var response = await client.GetStringAsync(apiKey + "/lookup.php?i=" + drinkId);
             Drink result = new Drink(response);
