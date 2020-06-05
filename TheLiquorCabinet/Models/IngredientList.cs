@@ -20,5 +20,9 @@ namespace TheLiquorCabinet.Models
                 this.IngredientNames.Add(item["strIngredient1"].ToString());
             }
         }
+
+        public IngredientList()
+        {
+        }
     }
 }
