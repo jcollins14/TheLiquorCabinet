@@ -11,7 +11,7 @@ namespace TheLiquorCabinet.Controllers
 {
     public class IngredientController : Controller
     {
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             //await GetIngredient("1");
             return View();
