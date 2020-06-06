@@ -25,10 +25,10 @@ namespace TheLiquorCabinet.Controllers
             return View(await GetAllIngredients());
         }
 
-        public async Task<IActionResult> DrinkListView(List<string> ingredients)
+        public async Task<IActionResult> DrinkListView(string[] ingredients)
         {
             //List<string> ingredients = new List<string> {  };
-            List<string> names = await SearchMultipleIngredients(ingredients);
+            List<string> names = await SearchMultipleIngredients(ingredients.ToList());
             List<Drink> drinks = await GetDrinks(names);
             return View(drinks);
         }

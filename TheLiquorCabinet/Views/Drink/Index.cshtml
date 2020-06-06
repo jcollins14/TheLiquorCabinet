@@ -21,19 +21,19 @@
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-controller="Drink" asp-action="GetDrinksByIngredient">
+        <form id="isearch" asp-controller="Drink" asp-action="DrinkListView">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <select class="js-example-basic-multiple" name="ingredients" multiple="multiple">
+            <select class="js-example-basic-multiple" name="ingredients" multiple="multiple" required="required">
                 @foreach (var ingredient in Model.IngredientNames)
                 {
                     <option value="@ingredient">@ingredient</option>
                 }
             </select>
+            <div class="form-group">
+                <input asp-controller="Drink" asp-action="DrinkListView"
+                       asp-route-ingredients="ingredients"
+                       type="submit" value="Submit" class="btn btn-primary" />
+            </div>
         </form>
-        <div class="form-group">
-            <input asp-controller="Drink" asp-action="GetDrinksByIngredient"
-                   asp-route-ingredients="ingredients"
-                   type="submit" value="Submit" class="btn btn-primary" />
-        </div>
     </div>
 </div>
