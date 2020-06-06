@@ -20,15 +20,15 @@ namespace TheLiquorCabinet.Controllers
             _client.BaseAddress = new Uri("https://www.thecocktaildb.com/");
            _client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            return View(await GetAllIngredients());
         }
 
-        public async Task<IActionResult> DrinkListView()
+        public async Task<IActionResult> DrinkListView(List<string> ingredients)
         {
-            List<string> ing = new List<string> { "dry vermouth", "gin" };
-            List<string> names = await SearchMultipleIngredients(ing);
+            //List<string> ingredients = new List<string> {  };
+            List<string> names = await SearchMultipleIngredients(ingredients);
             List<Drink> drinks = await GetDrinks(names);
             return View(drinks);
         }
@@ -76,6 +76,15 @@ namespace TheLiquorCabinet.Controllers
                 string drinkName = (string)parse["drinks"][i]["strDrink"];
                 result.Add(drinkName);
             }
+            return result;
+        }
+        public async Task<IngredientList> GetAllIngredients()
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/");
+            //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
+            var response = await client.GetStringAsync("9973533/list.php?i=list");
+            IngredientList result = new IngredientList(response);
             return result;
         }
     }

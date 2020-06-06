@@ -4,10 +4,9 @@
     <div class="col-md-4">
         <form asp-controller="Drink" asp-action="GetDrinksByIngredient">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="autocomplete" style="width:300px;">
-                <input type="text" id="ingredient" name="ingredients" placeholder="Country">
-            </div>
-            <script>autocomplete(document.getElementById("ingredient"), @Model.IngredientList.IngredientNames.ToArray())</script>
+            <select class="js-example-basic-multiple" name="Ingredients[]" multiple="multiple">
+                <option value="Vodka">Vodka</option>
+            </select>
         </form>
             <div class="form-group">
                 <input asp-controller="Drink" asp-action="GetDrinksByIngredient"
