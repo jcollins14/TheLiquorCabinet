@@ -20,14 +20,15 @@ namespace TheLiquorCabinet.Controllers
             _client.BaseAddress = new Uri("https://www.thecocktaildb.com/");
            _client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
         }
+        //Index passes list of ingredients to the view for use in the select2 search bar.
         public async Task<IActionResult> Index()
         {
             return View(await GetAllIngredients());
         }
 
+        //Select2 powered filter stores selection as an array which is passed from index view.
         public async Task<IActionResult> DrinkListView(string[] ingredients)
         {
-            //List<string> ingredients = new List<string> {  };
             List<string> names = await SearchMultipleIngredients(ingredients.ToList());
             List<Drink> drinks = await GetDrinks(names);
             return View(drinks);
@@ -78,6 +79,7 @@ namespace TheLiquorCabinet.Controllers
             }
             return result;
         }
+        //
         public async Task<IngredientList> GetAllIngredients()
         {
             var client = new HttpClient();
