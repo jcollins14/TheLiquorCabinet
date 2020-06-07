@@ -20,15 +20,16 @@ namespace TheLiquorCabinet.Controllers
             _client.BaseAddress = new Uri("https://www.thecocktaildb.com/");
            _client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
         }
-        public IActionResult Index()
+        //Index passes list of ingredients to the view for use in the select2 search bar.
+        public async Task<IActionResult> Index()
         {
-            return View();
+            return View(await GetAllIngredients());
         }
 
-        public async Task<IActionResult> DrinkListView()
+        //Select2 powered filter stores selection as an array which is passed from index view.
+        public async Task<IActionResult> DrinkListView(string[] ingredients)
         {
-            List<string> ing = new List<string> { "dry vermouth", "gin" };
-            List<string> names = await SearchMultipleIngredients(ing);
+            List<string> names = await SearchMultipleIngredients(ingredients.ToList());
             List<Drink> drinks = await GetDrinks(names);
             return View(drinks);
         }
@@ -76,6 +77,16 @@ namespace TheLiquorCabinet.Controllers
                 string drinkName = (string)parse["drinks"][i]["strDrink"];
                 result.Add(drinkName);
             }
+            return result;
+        }
+        //
+        public async Task<IngredientList> GetAllIngredients()
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/");
+            //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
+            var response = await client.GetStringAsync("9973533/list.php?i=list");
+            IngredientList result = new IngredientList(response);
             return result;
         }
     }
