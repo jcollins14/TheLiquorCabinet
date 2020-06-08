@@ -5,7 +5,7 @@
 }
 
 <h1>DrinkListView</h1>
-<p>Number of Results Found: </p>
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -44,7 +44,6 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-    
         <tr>
             <td>
                 <img src=@Html.DisplayFor(modelItem => item.PictureLink) height="50" width="50">
@@ -74,9 +73,9 @@
                 @Html.DisplayFor(modelItem => item.DateModified)
             </td>
             <td>
-                
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>
         </tr>
 }

@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheLiquorCabinet", "TheLiquorCabinet\TheLiquorCabinet.csproj", "{7E07ECB5-1E07-46F1-B0F0-A55E3074D375}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheLiquorCabinet.DataLayer", "TheLiquorCabinet.DataLayer\TheLiquorCabinet.DataLayer.csproj", "{A635A8BB-1896-4D89-A08D-DCAC07FA2CA9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheLiquorCabinet", "TheLiquorCabinet\TheLiquorCabinet.csproj", "{7E07ECB5-1E07-46F1-B0F0-A55E3074D375}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		{7E07ECB5-1E07-46F1-B0F0-A55E3074D375}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E07ECB5-1E07-46F1-B0F0-A55E3074D375}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E07ECB5-1E07-46F1-B0F0-A55E3074D375}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A635A8BB-1896-4D89-A08D-DCAC07FA2CA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A635A8BB-1896-4D89-A08D-DCAC07FA2CA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A635A8BB-1896-4D89-A08D-DCAC07FA2CA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A635A8BB-1896-4D89-A08D-DCAC07FA2CA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
