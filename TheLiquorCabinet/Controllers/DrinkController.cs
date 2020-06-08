@@ -89,5 +89,10 @@ namespace TheLiquorCabinet.Controllers
             IngredientList result = new IngredientList(response);
             return result;
         }
+
+        public IActionResult Details()
+        {
+            return View();
+        }
     }
 }
