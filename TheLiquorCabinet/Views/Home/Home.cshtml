@@ -1,7 +1,13 @@
-﻿
+﻿@model TheLiquorCabinet.Models.Drink
 @{
     ViewData["Title"] = "Home";
 }
 
-<h1>Home</h1>
+    <div class="text-center">
+        <h1 class="display-4">Welcome to The Liquor Cabinet</h1>
+
+        <img src="@Url.Content(Model.PictureLink)" width="350px"/>
+
+    </div>
+
 
