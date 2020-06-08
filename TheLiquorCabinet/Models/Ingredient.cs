@@ -22,6 +22,11 @@ namespace TheLiquorCabinet.Models
         [JsonProperty("strABV")]
         public int ABV { get; set; }
 
+        public Ingredient()
+        {
+
+        }
+
         public Ingredient(string APItext)
         {
             JObject parse = JObject.Parse(APItext);
