@@ -6,25 +6,14 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
-
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-
-    <PackageReference Include="Select2.js" Version="4.0.13" />
-
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\lib\select2\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\CocktailDbTools\CocktailDbTools.csproj" />
   </ItemGroup>
 
 </Project>
