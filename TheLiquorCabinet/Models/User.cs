@@ -9,14 +9,19 @@ namespace TheLiquorCabinet.Models
     public class User
     {
         public int ID { get; set; }
+        public int UserID { get; set; }
         public string Username { get; set; }
-        public List<Favorite> Favorites { get; set; }
-        public List<Ingredient> Cabinet { get; set; }
+        [NotMapped]
+        public ICollection<Favorite> Favorites { get; set; }
+        [NotMapped]
+        public ICollection<IngredOnHand> Cabinet { get; set; }
+        public User()
+        {
+
+        }
         public User(string username)
         {
             this.Username = username;
-            this.Favorites = new List<Favorite>();
-            this.Cabinet = new List<Ingredient>();
         }
     }
 }

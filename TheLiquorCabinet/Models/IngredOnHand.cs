@@ -5,12 +5,11 @@ using System.Threading.Tasks;
 
 namespace TheLiquorCabinet.Models
 {
-    public class Favorite
+    public class IngredOnHand
     {
         public int ID { get; set; }
         public int UserID { get; set; }
-        public int DrinkID { get; set; }
-
+        public int IngredID { get; set; }
         public User User { get; set; }
     }
 }
