@@ -6,7 +6,7 @@
     <div class="text-center">
         <h1 class="display-4">Welcome to The Liquor Cabinet</h1>
 
-        <img src="@Url.Content(Model.PictureLink)" width="350px"/>
+        <a asp-action="" asp-controller="Drink"><img src="@Url.Content(Model.PictureLink)" width="350px" /></a>
         <p>@Model.Name</p>
         <hr />
         
