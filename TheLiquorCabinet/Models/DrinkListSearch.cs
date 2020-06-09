@@ -4,11 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CocktailDbTools.Models
+namespace TheLiquorCabinet.Models
 {
     public class DrinkListSearch
     {
         public List<string> IdList { get; set; }
+
+        public DrinkListSearch()
+        {
+            this.IdList = new List<string>();
+        }
 
         public DrinkListSearch(string ApiText)
         {

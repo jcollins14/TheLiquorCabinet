@@ -23,8 +23,4 @@
     <Folder Include="wwwroot\lib\select2\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CocktailDbTools\CocktailDbTools.csproj" />
-  </ItemGroup>
-
 </Project>

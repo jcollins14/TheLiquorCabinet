@@ -31,34 +31,7 @@ namespace CocktailDbTools.Controllers
         {
             return View(await _context.DrinkDb.ToListAsync());
         }
-
-
-
-
-
-
-
-
-
-
-        public async Task<IActionResult> UpdateDb()
-        {
-            string[] categories = new string[] { "Alcoholic", "Non_Alcoholic", "Optional_Alcohol" };
-            DrinkListSearch searchResult;
-            foreach (string category in categories)
-            {
-                searchResult = new DrinkListSearch(await _client.GetStringAsync(ApiKey + "/filter.php?a=" + category));
-                foreach (var id in searchResult.IdList)
-                {
-                    if (!_context.DrinkDb.Any(e => e.idDrink == id))
-                    {
-                        DrinkResponse response = new DrinkResponse(await _client.GetStringAsync("/lookup.php?i=" + id));
-                        _context.Add(response.ResponseDrink);
-                    }
-                }
-            }
-            return RedirectToAction("Index");
-        }
+       
 
 
 
