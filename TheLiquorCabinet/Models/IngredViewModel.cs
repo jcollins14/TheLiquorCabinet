@@ -7,5 +7,6 @@ namespace TheLiquorCabinet.Models
 {
     public class IngredViewModel
     {
+        List<Ingredient> ingred { get; set; }
     }
 }

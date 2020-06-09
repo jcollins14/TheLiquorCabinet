@@ -15,6 +15,12 @@
 
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 
+    <PackageReference Include="Select2.js" Version="4.0.13" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\select2\" />
   </ItemGroup>
 
 </Project>
