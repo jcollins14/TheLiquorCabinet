@@ -82,14 +82,24 @@ namespace TheLiquorCabinet.Controllers
             return result;
         }
 
-        public async Task<List<string>> GetDrinksByCabinet(List<string> ings)
+        public List<string> GetDrinksByCabinet(List<string> ings)
         {
-            List<Drink> result = new List<Drink>();
-            foreach (var drink in _context.DrinkDb)
+            List<string> result = new List<string>();
+            foreach (DrinkDb drink in _context.DrinkDb)
             {
-                
+                List<string> drinkIngs = drink.GetDrinkDbIngredients();
+                if (CabinetContainsDrink(ings, drinkIngs))
+                {
+                    result.Add(drink.IdDrink);
+                }
             }
+            return result;
         }
+        public bool CabinetContainsDrink(List<string> cabinet, List<string> drinkIngs)
+        {
+            return !drinkIngs.Except(cabinet).Any();
+        }
+
         public async Task<IngredientList> GetAllIngredients()
         {
             var client = new HttpClient();
