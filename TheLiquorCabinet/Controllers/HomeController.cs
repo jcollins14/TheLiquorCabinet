@@ -14,16 +14,16 @@ namespace TheLiquorCabinet.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly LiquorDBContext _db;
         private readonly ILogger<HomeController> _logger;
-        private readonly CocktailDbContext _context;
         private HttpClient _client;
         public string ApiKey = "api/json/v2/9973533";
-        public HomeController(CocktailDbContext context)
+        public HomeController()
         {
+            _db = new LiquorDBContext();
             _client = new HttpClient();
             _client.BaseAddress = new Uri("https://www.thecocktaildb.com/");
             _client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
-            _context = context;
         }
 
         public IActionResult Index()
@@ -39,11 +39,11 @@ namespace TheLiquorCabinet.Controllers
                 searchResult = new DrinkListSearch(await _client.GetStringAsync(ApiKey + "/filter.php?a=" + category));
                 foreach (var id in searchResult.IdList)
                 {
-                    if (!_context.DrinkDb.Any(e => e.idDrink == id))
+                    if (!_db.DrinkDb.Any(e => e.idDrink == id))
                     {
                         DrinkResponse response = new DrinkResponse(await _client.GetStringAsync(ApiKey + "/lookup.php?i=" + id));
-                        _context.Add(response.ResponseDrink);
-                        _context.SaveChanges();
+                        _db.Add(response.ResponseDrink);
+                        _db.SaveChanges();
                     }
                 }
             }
@@ -51,6 +51,24 @@ namespace TheLiquorCabinet.Controllers
         }
         public IActionResult Privacy()
         {
+            return View();
+        }
+
+        public IActionResult TestDBContext()
+        {
+            User testU = new User()
+            {
+                Username = "John",
+                UserID = 4
+            };
+            Favorite testF = new Favorite()
+            {
+                UserID = 2,
+                DrinkID = 11009
+            };
+            _db.Users.Add(testU);
+            _db.Favorites.Add(testF);
+            _db.SaveChanges();
             return View();
         }
 
