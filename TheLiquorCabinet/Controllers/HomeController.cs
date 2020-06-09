@@ -16,6 +16,7 @@ namespace TheLiquorCabinet.Controllers
         public string ApiKey = "api/json/v2/9973533";
         private readonly ILogger<HomeController> _logger;
 
+
         
         public HomeController(ILogger<HomeController> logger)
         {
