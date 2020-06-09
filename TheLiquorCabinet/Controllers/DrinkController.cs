@@ -35,7 +35,12 @@ namespace TheLiquorCabinet.Controllers
             List<Drink> drinks = await GetDrinks(names);
             return View(drinks);
         }
-
+        public async Task<IActionResult> DrinksByCabinet(string[] ingredients)
+        {
+            List<string> names = GetDrinksByCabinet(ingredients.ToList());
+            List<Drink> drinks = await GetDrinks(names);
+            return View(drinks);
+        }
         public async Task<List<Drink>> GetDrinks(List<string> search)
         {
             List<Drink> drinks = new List<Drink>();
@@ -84,20 +89,22 @@ namespace TheLiquorCabinet.Controllers
 
         public List<string> GetDrinksByCabinet(List<string> ings)
         {
+            ings = ings.ConvertAll(e => e.ToLower());
             List<string> result = new List<string>();
             foreach (DrinkDb drink in _context.DrinkDb)
             {
                 List<string> drinkIngs = drink.GetDrinkDbIngredients();
                 if (CabinetContainsDrink(ings, drinkIngs))
                 {
-                    result.Add(drink.IdDrink);
+                    result.Add(drink.StrDrink);
                 }
             }
             return result;
         }
         public bool CabinetContainsDrink(List<string> cabinet, List<string> drinkIngs)
         {
-            return !drinkIngs.Except(cabinet).Any();
+            bool check = !drinkIngs.Except(cabinet).Any();
+            return check;
         }
 
         public async Task<IngredientList> GetAllIngredients()

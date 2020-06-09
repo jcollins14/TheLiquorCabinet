@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace TheLiquorCabinet.Models
@@ -29,6 +31,20 @@ namespace TheLiquorCabinet.Models
         public string StrIngredient14 { get; set; }
         public string StrIngredient15 { get; set; }
 
-    }
 
+        public List<string> GetDrinkDbIngredients()
+        {
+            List<string> ings = new List<string>(){
+            this.StrIngredient1, this.StrIngredient2, this.StrIngredient3,
+            this.StrIngredient4, this.StrIngredient5, this.StrIngredient6,
+            this.StrIngredient7, this.StrIngredient8, this.StrIngredient9,
+            this.StrIngredient10, this.StrIngredient11, this.StrIngredient12,
+            this.StrIngredient13, this.StrIngredient14, this.StrIngredient15
+        };
+            int firstEmpty = ings.IndexOf(null);
+            ings.RemoveRange(firstEmpty, ings.Count() - firstEmpty);
+            ings = ings.ConvertAll(e => e.ToLower());
+            return ings;
+        }
+    }
 }
