@@ -76,7 +76,7 @@ namespace TheLiquorCabinet.Controllers
             List<string> result = new List<string>();
             for (int i = 0; i < parse["drinks"].Count(); i++)
             {
-                string drinkName = (string)parse["drinks"][i]["strDrink"];
+                 string drinkName = (string)parse["drinks"][i]["strDrink"];
                 result.Add(drinkName);
             }
             return result;
@@ -85,7 +85,10 @@ namespace TheLiquorCabinet.Controllers
         public async Task<List<string>> GetDrinksByCabinet(List<string> ings)
         {
             List<Drink> result = new List<Drink>();
-            
+            foreach (var drink in _context.DrinkDb)
+            {
+                
+            }
         }
         public async Task<IngredientList> GetAllIngredients()
         {
