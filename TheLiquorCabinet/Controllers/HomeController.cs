@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using CocktailDbTools.Data;
-using CocktailDbTools.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TheLiquorCabinet.Models;
@@ -15,7 +13,6 @@ namespace TheLiquorCabinet.Controllers
     public class HomeController : Controller
     {
         private readonly LiquorDBContext _db;
-        private readonly ILogger<HomeController> _logger;
         private HttpClient _client;
         public string ApiKey = "api/json/v2/9973533";
         public HomeController()
@@ -29,25 +26,6 @@ namespace TheLiquorCabinet.Controllers
         public IActionResult Index()
         {
             return View();
-        }
-        public async Task<IActionResult> UpdateDb()
-        {
-            string[] categories = new string[] { "Alcoholic", "Non_Alcoholic", "Optional_Alcohol" };
-            DrinkListSearch searchResult;
-            foreach (string category in categories)
-            {
-                searchResult = new DrinkListSearch(await _client.GetStringAsync(ApiKey + "/filter.php?a=" + category));
-                foreach (var id in searchResult.IdList)
-                {
-                    if (!_db.DrinkDb.Any(e => e.idDrink == id))
-                    {
-                        DrinkResponse response = new DrinkResponse(await _client.GetStringAsync(ApiKey + "/lookup.php?i=" + id));
-                        _db.Add(response.ResponseDrink);
-                        _db.SaveChanges();
-                    }
-                }
-            }
-            return RedirectToAction("Index");
         }
         public IActionResult Privacy()
         {
