@@ -1,0 +1,125 @@
+﻿@model IEnumerable<CocktailDbTools.Models.DrinkDb>
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>View</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.strDrink)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.strIngredient1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.strIngredient2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.strIngredient3)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.strIngredient4)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.strIngredient5)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.strIngredient6)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.strIngredient7)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.strIngredient8)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.strIngredient9)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.strIngredient10)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.strIngredient11)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.strIngredient12)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.strIngredient13)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.strIngredient14)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.strIngredient15)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.strDrink)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.strIngredient1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.strIngredient2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.strIngredient3)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.strIngredient4)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.strIngredient5)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.strIngredient6)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.strIngredient7)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.strIngredient8)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.strIngredient9)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.strIngredient10)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.strIngredient11)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.strIngredient12)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.strIngredient13)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.strIngredient14)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.strIngredient15)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.idDrink">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.idDrink">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.idDrink">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

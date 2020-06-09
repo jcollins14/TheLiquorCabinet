@@ -7,16 +7,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CocktailDbTools.Data;
 using CocktailDbTools.Models;
+using System.Net.Http;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.Reflection;
 
 namespace CocktailDbTools.Controllers
 {
     public class DrinkDbsController : Controller
     {
         private readonly CocktailDbContext _context;
-
-        public DrinkDbsController(CocktailDbContext context)
+        private HttpClient _client;
+        public string ApiKey = "api/json/v2/9973533";
+        public DrinkDbsController()
         {
-            _context = context;
+            _client = new HttpClient();
+            _client.BaseAddress = new Uri("https://www.thecocktaildb.com/");
+            _client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
         }
 
         // GET: DrinkDbs
@@ -24,6 +31,55 @@ namespace CocktailDbTools.Controllers
         {
             return View(await _context.DrinkDb.ToListAsync());
         }
+
+
+
+
+
+
+
+
+
+
+        public async Task<IActionResult> UpdateDb()
+        {
+            string[] categories = new string[] { "Alcoholic", "Non_Alcoholic", "Optional_Alcohol" };
+            DrinkListSearch searchResult;
+            foreach (string category in categories)
+            {
+                searchResult = new DrinkListSearch(await _client.GetStringAsync(ApiKey + "/filter.php?a=" + category));
+                foreach (var id in searchResult.IdList)
+                {
+                    if (!_context.DrinkDb.Any(e => e.idDrink == id))
+                    {
+                        DrinkResponse response = new DrinkResponse(await _client.GetStringAsync("/lookup.php?i=" + id));
+                        _context.Add(response.ResponseDrink);
+                    }
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // GET: DrinkDbs/Details/5
         public async Task<IActionResult> Details(string id)
