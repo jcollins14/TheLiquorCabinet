@@ -55,9 +55,11 @@ namespace TheLiquorCabinet.Controllers
             return drinks;
         }
 
-        public async Task<IActionResult> GetDrink(int drinkId)
+        public async Task<IActionResult> GetDrink(int ID)
         {
-            var response = await _client.GetStringAsync("/lookup.php?i=" + drinkId);
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("https://www.thecocktaildb.com/");
+            var response = await _client.GetStringAsync(ApiKey + "/lookup.php?i=" + ID);
             Drink result = new Drink(response);
             return View(result);
         }

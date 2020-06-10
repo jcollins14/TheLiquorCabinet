@@ -23,4 +23,8 @@
     <Folder Include="wwwroot\lib\select2\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TheLiquorCabinet.DataLayer\TheLiquorCabinet.DataLayer.csproj" />
+  </ItemGroup>
+
 </Project>

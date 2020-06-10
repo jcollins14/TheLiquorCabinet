@@ -12,10 +12,12 @@ namespace TheLiquorCabinet.Controllers
 {
     public class HomeController : Controller
     {
+
         private readonly LiquorDBContext _db;
         private HttpClient _client;
         public string ApiKey = "api/json/v2/9973533";
         public HomeController()
+
         {
             _db = new LiquorDBContext();
             _client = new HttpClient();
@@ -27,6 +29,31 @@ namespace TheLiquorCabinet.Controllers
         {
             return View();
         }
+
+
+        public async Task<IActionResult> Home()
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/");
+            //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
+            var response = await client.GetStringAsync("1/random.php");
+            Drink result = new Drink(response);
+            
+            return View(result);
+        }
+
+        public async Task<IActionResult> HomeNA()
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/");
+            //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
+            var response = await client.GetStringAsync("1/random.php?a=Non-Alcoholic");
+            Drink result = new Drink(response);
+
+            return View(result);
+            
+        }
+
         public IActionResult Privacy()
         {
             return View();
