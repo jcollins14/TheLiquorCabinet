@@ -27,12 +27,12 @@ namespace TheLiquorCabinet.Controllers
         }
 
         [HttpPost]
-        public IActionResult RegisterUser(string username)
+        public IActionResult Register(string name)
         {
             int id = _db.Users.Max(e => e.UserID);
             id++;
-            User addition = new User(username, id);
-            _db.Users.Add(addition);
+            User register = new User(name, id);
+            _db.Users.Add(register);
             _db.SaveChanges();
             return RedirectToAction("Index", "Home");
         }
