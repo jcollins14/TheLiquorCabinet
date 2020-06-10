@@ -5,12 +5,14 @@
 
     <div class="text-center">
         <h1 class="display-4">Welcome to The Liquor Cabinet</h1>
-
+        
         <a asp-action="GetDrink" asp-controller="Drink" asp-route-id="@Model.ID"><img src="@Url.Content(Model.PictureLink)" width="350px" /></a>
         <p>@Model.Name</p>
+           
         <hr />
         
         <div class="row">
+            
             <div class="col-md-4">
                 <h2>Search By Ingredients</h2>
                 <p>
@@ -19,6 +21,7 @@
                 <a asp-action="" class="btn btn-primary"
                    asp-controller="Drink">Search By Ingredients</a>
             </div>
+            
             <div class="col-md-4">
                 <h2>Search for a Drink</h2>
                 <p>
