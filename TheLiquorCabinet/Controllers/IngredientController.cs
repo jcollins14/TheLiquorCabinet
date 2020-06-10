@@ -13,10 +13,8 @@ namespace TheLiquorCabinet.Controllers
     {
 
         IngredientList resultlist = new IngredientList();
-        public async Task<IActionResult> Index()
-
+        public IActionResult Index()
         {
-            //await GetIngredient("1");
             return RedirectToAction("GetAllIngredients");
         }
 

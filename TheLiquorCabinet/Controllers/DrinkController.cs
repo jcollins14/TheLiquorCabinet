@@ -14,11 +14,13 @@ namespace TheLiquorCabinet.Controllers
     {
         private HttpClient _client;
         public string ApiKey = "api/json/v2/9973533";
-        public DrinkController()
+        private readonly LiquorDBContext _context;
+        public DrinkController(LiquorDBContext context)
         {
             _client = new HttpClient();
             _client.BaseAddress = new Uri("https://www.thecocktaildb.com/");
            _client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
+            _context = context;
         }
         //Index passes list of ingredients to the view for use in the select2 search bar.
         public async Task<IActionResult> Index()
@@ -33,7 +35,12 @@ namespace TheLiquorCabinet.Controllers
             List<Drink> drinks = await GetDrinks(names);
             return View(drinks);
         }
-
+        public async Task<IActionResult> DrinksByCabinet(string[] ingredients)
+        {
+            List<string> names = GetDrinksByCabinet(ingredients.ToList());
+            List<Drink> drinks = await GetDrinks(names);
+            return View(drinks);
+        }
         public async Task<List<Drink>> GetDrinks(List<string> search)
         {
             List<Drink> drinks = new List<Drink>();
@@ -76,12 +83,32 @@ namespace TheLiquorCabinet.Controllers
             List<string> result = new List<string>();
             for (int i = 0; i < parse["drinks"].Count(); i++)
             {
-                string drinkName = (string)parse["drinks"][i]["strDrink"];
+                 string drinkName = (string)parse["drinks"][i]["strDrink"];
                 result.Add(drinkName);
             }
             return result;
         }
-        //
+
+        public List<string> GetDrinksByCabinet(List<string> ings)
+        {
+            ings = ings.ConvertAll(e => e.ToLower());
+            List<string> result = new List<string>();
+            foreach (DrinkDb drink in _context.DrinkDb)
+            {
+                List<string> drinkIngs = drink.GetDrinkDbIngredients();
+                if (CabinetContainsDrink(ings, drinkIngs))
+                {
+                    result.Add(drink.StrDrink);
+                }
+            }
+            return result;
+        }
+        public bool CabinetContainsDrink(List<string> cabinet, List<string> drinkIngs)
+        {
+            bool check = !drinkIngs.Except(cabinet).Any();
+            return check;
+        }
+
         public async Task<IngredientList> GetAllIngredients()
         {
             var client = new HttpClient();
