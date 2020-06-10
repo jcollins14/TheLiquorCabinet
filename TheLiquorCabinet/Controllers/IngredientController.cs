@@ -13,7 +13,7 @@ namespace TheLiquorCabinet.Controllers
     {
 
         IngredientList resultlist = new IngredientList();
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             await GetIngredient("9973533");
             return View();
@@ -41,26 +41,26 @@ namespace TheLiquorCabinet.Controllers
             return RedirectToAction("SearchByIngredient");
         }
 
-        public IActionResult SearchByIngredient()
-        {
+        //public IActionResult SearchByIngredient()
+        //{
 
-            return View();
-            client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/");
-            //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
-            var response = await client.GetStringAsync("9973533/lookup.php?iid=" + ingredientId);
-            Ingredient result = new Ingredient(response);
-            return View(result);
-        }
-        public async Task<IActionResult> GetAllIngredients()
-        {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/");
-            //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
-            var response = await client.GetStringAsync("9973533/list.php?i=list");
-            IngredientList result = new IngredientList (response);
-            resultlist = result;
-            return RedirectToAction("SearchByIngredient");
-        }
+        //    return View();
+        //    client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/");
+        //    //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
+        //    var response = await client.GetStringAsync("9973533/lookup.php?iid=" + ingredientId);
+        //    Ingredient result = new Ingredient(response);
+        //    return View(result);
+        //}
+        //public async Task<IActionResult> GetAllIngredients()
+        //{
+        //    var client = new HttpClient();
+        //    client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/");
+        //    //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
+        //    var response = await client.GetStringAsync("9973533/list.php?i=list");
+        //    IngredientList result = new IngredientList (response);
+        //    resultlist = result;
+        //    return RedirectToAction("SearchByIngredient");
+        //}
         public async Task<IngredientList> GetAll()
         {
             var client = new HttpClient();
