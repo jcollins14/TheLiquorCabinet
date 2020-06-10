@@ -1,4 +1,8 @@
-﻿<div class="row">
+﻿@using (Html.BeginForm())
+@model TheLiquorCabinet.Models.IngredientList
+
+
+<div class="row">
     <div class="col-md-4">
         <form asp-controller="Drink" asp-action="GetDrink">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -9,6 +13,45 @@
             <div class="form-group">
                 <input asp-controller="Drink" asp-action="GetDrink"
                        asp-route-drinkId="drinkId"
+                       type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form id="isearch" asp-controller="Drink" asp-action="DrinkListView">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <label name="DrinkId" class="control-label">Filter recipes by entering ingredients to include below: </label>
+            <select class="js-example-basic-multiple" name="ingredients" multiple="multiple" required="required">
+                @foreach (var ingredient in Model.IngredientNames)
+                {
+                    <option value="@ingredient">@ingredient</option>
+                }
+            </select>
+            <div class="form-group">
+                <input asp-controller="Drink" asp-action="DrinkListView"
+                       asp-route-ingredients="ingredients"
+                       type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form id="isearch" asp-controller="Drink" asp-action="DrinksByCabinet">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <label name="DrinkId" class="control-label">Search all drinks you can make with ingredients on hand: </label>
+            <select class="js-example-basic-multiple" name="ingredients" multiple="multiple" required="required">
+                @foreach (var ingredient in Model.IngredientNames)
+                {
+                    <option value="@ingredient">@ingredient</option>
+                }
+            </select>
+            <div class="form-group">
+                <input asp-controller="Drink" asp-action="DrinksByCabinet"
+                       asp-route-ingredients="ingredients"
                        type="submit" value="Submit" class="btn btn-primary" />
             </div>
         </form>

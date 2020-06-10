@@ -6,8 +6,16 @@
 
 <h1>GetDrink</h1>
 
-<div>
+<div class="text-center">
     <h4>@Model.Name</h4>
+    <img src="@Url.Content(Model.PictureLink)" width="350px" />
+    @*@for (int i = 0; i < Model.Ingredients.Count; i++)
+    {
+<p>
+       @Model.Measurements[i] @Model.Ingredients[i]
+</p>
+    }*@
+    <p>@Model.Instructions</p>
     <hr />
     <dl class="row">
     </dl>
@@ -16,3 +24,4 @@
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
     <a asp-action="Index">Back to List</a>
 </div>
+
