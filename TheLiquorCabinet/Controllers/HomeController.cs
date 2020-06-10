@@ -30,6 +30,21 @@ namespace TheLiquorCabinet.Controllers
             return View();
         }
 
+        [HttpPost]
+        public IActionResult DateConfirm(DateTime dateOfBirth)
+        {
+            var currentDate = DateTime.Now;
+            TimeSpan age = currentDate - dateOfBirth;
+            double years = age.TotalDays / 365.25;
+
+            if (years < 21.00)
+            {
+                return RedirectToAction("Privacy");
+            }
+            else
+            {
+                return RedirectToAction("Index", "Drink");
+            }
 
         public async Task<IActionResult> Home()
         {

@@ -23,5 +23,11 @@ namespace TheLiquorCabinet.Models
         {
             this.Username = username;
         }
+
+        public User(string username, int id)
+        {
+            this.UserID = id;
+            this.Username = username;
+        }
     }
 }
