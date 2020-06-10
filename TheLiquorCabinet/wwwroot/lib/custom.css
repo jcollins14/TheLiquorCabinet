@@ -51,6 +51,8 @@
     box-sizing: border-box;
 }
 
+
+
 html {
     font-family: sans-serif;
     line-height: 1.15;
@@ -82,6 +84,7 @@ hr {
     box-sizing: content-box;
     height: 0;
     overflow: visible;
+    
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -428,7 +431,7 @@ hr {
     margin-top: 1rem;
     margin-bottom: 1rem;
     border: 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 small,
@@ -4735,6 +4738,23 @@ input[type="button"].btn-block {
     list-style: none;
 }
 
+.nav-title {
+    color: white;
+    display: inline-block;
+    padding-top: 0.3125rem;
+    padding-bottom: 0.3125rem;
+    margin-right: 1rem;
+    font-size: 1.25rem;
+    line-height: inherit;
+    white-space: nowrap;
+}
+
+.nav-title:hover{
+    color : white;
+
+}
+
+
 .nav-link {
     display: block;
     padding: 0.5rem 1rem;
@@ -4860,6 +4880,7 @@ input[type="button"].btn-block {
     font-size: 1.25rem;
     line-height: inherit;
     white-space: nowrap;
+    color: white;
 }
 
     .navbar-brand:hover, .navbar-brand:focus {
@@ -5195,7 +5216,7 @@ input[type="button"].btn-block {
         display: none;
     }
 
-.navbar-light .navbar-brand {
+.navbar-light  {
     color: rgba(0, 0, 0, 0.9);
 }
 
@@ -5243,7 +5264,7 @@ input[type="button"].btn-block {
             color: rgba(0, 0, 0, 0.9);
         }
 
-.navbar-dark .navbar-brand {
+.navbar-dark  {
     color: #fff;
 }
 
@@ -7407,6 +7428,11 @@ a.close.disabled {
     background-color: #DF691A !important;
 }
 
+.bg-custom {
+    background-color:#4E5D6C;
+}
+
+
 a.bg-primary:hover, a.bg-primary:focus,
 button.bg-primary:hover,
 button.bg-primary:focus {
@@ -7475,6 +7501,7 @@ button.bg-light:focus {
 
 .bg-dark {
     background-color: #4E5D6C !important;
+    
 }
 
 a.bg-dark:hover, a.bg-dark:focus,
@@ -11505,6 +11532,9 @@ a.text-dark:hover, a.text-dark:focus {
 .text-white-50 {
     color: rgba(255, 255, 255, 0.5) !important;
 }
+.text-white-50:hover{
+    color : white !important;
+}
 
 .text-hide {
     font: 0/0 a;
@@ -11807,8 +11837,11 @@ label,
 .nav-tabs .nav-link:hover,
 .nav-pills .nav-link,
 .nav-pills .nav-link:hover {
-    color: #EBEBEB;
+    /*color: #EBEBEB;*/
+    color : white;
 }
+
+
 
     .nav-tabs .nav-link.disabled,
     .nav-pills .nav-link.disabled {

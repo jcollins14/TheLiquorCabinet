@@ -17,7 +17,6 @@ namespace TheLiquorCabinet.Controllers
         private HttpClient _client;
         public string ApiKey = "api/json/v2/9973533";
         public HomeController()
-
         {
             _db = new LiquorDBContext();
             _client = new HttpClient();
@@ -45,57 +44,57 @@ namespace TheLiquorCabinet.Controllers
             {
                 return RedirectToAction("Index", "Drink");
             }
-
-        public async Task<IActionResult> Home()
-        {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/");
-            //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
-            var response = await client.GetStringAsync("1/random.php");
-            Drink result = new Drink(response);
-            
-            return View(result);
         }
-
-        public async Task<IActionResult> HomeNA()
-        {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/");
-            //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
-            var response = await client.GetStringAsync("1/random.php?a=Non-Alcoholic");
-            Drink result = new Drink(response);
-
-            return View(result);
-            
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        public IActionResult TestDBContext()
-        {
-            User testU = new User()
+            public async Task<IActionResult> Home()
             {
-                Username = "John",
-                UserID = 4
-            };
-            Favorite testF = new Favorite()
-            {
-                UserID = 2,
-                DrinkID = 11009
-            };
-            _db.Users.Add(testU);
-            _db.Favorites.Add(testF);
-            _db.SaveChanges();
-            return View();
-        }
+                var client = new HttpClient();
+                client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/");
+                //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
+                var response = await client.GetStringAsync("1/random.php");
+                Drink result = new Drink(response);
 
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //public IActionResult Error()
-        //{
-        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //}
+                return View(result);
+            }
+
+            public async Task<IActionResult> HomeNA()
+            {
+                var client = new HttpClient();
+                client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/");
+                //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
+                var response = await client.GetStringAsync("1/random.php?a=Non-Alcoholic");
+                Drink result = new Drink(response);
+
+                return View(result);
+
+            }
+
+            public IActionResult Privacy()
+            {
+                return View();
+            }
+
+            public IActionResult TestDBContext()
+            {
+                User testU = new User()
+                {
+                    Username = "John",
+                    UserID = 4
+                };
+                Favorite testF = new Favorite()
+                {
+                    UserID = 2,
+                    DrinkID = 11009
+                };
+                _db.Users.Add(testU);
+                _db.Favorites.Add(testF);
+                _db.SaveChanges();
+                return View();
+            }
+
+            //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+            //public IActionResult Error()
+            //{
+            //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            //}
+        }
     }
-}
