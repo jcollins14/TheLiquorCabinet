@@ -135,10 +135,10 @@ namespace TheLiquorCabinet.Migrations
                 column: "UserID");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Cabinet_Users1_UserId",
+                name: "FK_Cabinet_Users_UserId",
                 table: "Cabinet",
                 column: "UserId",
-                principalTable: "Users1",
+                principalTable: "Users",
                 principalColumn: "UserID",
                 onDelete: ReferentialAction.Cascade);
 
@@ -149,14 +149,6 @@ namespace TheLiquorCabinet.Migrations
                 principalTable: "Users",
                 principalColumn: "ID",
                 onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Favorites1_Users1_UserId",
-                table: "Favorites1",
-                column: "UserId",
-                principalTable: "Users1",
-                principalColumn: "UserID",
-                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -303,9 +295,9 @@ namespace TheLiquorCabinet.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK__Favorites__UserI__4F7CD00D",
-                table: "Favorites1",
+                table: "Favorites",
                 column: "UserID",
-                principalTable: "Users1",
+                principalTable: "Users",
                 principalColumn: "UserID",
                 onDelete: ReferentialAction.Restrict);
         }

@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheLiquorCabinet;
 
 namespace TheLiquorCabinet.Migrations
 {
     [DbContext(typeof(LiquorDBContext))]
-    partial class LiquorDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200610230200_ThirdMig")]
+    partial class ThirdMig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,64 +58,6 @@ namespace TheLiquorCabinet.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Favorites1");
-                });
-
-            modelBuilder.Entity("TheLiquorCabinet.Models.DrinkDb", b =>
-                {
-                    b.Property<string>("IdDrink")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("StrDrink")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StrIngredient1")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StrIngredient10")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StrIngredient11")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StrIngredient12")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StrIngredient13")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StrIngredient14")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StrIngredient15")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StrIngredient2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StrIngredient3")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StrIngredient4")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StrIngredient5")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StrIngredient6")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StrIngredient7")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StrIngredient8")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StrIngredient9")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdDrink");
-
-                    b.ToTable("DrinkDb");
                 });
 
             modelBuilder.Entity("TheLiquorCabinet.Models.Favorite", b =>
