@@ -43,6 +43,7 @@ namespace TheLiquorCabinet
                     .HasForeignKey(d => d.UserID)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Cabinet__UserID__5441852A");
+                entity.ToTable("Cabinet");
             });
 
             modelBuilder.Entity<Favorite>(entity =>
@@ -57,7 +58,7 @@ namespace TheLiquorCabinet
                     .WithMany(p => p.Favorites)
                     .HasForeignKey(d => d.UserID)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Favorites__UserI__571DF1D5");
+                    .HasConstraintName("FK__Favorites__UserID__571DF1D5");
             });
 
             modelBuilder.Entity<Users>(entity =>
