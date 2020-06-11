@@ -12,14 +12,16 @@ namespace TheLiquorCabinet.Controllers
 {
     public class DrinkController : Controller
     {
-        private HttpClient _client;
-        public string ApiKey = "api/json/v2/9973533";
+        private readonly HttpClient _client;
+        private readonly string _apiKey = "api/json/v2/9973533";
         private readonly LiquorDBContext _context;
         public DrinkController(LiquorDBContext context)
         {
-            _client = new HttpClient();
-            _client.BaseAddress = new Uri("https://www.thecocktaildb.com/");
-           _client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
+            _client = new HttpClient
+            {
+                BaseAddress = new Uri("https://www.thecocktaildb.com/")
+            };
+            _client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
             _context = context;
         }
         //Index passes list of ingredients to the view for use in the select2 search bar.
@@ -48,7 +50,7 @@ namespace TheLiquorCabinet.Controllers
             {
                 string manipulate = drinkName;
                 manipulate = manipulate.Trim().ToLower().Replace(' ','_');
-                var response = await _client.GetStringAsync(ApiKey + "/search.php?s=" + manipulate);
+                var response = await _client.GetStringAsync(_apiKey + "/search.php?s=" + manipulate);
                 Drink result = new Drink(response);
                 drinks.Add(result);
             }
@@ -57,9 +59,7 @@ namespace TheLiquorCabinet.Controllers
 
         public async Task<IActionResult> GetDrink(int ID)
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("https://www.thecocktaildb.com/");
-            var response = await _client.GetStringAsync(ApiKey + "/lookup.php?i=" + ID);
+            var response = await _client.GetStringAsync(_apiKey + "/lookup.php?i=" + ID);
             Drink result = new Drink(response);
             return View(result);
         }
@@ -78,7 +78,7 @@ namespace TheLiquorCabinet.Controllers
                 endpoint += add;
             }
 
-            var response = await _client.GetStringAsync(ApiKey + "/filter.php?i=" + endpoint);
+            var response = await _client.GetStringAsync(_apiKey + "/filter.php?i=" + endpoint);
             JObject parse = JObject.Parse(response);
             List<string> result = new List<string>();
             for (int i = 0; i < parse["drinks"].Count(); i++)
@@ -114,8 +114,10 @@ namespace TheLiquorCabinet.Controllers
 
         public async Task<IngredientList> GetAllIngredients()
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/");
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/")
+            };
             //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
             var response = await client.GetStringAsync("9973533/list.php?i=list");
             IngredientList result = new IngredientList(response);
