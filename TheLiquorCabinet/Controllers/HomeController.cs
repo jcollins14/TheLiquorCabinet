@@ -55,6 +55,16 @@ namespace TheLiquorCabinet.Controllers
 
                 return View(result);
             }
+        public async Task<IActionResult> FeelingLucky()
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/");
+            //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
+            var response = await client.GetStringAsync("1/random.php");
+            Drink result = new Drink(response);
+
+            return RedirectToAction("GetDrink", "Drink", result);
+        }
 
             public async Task<IActionResult> HomeNA()
             {
