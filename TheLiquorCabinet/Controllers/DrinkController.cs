@@ -93,7 +93,10 @@ namespace TheLiquorCabinet.Controllers
         {
             ings = ings.ConvertAll(e => e.ToLower());
             List<string> result = new List<string>();
-            foreach (DrinkDb drink in _context.DrinkDb)
+            foreach (DrinkDb drink in 
+                //new List<DrinkDb>() { new DrinkDb() { IdDrink = "11011", StrIngredient1 = "Vodka", StrIngredient2 = "Lime Juice", StrIngredient3 = "Ginger Ale", StrDrink = "Moscow Mule"} }
+                _context.DrinkDb
+                )
             {
                 List<string> drinkIngs = drink.GetDrinkDbIngredients();
                 if (CabinetContainsDrink(ings, drinkIngs))
