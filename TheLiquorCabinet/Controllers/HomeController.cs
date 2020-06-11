@@ -38,11 +38,11 @@ namespace TheLiquorCabinet.Controllers
 
             if (years < 21.00)
             {
-                return RedirectToAction("Privacy");
+                return RedirectToAction("HomeNA");
             }
             else
             {
-                return RedirectToAction("Index", "Drink");
+                return RedirectToAction("Home");
             }
         }
             public async Task<IActionResult> Home()

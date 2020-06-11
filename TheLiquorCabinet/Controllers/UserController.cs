@@ -30,7 +30,14 @@ namespace TheLiquorCabinet.Controllers
         public IActionResult Register(string name)
         {
             int id = _db.Users.Max(e => e.UserID);
-            id++;
+            if (id == 0 || id == null)
+            {
+                id = 1;
+            }
+            else
+            {
+                id++;
+            }
             User register = new User(name, id);
             _db.Users.Add(register);
             _db.SaveChanges();
