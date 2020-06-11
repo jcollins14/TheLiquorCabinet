@@ -1,83 +1,28 @@
-﻿@model IEnumerable<TheLiquorCabinet.Models.Drink>
+﻿@model IList<TheLiquorCabinet.Models.Drink>
 
 @{
     ViewData["Title"] = "DrinkListView";
 }
 
-<h1>DrinkListView</h1>
+<h5>Results found: @Model.Count</h5>
+<br />
+<div class="text-center">
+    @foreach (var item in Model)
+    {
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <img src=@Html.DisplayFor(modelItem => item.PictureLink) height="100" width="100">
+            </div>
+            <div class="col-md-4">
+                <h5>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </h5>
+            </div>
+            <div class="col-md-4">
+                <a class="btn btn-primary" asp-action="GetDrink" asp-controller="Drink" asp-route-id="@item.ID">Details</a>
+            </div>
+        </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PictureLink)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IBA)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsAlcoholic)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Glass)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Instructions)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateModified)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <img src=@Html.DisplayFor(modelItem => item.PictureLink) height="50" width="50">
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IBA)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsAlcoholic)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Glass)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Instructions)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateModified)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    }
+</div>
