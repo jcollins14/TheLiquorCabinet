@@ -8,9 +8,9 @@ namespace TheLiquorCabinet.Models
 {
     public class User
     {
-        public int ID { get; set; }
         public int UserID { get; set; }
         public string Username { get; set; }
+        public DateTime Birthday { get; set; }
         [NotMapped]
         public ICollection<Favorite> Favorites { get; set; }
         [NotMapped]
