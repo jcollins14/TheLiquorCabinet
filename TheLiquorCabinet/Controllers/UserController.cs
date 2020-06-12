@@ -42,45 +42,47 @@ namespace TheLiquorCabinet.Controllers
             User register = new User(name);
             _context.Users.Add(register);
             _context.SaveChanges();
+            int userID = _context.Users.FirstOrDefault(n => n.Username == name).UserID;
+            HttpContext.Response.Cookies.Append("UserID", userID.ToString());
             return RedirectToAction("Index", "Home");
         }
-
-        //public async Task<IActionResult> Cabinet()
-        //{
-        //    List<Ingredient> cabinet = new List<Ingredient>();
-        //    if (SavedCookie.UserID != null)
-        //    {
-        //        List<IngredOnHand> savedCabinet = _context.Cabinet.Where(e => e.UserID == SavedCookie.UserID).ToList;
-        //        foreach (IngredOnHand item in savedCabinet)
-        //        {
-        //            var response = await _client.GetStringAsync(_apiKey + "/list.php?i=list" + item.IngredID);
-        //            Ingredient result = new Ingredient(response);
-        //            cabinet.Add(result);
-        //        }
-        //    }
-        //    return View(cabinet);
-        //}
-
-        //public async Task<IActionResult> AddToCabinet(List<string> ingredients)
-        //{
-        //    List<Ingredient> cabinetUpload = new List<Ingredient>();
-        //    foreach (string ingredient in ingredients)
-        //    {
-        //        var response = await _client.GetStringAsync(_apiKey + "/search.php?i=" + ingredient);
-        //        Ingredient result = new Ingredient(response);
-        //        cabinetUpload.Add(result);
-        //    }
-        //    foreach (Ingredient item in cabinetUpload)
-        //    {
-        //        IngredOnHand upload = new IngredOnHand()
-        //        {
-        //            UserID = SavedCookie.UserID,
-        //            IngredID = item.ID
-        //        };
-        //        _context.Cabinet.Add(upload);
-        //    }
-        //    _context.SaveChanges();
-        //    return RedirectToAction("Index", "Drink");
-        //}
+        public async Task<IActionResult> Cabinet()
+        {
+            var SavedCookie = HttpContext.Request.Cookies["UserID"];
+            List<Ingredient> cabinet = new List<Ingredient>();
+            if (SavedCookie != null)
+            {
+                List<IngredOnHand> savedCabinet = _context.Cabinet.Where(e => e.UserID == int.Parse(SavedCookie)).ToList();
+                foreach (IngredOnHand item in savedCabinet)
+                {
+                    var response = await _client.GetStringAsync(_apiKey + "/list.php?i=list" + item.IngredID);
+                    Ingredient result = new Ingredient(response);
+                    cabinet.Add(result);
+                }
+            }
+            return View(cabinet);
+        }
+        public async Task<IActionResult> AddToCabinet(List<string> ingredients)
+        {
+            var SavedCookie = HttpContext.Request.Cookies["UserID"];
+            List<Ingredient> cabinetUpload = new List<Ingredient>();
+            foreach (string ingredient in ingredients)
+            {
+                var response = await _client.GetStringAsync(_apiKey + "/search.php?i=" + ingredient);
+                Ingredient result = new Ingredient(response);
+                cabinetUpload.Add(result);
+            }
+            foreach (Ingredient item in cabinetUpload)
+            {
+                IngredOnHand upload = new IngredOnHand()
+                {
+                    UserID = int.Parse(SavedCookie),
+                    IngredID = item.ID
+                };
+                _context.Cabinet.Add(upload);
+            }
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Drink");
+        }
     }
 }
