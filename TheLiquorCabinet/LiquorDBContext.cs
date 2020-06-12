@@ -60,22 +60,69 @@ namespace TheLiquorCabinet
                     .HasForeignKey(d => d.UserID)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Favorites__UserID__571DF1D5");
+
+                entity.ToTable("Favorites");
             });
 
-            modelBuilder.Entity<Users>(entity =>
+            modelBuilder.Entity<User>(entity =>
             {
-                entity.HasKey(e => e.UserId)
+                entity.HasKey(e => e.UserID)
                     .HasName("PK__Users__1788CCACD3079F3C");
 
-                entity.Property(e => e.UserId)
+                entity.Property(e => e.UserID)
                     .HasColumnName("UserID")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .ValueGeneratedOnAdd();
+                    .ValueGeneratedOnAdd()
+                    .IsRequired();
 
                 entity.Property(e => e.Username).HasMaxLength(40);
+                
+                entity.Property(e => e.Birthday)
+                    .HasColumnName("Birthday")
+                    .IsRequired();
+
+                entity.ToTable("Users");
+            });
+
+            modelBuilder.Entity<DrinkDb>(entity =>
+            {
+                entity.Property(e => e.IdDrink)
+                    .HasColumnName("DrinkID")
+                    .IsRequired();
+
+                entity.Property(e => e.StrDrink)
+                    .HasColumnName("Drink_Name")
+                    .IsRequired();
+
+                entity.Property(e => e.StrIngredient1)
+                    .HasColumnName("Ingred1");
+                entity.Property(e => e.StrIngredient2)
+                    .HasColumnName("Ingred2");
+                entity.Property(e => e.StrIngredient3)
+                    .HasColumnName("Ingred3");
+                entity.Property(e => e.StrIngredient4)
+                    .HasColumnName("Ingred4");
+                entity.Property(e => e.StrIngredient5)
+                    .HasColumnName("Ingred5");
+                entity.Property(e => e.StrIngredient6)
+                    .HasColumnName("Ingred6");
+                entity.Property(e => e.StrIngredient7)
+                    .HasColumnName("Ingred7");
+                entity.Property(e => e.StrIngredient8)
+                    .HasColumnName("Ingred8");
+                entity.Property(e => e.StrIngredient9)
+                    .HasColumnName("Ingred9");
+                entity.Property(e => e.StrIngredient10)
+                    .HasColumnName("Ingred10");
+                entity.Property(e => e.StrIngredient11)
+                    .HasColumnName("Ingred11");
+                entity.Property(e => e.StrIngredient12)
+                    .HasColumnName("Ingred12");
+                entity.Property(e => e.StrIngredient13)
+                    .HasColumnName("Ingred13");
+                entity.Property(e => e.StrIngredient14)
+                    .HasColumnName("Ingred14");
+                entity.Property(e => e.StrIngredient15)
+                    .HasColumnName("Ingred15");
             });
 
             OnModelCreatingPartial(modelBuilder);

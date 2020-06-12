@@ -13,14 +13,16 @@ namespace TheLiquorCabinet.Controllers
     public class HomeController : Controller
     {
 
-        private readonly LiquorDBContext _db;
-        private HttpClient _client;
-        public string ApiKey = "api/json/v2/9973533";
+        private readonly LiquorDBContext _context;
+        private readonly HttpClient _client;
+        private readonly string _apiKey = "api/json/v2/9973533";
         public HomeController()
         {
-            _db = new LiquorDBContext();
-            _client = new HttpClient();
-            _client.BaseAddress = new Uri("https://www.thecocktaildb.com/");
+            _context = new LiquorDBContext();
+            _client = new HttpClient
+            {
+                BaseAddress = new Uri("https://www.thecocktaildb.com/")
+            };
             _client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
         }
 
@@ -47,25 +49,37 @@ namespace TheLiquorCabinet.Controllers
         }
             public async Task<IActionResult> Home()
             {
-                var client = new HttpClient();
-                client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/");
-                //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
-                var response = await client.GetStringAsync("1/random.php");
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/")
+            };
+            //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
+            var response = await client.GetStringAsync("1/random.php");
                 Drink result = new Drink(response);
 
                 return View(result);
             }
+        public async Task<IActionResult> FeelingLucky()
+        {
+            var response = await _client.GetStringAsync("1/random.php");
+            Drink result = new Drink(response);
+
+            return RedirectToAction("GetDrink", "Drink", result);
+        }
+
+        public async Task<Drink> GetRandomNADrink()
+        {
+            DrinkListSearch searchResult = new DrinkListSearch(await _client.GetStringAsync(_apiKey + "/filter.php?a=Non_Alcoholic"));
+            Random rng = new Random();
+            string id = searchResult.IdList[rng.Next(0, searchResult.IdList.Count)];
+            Drink result = new Drink(await _client.GetStringAsync(_apiKey + "/lookup.php?i=" + id));
+            return result; 
+        }
 
             public async Task<IActionResult> HomeNA()
             {
-                var client = new HttpClient();
-                client.BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/");
-                //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
-                var response = await client.GetStringAsync("1/random.php?a=Non-Alcoholic");
-                Drink result = new Drink(response);
-
+                Drink result = await GetRandomNADrink();
                 return View(result);
-
             }
 
             public IActionResult Privacy()
@@ -85,9 +99,9 @@ namespace TheLiquorCabinet.Controllers
                     UserID = 2,
                     DrinkID = 11009
                 };
-                _db.Users.Add(testU);
-                _db.Favorites.Add(testF);
-                _db.SaveChanges();
+                _context.Users.Add(testU);
+                _context.Favorites.Add(testF);
+                _context.SaveChanges();
                 return View();
             }
 
