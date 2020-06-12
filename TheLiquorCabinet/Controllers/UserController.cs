@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Runtime.Loader;
 using System.Threading.Tasks;
-using AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TheLiquorCabinet.Models;
@@ -46,42 +45,42 @@ namespace TheLiquorCabinet.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public async Task<IActionResult> Cabinet()
-        {
-            List<Ingredient> cabinet = new List<Ingredient>();
-            if (SavedCookie.UserID != null)
-            {
-                List<IngredOnHand> savedCabinet = _context.Cabinet.Where(e => e.UserID == SavedCookie.UserID).ToList;
-                foreach (IngredOnHand item in savedCabinet)
-                {
-                    var response = await _client.GetStringAsync(_apiKey + "/list.php?i=list" + item.IngredID);
-                    Ingredient result = new Ingredient(response);
-                    cabinet.Add(result);
-                }
-            }
-            return View(cabinet);
-        }
+        //public async Task<IActionResult> Cabinet()
+        //{
+        //    List<Ingredient> cabinet = new List<Ingredient>();
+        //    if (SavedCookie.UserID != null)
+        //    {
+        //        List<IngredOnHand> savedCabinet = _context.Cabinet.Where(e => e.UserID == SavedCookie.UserID).ToList;
+        //        foreach (IngredOnHand item in savedCabinet)
+        //        {
+        //            var response = await _client.GetStringAsync(_apiKey + "/list.php?i=list" + item.IngredID);
+        //            Ingredient result = new Ingredient(response);
+        //            cabinet.Add(result);
+        //        }
+        //    }
+        //    return View(cabinet);
+        //}
 
-        public async Task<IActionResult> AddToCabinet(List<string> ingredients)
-        {
-            List<Ingredient> cabinetUpload = new List<Ingredient>();
-            foreach (string ingredient in ingredients)
-            {
-                var response = await _client.GetStringAsync(_apiKey + "/search.php?i=" + ingredient);
-                Ingredient result = new Ingredient(response);
-                cabinetUpload.Add(result);
-            }
-            foreach (Ingredient item in cabinetUpload)
-            {
-                IngredOnHand upload = new IngredOnHand()
-                {
-                    UserID = SavedCookie.UserID,
-                    IngredID = item.ID
-                };
-                _context.Cabinet.Add(upload);
-            }
-            _context.SaveChanges();
-            return RedirectToAction("Index", "Drink");
-        }
+        //public async Task<IActionResult> AddToCabinet(List<string> ingredients)
+        //{
+        //    List<Ingredient> cabinetUpload = new List<Ingredient>();
+        //    foreach (string ingredient in ingredients)
+        //    {
+        //        var response = await _client.GetStringAsync(_apiKey + "/search.php?i=" + ingredient);
+        //        Ingredient result = new Ingredient(response);
+        //        cabinetUpload.Add(result);
+        //    }
+        //    foreach (Ingredient item in cabinetUpload)
+        //    {
+        //        IngredOnHand upload = new IngredOnHand()
+        //        {
+        //            UserID = SavedCookie.UserID,
+        //            IngredID = item.ID
+        //        };
+        //        _context.Cabinet.Add(upload);
+        //    }
+        //    _context.SaveChanges();
+        //    return RedirectToAction("Index", "Drink");
+        //}
     }
 }
