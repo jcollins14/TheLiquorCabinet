@@ -68,7 +68,15 @@ namespace TheLiquorCabinet.Controllers
 
             return RedirectToAction("GetDrink", "Drink", result);
         }
+        public async Task<IActionResult> FeelingLuckyNA()
+        {
+            DrinkListSearch searchResult = new DrinkListSearch(await _client.GetStringAsync(_apiKey + "/filter.php?a=Non_Alcoholic"));
+            Random rng = new Random();
+            string id = searchResult.IdList[rng.Next(0, searchResult.IdList.Count)];
+            Drink result = new Drink(await _client.GetStringAsync(_apiKey + "/lookup.php?i=" + id));
 
+            return RedirectToAction("GetDrink", "Drink", result);
+        }
         //Returns a random non-alcoholic drink from thecocktaildb.com
         public async Task<Drink> GetRandomNADrink()
         {
