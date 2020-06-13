@@ -22,16 +22,13 @@ namespace TheLiquorCabinet.Controllers
             _client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
                 _context = context;
             }
-            public IActionResult Index()
-        {
-            return View();
-        }
 
         public async Task<IActionResult> UpdateDb()
         {
             string[] categories = new string[] { "Alcoholic", "Non_Alcoholic", "Optional_Alcohol" };
             DrinkListSearch searchResult = new DrinkListSearch();
             List<DrinkDb> duplicate = new List<DrinkDb>();
+            //pull all drinks from thecocktaildb.com and check for duplicates in azure table
             foreach (string category in categories)
             {
                 searchResult = new DrinkListSearch(await _client.GetStringAsync(_apiKey + "/filter.php?a=" + category));
@@ -44,6 +41,7 @@ namespace TheLiquorCabinet.Controllers
                     }
                 }
             }
+            //add to azure sql database
             foreach (DrinkDb recipe in duplicate)
             {
                 _context.DrinkDb.Add(recipe);

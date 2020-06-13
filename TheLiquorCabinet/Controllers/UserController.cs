@@ -36,6 +36,7 @@ namespace TheLiquorCabinet.Controllers
             return View();
         }
 
+        //Send username to Azure along with DOB from cookie
         [HttpPost]
         public IActionResult Register(string name)
         {
@@ -46,25 +47,43 @@ namespace TheLiquorCabinet.Controllers
             HttpContext.Response.Cookies.Append("UserID", userID.ToString());
             return RedirectToAction("Index", "Home");
         }
+
+        //Pull all ingredients from API and put into list for Select2
+        public async Task<IngredientList> GetAllIngredients()
+        {
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/")
+            };
+            //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
+            var response = await client.GetStringAsync("9973533/list.php?i=list");
+            IngredientList result = new IngredientList(response);
+            return result;
+        }
+
         public async Task<IActionResult> Cabinet()
         {
-            var SavedCookie = HttpContext.Request.Cookies["UserID"];
-            List<Ingredient> cabinet = new List<Ingredient>();
-            if (SavedCookie != null)
+            var UserID = HttpContext.Request.Cookies["UserID"];
+            CabinetViewModel cabinetModel = new CabinetViewModel();
+            if (UserID != null)
             {
-                List<IngredOnHand> savedCabinet = _context.Cabinet.Where(e => e.UserID == int.Parse(SavedCookie)).ToList();
+                List<IngredOnHand> savedCabinet = _context.Cabinet.Where(e => e.UserID == int.Parse(UserID)).ToList();
                 foreach (IngredOnHand item in savedCabinet)
                 {
-                    var response = await _client.GetStringAsync(_apiKey + "/list.php?i=list" + item.IngredID);
-                    Ingredient result = new Ingredient(response);
-                    cabinet.Add(result);
+                    Ingredient response = new Ingredient(await _client.GetStringAsync(_apiKey + "/list.php?i=list" + item.IngredID));
+                    IngredOnHand result = new IngredOnHand()
+                    {
+                        UserID = UserID,
+                        IngredID = response.ID
+                    };
+                    cabinetModel.CabinetList.Add(result);
                 }
             }
-            return View(cabinet);
+            return View(cabinetModel);
         }
         public async Task<IActionResult> AddToCabinet(List<string> ingredients)
         {
-            var SavedCookie = HttpContext.Request.Cookies["UserID"];
+            var UserID = HttpContext.Request.Cookies["UserID"];
             List<Ingredient> cabinetUpload = new List<Ingredient>();
             foreach (string ingredient in ingredients)
             {
@@ -76,7 +95,7 @@ namespace TheLiquorCabinet.Controllers
             {
                 IngredOnHand upload = new IngredOnHand()
                 {
-                    UserID = int.Parse(SavedCookie),
+                    UserID = int.Parse(UserID),
                     IngredID = item.ID
                 };
                 _context.Cabinet.Add(upload);

@@ -59,14 +59,17 @@ namespace TheLiquorCabinet.Controllers
 
                 return View(result);
             }
+
+        //Returns a random drink from thecocktaildb.com
         public async Task<IActionResult> FeelingLucky()
         {
-            var response = await _client.GetStringAsync("1/random.php");
+            var response = await _client.GetStringAsync(_apiKey + "/random.php");
             Drink result = new Drink(response);
 
             return RedirectToAction("GetDrink", "Drink", result);
         }
 
+        //Returns a random non-alcoholic drink from thecocktaildb.com
         public async Task<Drink> GetRandomNADrink()
         {
             DrinkListSearch searchResult = new DrinkListSearch(await _client.GetStringAsync(_apiKey + "/filter.php?a=Non_Alcoholic"));
@@ -87,23 +90,24 @@ namespace TheLiquorCabinet.Controllers
                 return View();
             }
 
-            public IActionResult TestDBContext()
-            {
-                User testU = new User()
-                {
-                    Username = "John",
-                    UserID = 4
-                };
-                Favorite testF = new Favorite()
-                {
-                    UserID = 2,
-                    DrinkID = 11009
-                };
-                _context.Users.Add(testU);
-                _context.Favorites.Add(testF);
-                _context.SaveChanges();
-                return View();
-            }
+        //debug method
+            //public IActionResult TestDBContext()
+            //{
+            //    User testU = new User()
+            //    {
+            //        Username = "John",
+            //        UserID = 4
+            //    };
+            //    Favorite testF = new Favorite()
+            //    {
+            //        UserID = 2,
+            //        DrinkID = 11009
+            //    };
+            //    _context.Users.Add(testU);
+            //    _context.Favorites.Add(testF);
+            //    _context.SaveChanges();
+            //    return View();
+            //}
 
             //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
             //public IActionResult Error()
