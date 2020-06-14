@@ -47,21 +47,23 @@ namespace TheLiquorCabinet.Controllers
                 return RedirectToAction("Home");
             }
         }
-            public async Task<IActionResult> Home()
-            {
-            var client = new HttpClient
-            {
-                BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/")
-            };
-            //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
-            var response = await client.GetStringAsync("1/random.php");
-            Drink result = new Drink(response);
-            HomeViewModel hvm = new HomeViewModel();
-            hvm.IngredientList = await GetAllIngredients();
-            hvm.Drink = result;
+            
+        public async Task<IActionResult> Home()
+        {
+        var client = new HttpClient
+        {
+            BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/")
+        };
+        //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
+        var response = await client.GetStringAsync("1/random.php");
+        Drink result = new Drink(response);
+        HomeViewModel hvm = new HomeViewModel();
+        hvm.IngredientList = await GetAllIngredients();
+        hvm.Drink = result;
+        hvm.DrinkIndexViewModel.Drinks =  _context.DrinkDb.ToList();
 
-            return View(hvm);
-            }
+        return View(hvm);
+        }
 
         //Returns a random drink from thecocktaildb.com
         public async Task<IActionResult> FeelingLucky()
@@ -75,10 +77,12 @@ namespace TheLiquorCabinet.Controllers
 
         public async Task<IActionResult> HomeNA()
         {
+            
             Drink result = await GetRandomNADrink();
             HomeViewModel hvm = new HomeViewModel();
             hvm.IngredientList = await GetAllIngredients();
             hvm.Drink = result;
+            hvm.DrinkIndexViewModel.Drinks = _context.DrinkDb.ToList();
             return View(hvm);
         }
 

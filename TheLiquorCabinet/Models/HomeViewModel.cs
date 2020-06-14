@@ -9,5 +9,6 @@ namespace TheLiquorCabinet.Models
     {
         public Drink Drink { get; set; }
         public IngredientList IngredientList { get; set; }
+        public DrinkIndexViewModel DrinkIndexViewModel { get; set; }
     }
 }
