@@ -74,7 +74,9 @@ body {
     text-align: left;
     background-color: #2B3E50;
 }
-
+.select2Option{
+    color : black
+}
 [tabindex="-1"]:focus:not(:focus-visible) {
     outline: 0 !important;
 }

@@ -36,52 +36,74 @@ namespace TheLiquorCabinet.Controllers
             return View();
         }
 
+        //Send username to Azure along with DOB from cookie
         [HttpPost]
         public IActionResult Register(string name)
         {
             User register = new User(name);
             _context.Users.Add(register);
             _context.SaveChanges();
+            int userID = _context.Users.FirstOrDefault(n => n.Username == name).UserID;
+            HttpContext.Response.Cookies.Append("UserID", userID.ToString());
             return RedirectToAction("Index", "Home");
+        }
+
+        //Pull all ingredients from API and put into list for Select2
+        public async Task<IngredientList> GetAllIngredients()
+        {
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/")
+            };
+            //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
+            var response = await client.GetStringAsync("9973533/list.php?i=list");
+            IngredientList result = new IngredientList(response);
+            return result;
         }
 
         public async Task<IActionResult> Cabinet()
         {
-            List<Ingredient> cabinet = new List<Ingredient>();
-            //if (SavedCookie.UserID != null)
-            //{
-            //    List<IngredOnHand> savedCabinet = _context.Cabinet.Where(e => e.UserID == SavedCookie.UserID).ToList;
-            //    foreach (IngredOnHand item in savedCabinet)
-            //    {
-            //        var response = await _client.GetStringAsync(_apiKey + "/list.php?i=list" + item.IngredID);
-            //        Ingredient result = new Ingredient(response);
-            //        cabinet.Add(result);
-            //    }
-            //}
 
-            return View(cabinet);
+            int UserID = int.Parse(HttpContext.Request.Cookies["UserID"]);
+            CabinetViewModel cabinetModel = new CabinetViewModel();
+            if (UserID != 0)
+            {
+                List<IngredOnHand> savedCabinet = _context.Cabinet.Where(e => e.UserID == UserID).ToList();
+                foreach (IngredOnHand item in savedCabinet)
+                {
+                    Ingredient response = new Ingredient(await _client.GetStringAsync(_apiKey + "/list.php?i=list" + item.IngredID));
+                    IngredOnHand result = new IngredOnHand()
+                    {
+                        UserID = UserID,
+                        IngredID = response.ID
+                    };
+                    cabinetModel.CabinetList.Add(result);
+                }
+            }
+            return View(cabinetModel);
+        }
+        public async Task<IActionResult> AddToCabinet(List<string> ingredients)
+        {
+            var UserID = HttpContext.Request.Cookies["UserID"];
+            List<Ingredient> cabinetUpload = new List<Ingredient>();
+            foreach (string ingredient in ingredients)
+            {
+                var response = await _client.GetStringAsync(_apiKey + "/search.php?i=" + ingredient);
+                Ingredient result = new Ingredient(response);
+                cabinetUpload.Add(result);
+            }
+            foreach (Ingredient item in cabinetUpload)
+            {
+                IngredOnHand upload = new IngredOnHand()
+                {
+                    UserID = int.Parse(UserID),
+                    IngredID = item.ID
+                };
+                _context.Cabinet.Add(upload);
+            }
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Drink");
         }
 
-        //public async Task<IActionResult> AddToCabinet(List<string> ingredients)
-        //{
-        //    List<Ingredient> cabinetUpload = new List<Ingredient>();
-        //    foreach (string ingredient in ingredients)
-        //    {
-        //        var response = await _client.GetStringAsync(_apiKey + "/search.php?i=" + ingredient);
-        //        Ingredient result = new Ingredient(response);
-        //        cabinetUpload.Add(result);
-        //    }
-        //    foreach (Ingredient item in cabinetUpload)
-        //    {
-        //        IngredOnHand upload = new IngredOnHand()
-        //        {
-        //            UserID = SavedCookie.UserID,
-        //            IngredID = item.ID
-        //        };
-        //        _context.Cabinet.Add(upload);
-        //    }
-        //    _context.SaveChanges();
-        //    return RedirectToAction("Index", "Drink");
-        //}
     }
 }
