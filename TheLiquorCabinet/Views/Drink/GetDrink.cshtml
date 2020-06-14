@@ -10,21 +10,21 @@
     <hr />
     <div class="row">
         <div class="col-md-7">
-            <img src="@Url.Content(Model.PictureLink)" width="350px" />
+            <img src="@Url.Content(Model.PictureLink)" height="350 "width="350" />
         </div>
         <div class="col-md-5">
             <h3>Ingredients:</h3>
             @for (int i = 0; i < Model.Ingredients.Count; i++)
             {
-                <p>
-                    @if (i < Model.Measurements.Count)
-                    {
-                        @Model.Measurements[i]
-                    }
+        <p>
+            @if (i < Model.Measurements.Count)
+            {
+                @Model.Measurements[i]
+            }
+            
+            <a asp-action="IngredientInfo" asp-controller="Ingredient" asp-route-name="@Model.Ingredients[i]">@Model.Ingredients[i]</a>
 
-                    <a asp-action="IngredientInfo" asp-controller="Ingredient" asp-route-name="@Model.Ingredients[i]">@Model.Ingredients[i]</a>
-
-                </p>
+        </p>
             }
         </div>
     </div>
@@ -32,7 +32,7 @@
     <h3>Instructions:</h3>
     <p>@Model.Instructions</p>
 
-
+    </div>
     @*<hr />
     <dl class="row">
     </dl>
