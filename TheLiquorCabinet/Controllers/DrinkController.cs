@@ -63,6 +63,12 @@ namespace TheLiquorCabinet.Controllers
             Drink result = new Drink(response);
             return View(result);
         }
+        public async Task<IActionResult> GetDrinkByName(string name)
+        {
+            var response = await _client.GetStringAsync(_apiKey + "/search.php?s=" + name);
+            Drink result = new Drink(response);
+            return View(result);
+        }
 
         public async Task<List<string>> SearchMultipleIngredients(List<string> ingredients)
         {
