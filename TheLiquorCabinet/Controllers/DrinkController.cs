@@ -27,21 +27,23 @@ namespace TheLiquorCabinet.Controllers
         //Index passes list of ingredients to the view for use in the select2 search bar.
         public async Task<IActionResult> Index()
         {
-            return View(await GetAllIngredients());
+            DrinkIndexViewModel model = new DrinkIndexViewModel();
+            model.Ingredients = await GetAllIngredients();
+            model.Drinks = _context.DrinkDb.ToList();
+            return View(model);
         }
 
         //Select2 powered filter stores selection as an array which is passed from index view.
-        public async Task<IActionResult> DrinkListView(string[] ingredients)
+        public IActionResult DrinkListView(List<Drink> drinks)
         {
-            List<string> names = await SearchMultipleIngredients(ingredients.ToList());
-            List<Drink> drinks = await GetDrinks(names);
-            return View(drinks);
+            
+            return View("DrinkListView", drinks);
         }
         public async Task<IActionResult> DrinksByCabinet(string[] ingredients)
         {
             List<string> names = GetDrinksByCabinet(ingredients.ToList());
             List<Drink> drinks = await GetDrinks(names);
-            return View(drinks);
+            return View("DrinkListView", drinks);
         }
         public async Task<List<Drink>> GetDrinks(List<string> search)
         {
@@ -63,8 +65,21 @@ namespace TheLiquorCabinet.Controllers
             Drink result = new Drink(response);
             return View(result);
         }
-
-        public async Task<List<string>> SearchMultipleIngredients(List<string> ingredients)
+        public async Task<IActionResult> GetDrinkByName(string name)
+        {
+            var response = await _client.GetStringAsync(_apiKey + "/search.php?s=" + name.Trim().ToLower().Replace(' ', '_'));
+            Drink result = new Drink(response);
+            return View("GetDrink", result);
+        }
+        public async Task<IActionResult> DrinkNameSearch(string[] names)
+        {
+            if (names.Length == 1)
+            {
+                return await GetDrinkByName(names[0]);
+            }
+            return DrinkListView( await GetDrinks(names.ToList()));
+        }
+        public async Task<IActionResult> SearchMultipleIngredients(List<string> ingredients)
         {
             string endpoint = "";
             for (int i = 0; i < ingredients.Count; i++)
@@ -86,7 +101,8 @@ namespace TheLiquorCabinet.Controllers
                  string drinkName = (string)parse["drinks"][i]["strDrink"];
                 result.Add(drinkName);
             }
-            return result;
+            List<Drink> drinks = await GetDrinks(result);
+            return DrinkListView(drinks);
         }
 
         public List<string> GetDrinksByCabinet(List<string> ings)

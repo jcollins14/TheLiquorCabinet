@@ -1,37 +1,40 @@
 ﻿@using (Html.BeginForm())
-@model TheLiquorCabinet.Models.IngredientList
+@model TheLiquorCabinet.Models.DrinkIndexViewModel
 
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-controller="Drink" asp-action="GetDrink">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label name="DrinkId" class="control-label">Drink Id</label>
-                <input type="text" name="DrinkId" class="form-control" />
-            </div>
-            <div class="form-group">
-                <input asp-controller="Drink" asp-action="GetDrink"
-                       asp-route-drinkId="drinkId"
-                       type="submit" value="Submit" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="row">
+        <div class="col-md-4">
+            <form id="isearch" asp-controller="Drink" asp-action="DrinkNameSearch">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <label name="DrinkId" class="control-label">Select specific drinks by name: </label>
+                <select class="js-example-basic-multiple" name="names" multiple="multiple" required="required">
+                    @foreach (var drink in Model.Drinks)
+                    {
+                        <option value="@drink.StrDrink ">@drink.StrDrink</option>
+                    }
+                </select>
+                <div class="form-group">
+                    <input asp-controller="Drink" asp-action="DrinkNameSearch"
+                           asp-route-names="names"
+                           type="submit" value="Submit" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
 <div class="row">
     <div class="col-md-4">
-        <form id="isearch" asp-controller="Drink" asp-action="DrinkListView">
+        <form id="isearch" asp-controller="Drink" asp-action="SearchMultipleIngredients">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <label name="DrinkId" class="control-label">Filter recipes by entering ingredients to include below: </label>
             <select class="js-example-basic-multiple"  name="ingredients" multiple="multiple" required="required">
-                @foreach (var ingredient in Model.IngredientNames)
+                @foreach (var ingredient in Model.Ingredients.IngredientNames)
                 {
                     <option value="@ingredient">@ingredient</option>
                 }
             </select>
             <div class="form-group">
-                <input asp-controller="Drink" asp-action="DrinkListView"
+                <input asp-controller="Drink" asp-action="SearchMultipleIngredients"
                        asp-route-ingredients="ingredients"
                        type="submit" value="Submit" class="btn btn-primary" />
             </div>
@@ -44,7 +47,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <label name="DrinkId" class="control-label">Search all drinks you can make with ingredients on hand: </label>
             <select class="js-example-basic-multiple" name="ingredients" multiple="multiple" required="required">
-                @foreach (var ingredient in Model.IngredientNames)
+                @foreach (var ingredient in Model.Ingredients.IngredientNames)
                 {
                     <option value="@ingredient">@ingredient</option>
                 }
