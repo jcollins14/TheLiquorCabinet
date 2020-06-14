@@ -47,7 +47,7 @@
             <form id="isearch" asp-controller="Drink" asp-action="DrinkNameSearch">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <select class="js-example-basic-multiple" name="names" multiple="multiple" required="required">
-                    @foreach (var drink in Model.DrinkIndexViewModel.Drinks)
+                    @foreach (var drink in Model.DrinksIndex)
                     {
                         <option value="@drink.StrDrink ">@drink.StrDrink</option>
                     }

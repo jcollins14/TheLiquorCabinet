@@ -60,8 +60,7 @@ namespace TheLiquorCabinet.Controllers
         HomeViewModel hvm = new HomeViewModel();
         hvm.IngredientList = await GetAllIngredients();
         hvm.Drink = result;
-        hvm.DrinkIndexViewModel.Drinks =  _context.DrinkDb.ToList();
-
+        hvm.DrinksIndex = _context.DrinkDb.ToList();
         return View(hvm);
         }
 
@@ -82,7 +81,7 @@ namespace TheLiquorCabinet.Controllers
             HomeViewModel hvm = new HomeViewModel();
             hvm.IngredientList = await GetAllIngredients();
             hvm.Drink = result;
-            hvm.DrinkIndexViewModel.Drinks = _context.DrinkDb.ToList();
+            hvm.DrinksIndex = _context.DrinkDb.ToList();
             return View(hvm);
         }
 
@@ -111,6 +110,18 @@ namespace TheLiquorCabinet.Controllers
             return View();
         }
 
+        public async Task<IngredientList> GetAllIngredients()
+        {
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/")
+            };
+            //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
+            var response = await client.GetStringAsync("9973533/list.php?i=list");
+            IngredientList result = new IngredientList(response);
+            return result;
+        }
+
         //debug method
         //public IActionResult TestDBContext()
         //{
@@ -135,17 +146,7 @@ namespace TheLiquorCabinet.Controllers
         //{
         //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         //}
-        public async Task<IngredientList> GetAllIngredients()
-        {
-            var client = new HttpClient
-            {
-                BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/")
-            };
-            //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
-            var response = await client.GetStringAsync("9973533/list.php?i=list");
-            IngredientList result = new IngredientList(response);
-            return result;
-        }
+
     }
 
     
