@@ -79,7 +79,7 @@ namespace TheLiquorCabinet.Controllers
             HomeViewModel hvm = new HomeViewModel();
             hvm.IngredientList = await GetAllIngredients();
             hvm.Drink = result;
-            return View(result);
+            return View(hvm);
         }
 
         //Returns a random non-alcoholic drink from thecocktaildb.com

@@ -1,12 +1,15 @@
 ﻿@model TheLiquorCabinet.Models.HomeViewModel
 @{
     ViewData["Title"] = "Home";
+    <head>
+        <script src="https://kit.fontawesome.com/7a92ca4a68.js" crossorigin="anonymous"></script>
+    </head>
 }
 
     <div class="text-center">
         <h1 class="display-4">Welcome to The Liquor Cabinet</h1>
         
-        <a asp-action="GetDrink" asp-controller="Drink" asp-route-id="@Model.Drink.ID"><img src="@Url.Content(Model.Drink.PictureLink)" width="350px" /></a>
+        <a asp-action="GetDrink" asp-controller="Drink" asp-route-id="@Model.Drink.ID"><img src="@Url.Content(Model.Drink.PictureLink)" height="350 "width="350" /></a>
         <p>@Model.Drink.Name</p>
            
         <hr />
@@ -25,10 +28,9 @@
                             <option value="@ingredient">@ingredient</option>
                         }
                     </select>
-                    <input asp-action="DrinkListView" asp-controller="Drink" asp-route-ingredients="ingredients"
-                           class="btn btn-primary" type="submit" value="Search"/>
                     
-                       
+                        <button asp-action="DrinkListView" asp-controller="Drink" asp-route-ingredients="ingredients"
+                               class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>                     
                 </form>
             </div>
             
