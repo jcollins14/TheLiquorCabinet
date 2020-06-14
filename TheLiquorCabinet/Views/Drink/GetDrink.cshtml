@@ -22,7 +22,7 @@
                         @Model.Measurements[i]
                     }
 
-                    @Model.Ingredients[i]
+                    <a asp-action="IngredientInfo" asp-controller="Ingredient" asp-route-name="@Model.Ingredients[i]">@Model.Ingredients[i]</a>
 
                 </p>
             }
