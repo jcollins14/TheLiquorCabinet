@@ -15,7 +15,7 @@ namespace TheLiquorCabinet.Controllers
 
         private readonly LiquorDBContext _context;
         private readonly HttpClient _client;
-        //private readonly string _apiKey = "api/json/v2/9973533";
+        private readonly string _apiKey = "api/json/v2/9973533";
         public HomeController()
         {
             _context = new LiquorDBContext();

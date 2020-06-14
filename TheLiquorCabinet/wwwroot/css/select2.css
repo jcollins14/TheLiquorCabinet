@@ -203,7 +203,8 @@
     float: left;
     margin-right: 5px;
     margin-top: 5px;
-    padding: 0 5px; }
+    padding: 0 5px;
+  }
   .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
     color: #999;
     cursor: pointer;
@@ -473,9 +474,11 @@
   color: white; }
 
 .select2-container--classic .select2-results__group {
-  cursor: default;
-  display: block;
-  padding: 6px; }
+    cursor: default;
+    display: block;
+    padding: 6px;
+  
+}
 
 .select2-container--classic.select2-container--open .select2-dropdown {
   border-color: #5897fb; }

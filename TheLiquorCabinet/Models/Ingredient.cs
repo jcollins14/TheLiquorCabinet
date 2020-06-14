@@ -49,7 +49,7 @@ namespace TheLiquorCabinet.Models
             {
                 this.ABV = (int)parse["ingredients"][0]["strABV"];
             }
-            
+
         }
     }
 }
