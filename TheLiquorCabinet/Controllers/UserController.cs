@@ -63,6 +63,7 @@ namespace TheLiquorCabinet.Controllers
 
         public async Task<IActionResult> Cabinet()
         {
+
             int UserID = int.Parse(HttpContext.Request.Cookies["UserID"]);
             CabinetViewModel cabinetModel = new CabinetViewModel();
             if (UserID != 0)
@@ -103,5 +104,6 @@ namespace TheLiquorCabinet.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index", "Drink");
         }
+
     }
 }

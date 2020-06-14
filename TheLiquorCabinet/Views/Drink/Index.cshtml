@@ -24,7 +24,7 @@
         <form id="isearch" asp-controller="Drink" asp-action="DrinkListView">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <label name="DrinkId" class="control-label">Filter recipes by entering ingredients to include below: </label>
-            <select class="js-example-basic-multiple" name="ingredients" multiple="multiple" required="required">
+            <select class="js-example-basic-multiple"  name="ingredients" multiple="multiple" required="required">
                 @foreach (var ingredient in Model.IngredientNames)
                 {
                     <option value="@ingredient">@ingredient</option>
