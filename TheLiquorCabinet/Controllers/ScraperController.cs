@@ -34,7 +34,7 @@ namespace TheLiquorCabinet.Controllers
                 searchResult = new DrinkListSearch(await _client.GetStringAsync(_apiKey + "/filter.php?a=" + category));
                 foreach (var id in searchResult.IdList)
                 {
-                    if (!_context.DrinkDb.Any(e => e.IdDrink.Contains(id)))
+                    if (!_context.DrinkDb.Any(e => e.IdDrink.ToString().Contains(id)))
                     {
                         DrinkResponse response = new DrinkResponse(await _client.GetStringAsync(_apiKey + "/lookup.php?i=" + id));
                         duplicate.Add(response.ResponseDrink);
