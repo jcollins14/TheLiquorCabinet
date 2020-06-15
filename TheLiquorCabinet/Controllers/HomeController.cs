@@ -77,7 +77,7 @@ namespace TheLiquorCabinet.Controllers
         public async Task<IActionResult> HomeNA()
         {
             
-            Drink result = await GetRandomNADrink();
+            Drink result = await GetRandomNADrink();           
             HomeViewModel hvm = new HomeViewModel();
             hvm.IngredientList = await GetAllIngredients();
             hvm.Drink = result;
@@ -94,6 +94,7 @@ namespace TheLiquorCabinet.Controllers
             Drink result = new Drink(await _client.GetStringAsync(_apiKey + "/lookup.php?i=" + id));
             return result;
         }
+        
 
         public async Task<IActionResult> FeelingLuckyNA()
         {
