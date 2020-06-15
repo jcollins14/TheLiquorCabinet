@@ -1,0 +1,26 @@
+﻿@model TheLiquorCabinet.Models.Ingredient
+
+@{
+    ViewData["Title"] = "GetDrink";
+}
+
+    <div class="text-center">
+        <h1>@Model.Name</h1>
+
+        <div>
+            <img src="@Url.Content("https://www.thecocktaildb.com/images/ingredients/" + Model.Name.ToLower() + ".png")" height="300" width="300"/>
+            @if (@Model.Description != null)
+            {
+            <h4>Ingredient Description:</h4>
+            <p>@Model.Description</p>    
+            }        
+            <dl class="row">
+            </dl>
+        </div>
+        
+
+        <a href='javascript:history.go(-1)'>Back to Drink</a>
+            
+       
+    </div>
+

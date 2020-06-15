@@ -2,21 +2,20 @@
     ViewData["Title"] = "Home Page";
 }
 
-    <div class="text-center">
-        <h1 class="display-4">Welcome to The Liquor Cabinet</h1>
 
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to The Liquor Cabinet</h1>
+
+    <form asp-controller="Home" asp-action="DateConfirm">
         <div class="jumbotron">
             <h2>Must be 21 years of Age or Older to Use the Full Site</h2>
             <p>Please enter your date of birth:</p>
-            <input type="date" id="dateOfBirth" name="dateOfBirth">
-            <button type="submit">Enter</button>
+
+            <input type="date" id="dateOfBirth" name="dateOfBirth" value="2020-06-26">
+            <button type="submit" class="btn btn-primary">Enter</button>
+            <br />
             <p>If under 21, you will be redirected to Non-Alchoholic drinks</p>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-                <div class="form-group">
-                    <input asp-controller="Home" asp-action="UpdateDb" type="submit" value="Submit" class="btn btn-primary" />
-                </div>
-        </div>
-    </div>
+    </form>
+</div>

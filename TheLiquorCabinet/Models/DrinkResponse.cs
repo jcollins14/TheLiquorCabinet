@@ -16,7 +16,7 @@ namespace TheLiquorCabinet.Models
             {
                 this.ResponseDrink = (new DrinkDb
                 {
-                    IdDrink = (string)item["idDrink"],
+                    IdDrink = (int)item["idDrink"],
                     StrDrink = (string)item["strDrink"],
                     StrIngredient1 = (string)item["strIngredient1"],
                     StrIngredient2 = (string)item["strIngredient2"],

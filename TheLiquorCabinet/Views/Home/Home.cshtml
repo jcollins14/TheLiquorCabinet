@@ -1,42 +1,74 @@
-﻿@model TheLiquorCabinet.Models.Drink
+﻿@using (Html.BeginForm())
+    @model TheLiquorCabinet.Models.HomeViewModel
 @{
     ViewData["Title"] = "Home";
+<head>
+    <script src="https://kit.fontawesome.com/7a92ca4a68.js" crossorigin="anonymous"></script>
+    
+</head>
 }
 
-    <div class="text-center">
-        <h1 class="display-4">Welcome to The Liquor Cabinet</h1>
-        
-        <a asp-action="GetDrink" asp-controller="Drink" asp-route-id="@Model.ID"><img src="@Url.Content(Model.PictureLink)" width="350px" /></a>
-        <p>@Model.Name</p>
-           
-        <hr />
-        
-        <div class="row">
-            
-            <div class="col-md-4">
-                <h2>Search By Ingredients</h2>
-                <p>
-                    You can use this link to search for a drink by an ingredient
-                </p>
-                <a asp-action="" class="btn btn-primary"
-                   asp-controller="Drink">Search By Ingredients</a>
-            </div>
-            
-            <div class="col-md-4">
-                <h2>Search for a Drink</h2>
-                <p>
-                    Use this link to search for a drink.
-                </p>
-                <a asp-action="" class="btn btn-primary"
-                   asp-controller="Drink">Search for a Drink</a>
-            </div>
-            <div class="col-md-4">
-                <h2>Add another feature</h2>
-                <p>
-                    This can be for another feature
-                </p>
-            </div>
+<div class="text-center">
+    <h1 class="display-4">Welcome to The Liquor Cabinet</h1>
 
+    <a asp-action="GetDrink" asp-controller="Drink" asp-route-id="@Model.Drink.ID"><img src="@Url.Content(Model.Drink.PictureLink)" height="350 " width="350" /></a>
+    <p>@Model.Drink.Name</p>
 
+    <hr />
+
+    <div class="row">
+
+        <div class="col-md-4">
+            <h2>Search By Ingredients</h2>
+            <p>
+                Use the search bar below to look for a drink by a certain ingredient or by multiple ingredients.
+            </p>
+            <form id="isearch" asp-controller="Drink" asp-action="SearchMultipleIngredients">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <select class="js-example-basic-multiple" name="ingredients" multiple="multiple" required="required">
+                    @foreach (var ingredient in Model.IngredientList.IngredientNames)
+                    {
+                        <option value="@ingredient">@ingredient</option>
+                    }
+                </select>
+
+                <button asp-action="SearchMultipleIngredients" asp-controller="Drink" asp-route-ingredients="ingredients"
+                        class="btn btn-primary" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
         </div>
+
+        <div class="col-md-4">
+            <h2>Search for a Drink</h2>
+            <p>
+                Use the search bar below to look for one or more specific drinks from the database.
+            </p>
+
+            <form id="isearch" asp-controller="Drink" asp-action="DrinkNameSearch">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <select class="js-example-basic-multiple js-example-basic-multiple" name="names" multiple="multiple" required="required">
+                    @foreach (var drink in Model.DrinksIndex)
+                    {
+                        <option value="@drink.StrDrink ">@drink.StrDrink</option>
+                    }
+                </select>
+                <button asp-action="DrinkNameSearch" asp-controller="Drink" asp-route-names="names"
+                        class="btn btn-primary" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+
+        <div class="col-md-4">
+            <h2>Feeling lucky?</h2>
+            <p>
+                If you're feeling adventurous, click the button for a random drink.
+            </p>
+            <a asp-action="FeelingLucky" class="btn btn-primary"
+               asp-controller="Home">Search for a Drink</a>
+        </div>
+
+
     </div>
+</div>
