@@ -1,0 +1,28 @@
+﻿@model IList<TheLiquorCabinet.Models.Drink>
+
+@{
+    ViewData["Title"] = "DrinkListView";
+}
+
+<h3>Results found: @Model.Count</h3>
+<br />
+<div class="text-center">
+    @foreach (var item in Model)
+    {
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <img src=@Html.DisplayFor(modelItem => item.PictureLink) height="100" width="100">
+            </div>
+            <div class="col-md-4">
+                <h5>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </h5>
+            </div>
+            <div class="col-md-4">
+                <a class="btn btn-primary" asp-action="GetDrink" asp-controller="Drink" asp-route-id="@item.ID">Details</a>
+            </div>
+        </div>
+
+    }
+</div>
