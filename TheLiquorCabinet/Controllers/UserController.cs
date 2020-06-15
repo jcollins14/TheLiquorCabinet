@@ -45,6 +45,7 @@ namespace TheLiquorCabinet.Controllers
             _context.SaveChanges();
             int userID = _context.Users.FirstOrDefault(n => n.Username == name).UserID;
             HttpContext.Response.Cookies.Append("UserID", userID.ToString());
+            
             return RedirectToAction("Index", "Home");
         }
 
