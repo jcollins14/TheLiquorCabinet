@@ -8,16 +8,19 @@
         <h1>@Model.Name</h1>
 
         <div>
-            <h4>Ingredient Descrption:</h4>
-            <p>@Model.Description</p>
-            <p>@Model.ABV</p>
-            <p>@Model.Type</p>
+            <img src="@Url.Content("https://www.thecocktaildb.com/images/ingredients/" + Model.Name.ToLower() + ".png")" height="300" width="300"/>
+            @if (@Model.Description != null)
+            {
+            <h4>Ingredient Description:</h4>
+            <p>@Model.Description</p>    
+            }        
             <dl class="row">
             </dl>
         </div>
-        <div>
-            @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-            <a asp-action="Index">Back to List</a>
-        </div>
+        
+
+        <a href='javascript:history.go(-1)'>Back to Drink</a>
+            
+       
     </div>
 
