@@ -23,7 +23,7 @@
             <p>
                 Use the search bar below to look for a drink by a certain ingredient or by multiple ingredients.
             </p>
-            <form id="isearch" asp-controller="Drink" asp-action="DrinkListView">
+            <form id="isearch" asp-controller="Drink" asp-action="SearchMultipleIngredients">
                 <select class="js-example-basic-multiple" name="ingredients" multiple="multiple" required="required">
                     @foreach (var ingredient in Model.IngredientList.IngredientNames)
                     {
@@ -31,7 +31,7 @@
                     }
                 </select>
 
-                <button asp-action="DrinkListView" asp-controller="Drink" asp-route-ingredients="ingredients"
+                <button asp-controller="Drink" asp-action="SearchMultipleIngredients" asp-route-ingredients="ingredients"
                         class="btn btn-primary" type="submit">
                     <i class="fas fa-search"></i>
                 </button>
