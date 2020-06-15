@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - TheLiquorCabinet</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link href="~/css/select2.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/lib/custom.css" />
+    <link href="~/css/select2.css" rel="stylesheet" />
 </head>
 <body>
     <header>
@@ -30,6 +30,15 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" asp-area="" asp-controller="Home" asp-action="HomeNA">HomeNA</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white-50" asp-area="" asp-controller="User" asp-action="Cabinet">Cabinet</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white-50" asp-area="" asp-controller="User" asp-action="Register">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white-50" asp-area="" asp-controller="User" asp-action="FavoriteDrinks">Favorite Drinks</a>
                         </li>
                     </ul>
                 </div>
