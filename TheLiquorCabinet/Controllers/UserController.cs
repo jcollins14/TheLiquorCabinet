@@ -62,6 +62,11 @@ namespace TheLiquorCabinet.Controllers
             return result;
         }
 
+        public IActionResult Login()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> Cabinet()
         {
 
