@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -111,7 +112,7 @@ namespace TheLiquorCabinet.Controllers
             List<string> result = new List<string>();
             foreach (DrinkDb drink in 
                 //new List<DrinkDb>() { new DrinkDb() { IdDrink = "11011", StrIngredient1 = "Vodka", StrIngredient2 = "Lime Juice", StrIngredient3 = "Ginger Ale", StrDrink = "Moscow Mule"} }
-                _context.DrinkDb
+                _context.DrinkDb.ToList()
                 )
             {
                 List<string> drinkIngs = drink.GetDrinkDbIngredients();
@@ -124,6 +125,13 @@ namespace TheLiquorCabinet.Controllers
         }
         public bool CabinetContainsDrink(List<string> cabinet, List<string> drinkIngs)
         {
+            List<string> basics = new List<string>();
+            List<IngredDb> ingredDb = _context.IngredDb.ToList();
+            basics.AddRange(ingredDb.Where(e => e.Type == "Basic").Select(e => e.Name.ToLower()));
+            foreach (var item in basics)
+            {
+                cabinet.Add(item);
+            }
             bool check = !drinkIngs.Except(cabinet).Any();
             return check;
         }

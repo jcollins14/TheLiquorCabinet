@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using TheLiquorCabinet.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
+using System.IO;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace TheLiquorCabinet.Controllers
 {
@@ -48,6 +50,60 @@ namespace TheLiquorCabinet.Controllers
             }
             _context.SaveChanges();
             return RedirectToAction("Home", "Home");
+        }
+        public async Task<IActionResult> UpdateIngredDb()
+        {
+            IngredientList ingredients = await GetAllIngredients();
+            List<IngredDb> duplicate = new List<IngredDb>();
+            //pull all drinks from thecocktaildb.com and check for duplicates in azure table
+            foreach (var name in ingredients.IngredientNames)
+            {
+                if (!_context.IngredDb.Any(e => e.Name.Contains(name)))
+                {
+                    IngredientResponse response = new IngredientResponse(await _client.GetStringAsync(_apiKey + "/search.php?i=" + name));
+                    duplicate.Add(response.ResponseIngred);
+                }
+            }
+            //add to azure sql database
+            foreach (IngredDb ingred in duplicate)
+            {
+                _context.IngredDb.Add(ingred);
+            }
+            _context.SaveChanges();
+            return RedirectToAction("Home", "Home");
+        }
+        public IActionResult SetBasicTypes()
+        {
+            List<string> basics = new List<string>();
+            string DocPath = @"C:\Users\austi\source\repos\ingredientgetter";
+            using (StreamReader inputFile = new StreamReader(Path.Combine(DocPath, "Basics.txt")))
+            {
+                while (!inputFile.EndOfStream)
+                {
+                    string ingred;
+                    if (!string.IsNullOrEmpty((ingred = inputFile.ReadLine())))
+                    {
+                        basics.Add(ingred);
+                    }
+                }
+            }
+            foreach (var basic in basics)
+            {
+                _context.IngredDb.FirstOrDefault(e => e.Name == basic).Type = "Basic";
+            }
+            _context.SaveChanges();
+            return RedirectToAction("Home", "Home");
+        }
+        public async Task<IngredientList> GetAllIngredients()
+        {
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/")
+            };
+            //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
+            var response = await client.GetStringAsync("9973533/list.php?i=list");
+            IngredientList result = new IngredientList(response);
+            return result;
         }
     }
 }
