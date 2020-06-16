@@ -42,6 +42,21 @@
                         </li>
                     </ul>
                 </div>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <div allign="right">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-white-50" asp-area="" asp-controller="User" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white-50" asp-area="" asp-controller="User" asp-action="Register">Register</a>
+                            </li>
+                        </ul>
+                        @*<input type="button" value="Log Out" class="btn btn-primary" onclick="location.href='@Url.Action("Logout")'" />*@
+                    </div>
+                </div>
+
             </div>
         </nav>
     </header>
