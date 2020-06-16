@@ -45,6 +45,7 @@ namespace TheLiquorCabinet.Controllers
             _context.SaveChanges();
             int userID = _context.Users.FirstOrDefault(n => n.Username == name).UserID;
             HttpContext.Response.Cookies.Append("UserID", userID.ToString());
+            
             return RedirectToAction("Index", "Home");
         }
 
@@ -59,6 +60,11 @@ namespace TheLiquorCabinet.Controllers
             var response = await client.GetStringAsync("9973533/list.php?i=list");
             IngredientList result = new IngredientList(response);
             return result;
+        }
+
+        public IActionResult Login()
+        {
+            return View();
         }
 
         public async Task<IActionResult> Cabinet()
