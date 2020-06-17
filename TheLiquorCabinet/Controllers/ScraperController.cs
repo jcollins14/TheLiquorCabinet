@@ -72,10 +72,12 @@ namespace TheLiquorCabinet.Controllers
             _context.SaveChanges();
             return RedirectToAction("Home", "Home");
         }
+        //this method reads the IngredienTypes/Basics.txt file, sets all matching ingredients to basic in database
+        //then it removes the basic type from any in the database that don't appear in the file
         public IActionResult SetBasicTypes()
         {
             List<string> basics = new List<string>();
-            using (StreamReader inputFile = new StreamReader("Basics.txt"))
+            using (StreamReader inputFile = new StreamReader("IngredientTypes/Basics.txt"))
             {
                 while (!inputFile.EndOfStream)
                 {
@@ -100,6 +102,7 @@ namespace TheLiquorCabinet.Controllers
             _context.SaveChanges();
             return RedirectToAction("Home", "Home");
         }
+
         public async Task<IngredientList> GetAllIngredients()
         {
             var client = new HttpClient

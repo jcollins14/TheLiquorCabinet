@@ -125,9 +125,9 @@ namespace TheLiquorCabinet.Controllers
         }
         public bool CabinetContainsDrink(List<string> cabinet, List<string> drinkIngs)
         {
-            List<string> basics = new List<string>();
-            List<IngredDb> ingredDb = _context.IngredDb.ToList();
-            basics.AddRange(ingredDb.Where(e => e.Type == "Basic").Select(e => e.Name.ToLower()));
+            //this line is injecting the designated basic ingredients from our database into the cabinet during the search.
+            //we can comment it out when we include these in the user's cabinet when it's generated.
+            List<string> basics = _context.IngredDb.Where(e => e.Type == "Basic").Select(e => e.Name.ToLower()).ToList();
             foreach (var item in basics)
             {
                 cabinet.Add(item);
