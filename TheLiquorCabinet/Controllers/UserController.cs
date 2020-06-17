@@ -74,11 +74,14 @@ namespace TheLiquorCabinet.Controllers
         public IActionResult LoginUser(string name)
         {
             var user = _context.Users.Where(x => x.Username == name).FirstOrDefault();
+            int userID = _context.Users.FirstOrDefault(n => n.Username == name).UserID;
+            HttpContext.Response.Cookies.Append("UserID", userID.ToString());
+            TimeSpan age = DateTime.Today - user.Birthday;
+            double years = age.TotalDays / 365.25;
+            HttpContext.Response.Cookies.Append("Age", years.ToString());
+
             if (user is object)
             {
-                TimeSpan age = DateTime.Today - user.Birthday;
-                double years = age.TotalDays / 365.25;
-
                 if (years < 21) //Age check validation
                 {
                     return RedirectToAction("HomeNA", "Home");
