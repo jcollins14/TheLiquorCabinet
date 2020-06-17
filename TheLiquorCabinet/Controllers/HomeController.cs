@@ -38,7 +38,7 @@ namespace TheLiquorCabinet.Controllers
             TimeSpan age = currentDate - dateOfBirth;
             double years = age.TotalDays / 365.25;
 
-            if (years < 21.00)
+            if (years < 21)
             {
                 return RedirectToAction("HomeNA");
             }
