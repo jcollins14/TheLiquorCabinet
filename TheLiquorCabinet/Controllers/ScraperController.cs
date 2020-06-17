@@ -90,6 +90,13 @@ namespace TheLiquorCabinet.Controllers
             {
                 _context.IngredDb.FirstOrDefault(e => e.Name == basic).Type = "Basic";
             }
+            foreach (var ingred in _context.IngredDb)
+            {
+                if (ingred.Type == "Basic" && !basics.Contains(ingred.Name))
+                {
+                    ingred.Type = null;
+                }
+            }
             _context.SaveChanges();
             return RedirectToAction("Home", "Home");
         }
