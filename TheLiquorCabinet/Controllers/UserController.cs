@@ -5,12 +5,14 @@ using System.Net;
 using System.Net.Http;
 using System.Runtime.Loader;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TheLiquorCabinet.Models;
 
 namespace TheLiquorCabinet.Controllers
 {
+
     public class UserController : Controller
     {
         private readonly LiquorDBContext _context;
@@ -38,15 +40,56 @@ namespace TheLiquorCabinet.Controllers
 
         //Send username to Azure along with DOB from cookie
         [HttpPost]
-        public IActionResult Register(string name)
+        public IActionResult Register(string name, DateTime dateOfBirth)
         {
-            User register = new User(name);
-            _context.Users.Add(register);
+
+            //This took way longer than need be
+            var registerUser = new User()
+            {
+                Username = name,
+                Birthday = dateOfBirth //make sure this name matches the .cshtml input name="[name]" as well!
+            };
+
+            _context.Users.Add(registerUser);
             _context.SaveChanges();
             int userID = _context.Users.FirstOrDefault(n => n.Username == name).UserID;
             HttpContext.Response.Cookies.Append("UserID", userID.ToString());
+            TimeSpan age = DateTime.Today - dateOfBirth;
+            double years = age.TotalDays / 365.25;
+            HttpContext.Response.Cookies.Append("Age", years.ToString());
             
-            return RedirectToAction("Index", "Home");
+            if(years < 21)
+            {
+                return RedirectToAction("HomeNA", "Home");
+            }
+
+            return RedirectToAction("Home", "Home");
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        public IActionResult LoginUser(string name)
+        {
+            var user = _context.Users.Where(x => x.Username == name).FirstOrDefault();
+            if (user is object)
+            {
+                TimeSpan age = DateTime.Today - user.Birthday;
+                double years = age.TotalDays / 365.25;
+
+                if (years < 21) //Age check validation
+                {
+                    return RedirectToAction("HomeNA", "Home");
+                }
+
+                return RedirectToAction("Home", "Home");
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
         }
 
         //Pull all ingredients from API and put into list for Select2
@@ -62,11 +105,6 @@ namespace TheLiquorCabinet.Controllers
             return result;
         }
 
-        public IActionResult Login()
-        {
-            return View();
-        }
-
         public async Task<IActionResult> Cabinet()
         {
 
@@ -77,7 +115,7 @@ namespace TheLiquorCabinet.Controllers
                 List<IngredOnHand> savedCabinet = _context.Cabinet.Where(e => e.UserID == UserID).ToList();
                 foreach (IngredOnHand item in savedCabinet)
                 {
-                    Ingredient response = new Ingredient(await _client.GetStringAsync(_apiKey + "/list.php?i=list" + item.IngredID));
+                    Ingredient response = new Ingredient(await _client.GetStringAsync(_apiKey + "/lookup.php?iid=" + item.IngredID));
                     IngredOnHand result = new IngredOnHand()
                     {
                         UserID = UserID,
@@ -86,7 +124,7 @@ namespace TheLiquorCabinet.Controllers
                     cabinetModel.CabinetList.Add(result);
                 }
             }
-            return View(cabinetModel);
+            return View("Cabinet", cabinetModel);
         }
         public async Task<IActionResult> AddToCabinet(List<string> ingredients)
         {
@@ -111,5 +149,34 @@ namespace TheLiquorCabinet.Controllers
             return RedirectToAction("Index", "Drink");
         }
 
+        public async void AddDefaultIngredients()
+        {
+            List<string> defaults = new List<string>()
+            {
+                "Black Pepper",
+                "Brown Sugar",
+                "Butter",
+                "Cayenne Pepper",
+                "Cinnamon",
+                "Cola",
+                "Cold Water",
+                "Egg White",
+                "Egg Yolk",
+                "Egg",
+                "Honey",
+                "Ice",
+                "Jelly",
+                "Milk",
+                "Nutmeg",
+                "Pepper",
+                "Plain Flour",
+                "Salt",
+                "Soy Sauce",
+                "Sugar",
+                "Sugar Syrup",
+                "Water"
+            };
+            await AddToCabinet(defaults);
+        }
     }
 }
