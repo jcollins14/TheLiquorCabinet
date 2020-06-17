@@ -1,13 +1,14 @@
 Basil
+Black Pepper
 Brown Sugar
 Butter
 Candy
 Carbonated Soft Drink
 Carbonated Water
+Cayenne Pepper
 Cherries
 Cherry
-Club Soda
-Coffee
+Cinnamon
 Cola
 Cold Water
 Coriander
@@ -26,6 +27,7 @@ Granulated Sugar
 Honey
 Hot Sauce
 Ice
+Jelly
 Lemon Juice
 Lemon Peel
 lemon
@@ -35,9 +37,11 @@ Lime
 Maple syrup
 Maraschino cherry juice
 Maraschino Cherry
+Marshmallows
 Milk
-Orange Juice
-Orange
+Nutmeg
+Olive Oil
+Onion
 Pepper
 Plain Flour
 Powdered Sugar
