@@ -111,6 +111,7 @@ namespace TheLiquorCabinet.Controllers
             ings = ings.ConvertAll(e => e.ToLower());
             List<string> result = new List<string>();
             foreach (DrinkDb drink in 
+                //commented below is test code for manually providing dring to method.
                 //new List<DrinkDb>() { new DrinkDb() { IdDrink = "11011", StrIngredient1 = "Vodka", StrIngredient2 = "Lime Juice", StrIngredient3 = "Ginger Ale", StrDrink = "Moscow Mule"} }
                 _context.DrinkDb.ToList()
                 )
@@ -125,17 +126,35 @@ namespace TheLiquorCabinet.Controllers
         }
         public bool CabinetContainsDrink(List<string> cabinet, List<string> drinkIngs)
         {
-            //this line is injecting the designated basic ingredients from our database into the cabinet during the search.
+            //this code is injecting the designated basic ingredients from our database into the cabinet during the search.
             //we can comment it out when we include these in the user's cabinet when it's generated.
             List<string> basics = _context.IngredDb.Where(e => e.Type == "Basic").Select(e => e.Name.ToLower()).ToList();
             foreach (var item in basics)
             {
                 cabinet.Add(item);
             }
+
+            cabinet = ParseGenerics(cabinet);
             bool check = !drinkIngs.Except(cabinet).Any();
             return check;
         }
+        public List<string> ParseGenerics(List<string> cabinet)
+        {
+            if (cabinet.Contains("whisky") && !cabinet.Contains("whiskey"))
+            {
+                cabinet.Add("whiskey");
+            }
 
+            List<string> generics = new List<string>() { "Vodka", "Gin", "Rum", "Whiskey", "Brandy", "Tequila"};
+            foreach (var generic in generics)
+            {
+                if (cabinet.Contains(generic.ToLower()))
+                {
+                    cabinet.AddRange(_context.IngredDb.Where(e => e.Type == generic).Select(e => e.Name.ToLower()).ToList());
+                }
+            }
+            return cabinet;
+        }
         public async Task<IngredientList> GetAllIngredients()
         {
             var client = new HttpClient
