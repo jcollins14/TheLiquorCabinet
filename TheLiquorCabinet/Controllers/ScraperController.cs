@@ -75,8 +75,7 @@ namespace TheLiquorCabinet.Controllers
         public IActionResult SetBasicTypes()
         {
             List<string> basics = new List<string>();
-            string DocPath = @"C:\Users\austi\source\repos\ingredientgetter";
-            using (StreamReader inputFile = new StreamReader(Path.Combine(DocPath, "Basics.txt")))
+            using (StreamReader inputFile = new StreamReader("Basics.txt"))
             {
                 while (!inputFile.EndOfStream)
                 {
