@@ -115,7 +115,7 @@ namespace TheLiquorCabinet.Controllers
                 List<IngredOnHand> savedCabinet = _context.Cabinet.Where(e => e.UserID == UserID).ToList();
                 foreach (IngredOnHand item in savedCabinet)
                 {
-                    Ingredient response = new Ingredient(await _client.GetStringAsync(_apiKey + "/list.php?i=list" + item.IngredID));
+                    Ingredient response = new Ingredient(await _client.GetStringAsync(_apiKey + "/lookup.php?iid=" + item.IngredID));
                     IngredOnHand result = new IngredOnHand()
                     {
                         UserID = UserID,
@@ -124,7 +124,7 @@ namespace TheLiquorCabinet.Controllers
                     cabinetModel.CabinetList.Add(result);
                 }
             }
-            return View(cabinetModel);
+            return View("Cabinet", cabinetModel);
         }
         public async Task<IActionResult> AddToCabinet(List<string> ingredients)
         {

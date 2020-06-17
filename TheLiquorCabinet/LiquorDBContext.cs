@@ -20,6 +20,7 @@ namespace TheLiquorCabinet
         public virtual DbSet<Favorite> Favorites { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<DrinkDb> DrinkDb { get; set; }
+        public virtual DbSet<IngredDb> IngredDb { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
