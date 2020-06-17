@@ -1,14 +1,17 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Register";
 }
 
-<h1>Register new Username</h1>
+<h1>Register</h1>
 <hr />
 
-<form action="Register" method="Post">
+<form asp-controller="User" asp-action="Register">
     <label for="name">Username: </label>
-    <input name="name" type="text" placeholder="Username"/>
-    <input type="submit" />
+    <input name="name" type="text" placeholder="Username" />
+    <br />
+    <label for="date">Date of Birth: </label>
+    <input name="dateOfBirth" type="date" value="2020-06-26">
+    <br />
+    <input class="btn btn-primary" type="submit" />
 </form>
 
