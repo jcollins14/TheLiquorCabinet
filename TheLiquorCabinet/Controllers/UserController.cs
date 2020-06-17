@@ -54,7 +54,6 @@ namespace TheLiquorCabinet.Controllers
             _context.SaveChanges();
             int userID = _context.Users.FirstOrDefault(n => n.Username == name).UserID;
             HttpContext.Response.Cookies.Append("UserID", userID.ToString());
-
             TimeSpan age = DateTime.Today - dateOfBirth;
             double years = age.TotalDays / 365.25;
             HttpContext.Response.Cookies.Append("Age", years.ToString());
@@ -150,5 +149,34 @@ namespace TheLiquorCabinet.Controllers
             return RedirectToAction("Index", "Drink");
         }
 
+        public async void AddDefaultIngredients()
+        {
+            List<string> defaults = new List<string>()
+            {
+                "Black Pepper",
+                "Brown Sugar",
+                "Butter",
+                "Cayenne Pepper",
+                "Cinnamon",
+                "Cola",
+                "Cold Water",
+                "Egg White",
+                "Egg Yolk",
+                "Egg",
+                "Honey",
+                "Ice",
+                "Jelly",
+                "Milk",
+                "Nutmeg",
+                "Pepper",
+                "Plain Flour",
+                "Salt",
+                "Soy Sauce",
+                "Sugar",
+                "Sugar Syrup",
+                "Water"
+            };
+            await AddToCabinet(defaults);
+        }
     }
 }
