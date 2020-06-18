@@ -20,28 +20,26 @@
     
 }
 
-@if (@*UserID != null*@true) { 
+@if @*(UserID != null*@true) { 
 <div class="text-center">
     <h2>Usernames's Cabinet</h2>
     <br />
     <h4>Ingredients Currently in Your Cabinet:</h4>
     <hr />
-    @foreach (var ingredient in Model.IngredList.IngredientNames)
+    @foreach (var ingredient in Model.CabinetList)
     {
-        <p>
-            @ingredient
-        </p>
+        <option value="@ingredient.Name">@ingredient.Name</option>
     }
-   
+
     <div class="row">
         <div class="col-md-6">
             <form id="isearch" asp-controller="Drink" asp-action="DrinksByCabinet">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <label name="DrinkId" class="control-label">Search all drinks you can make with ingredients on hand: </label>
                 <select class="js-example-basic-multiple" name="ingredients" multiple="multiple" required="required">
-                    @foreach (var ingredient in Model.IngredList.IngredientNames)
+                    @foreach (var ingredient in Model.CabinetList)
                     {
-                        <option value="@ingredient">@ingredient</option>
+                        <option value="@ingredient.Name">@ingredient.Name</option>
                     }
                 </select>
                 <div class="form-group">
