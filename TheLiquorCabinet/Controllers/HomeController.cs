@@ -28,6 +28,8 @@ namespace TheLiquorCabinet.Controllers
 
         public IActionResult Index()
         {
+            DateTime today = DateTime.Now;
+            ViewBag.Date = today.ToString("d");
             return View();
         }
 
@@ -37,7 +39,8 @@ namespace TheLiquorCabinet.Controllers
             var currentDate = DateTime.Now;
             TimeSpan age = currentDate - dateOfBirth;
             double years = age.TotalDays / 365.25;
-
+            string birthday = dateOfBirth.ToString("d");
+            HttpContext.Response.Cookies.Append("DoB", birthday);
             if (years < 21)
             {
                 return RedirectToAction("HomeNA");
