@@ -109,23 +109,18 @@ namespace TheLiquorCabinet.Controllers
             return result;
         }
 
-        public async Task<IActionResult> Cabinet()
+        public IActionResult Cabinet()
         {
 
             int UserID = int.Parse(HttpContext.Request.Cookies["UserID"]);
             CabinetViewModel cabinetModel = new CabinetViewModel();
             if (UserID != 0)
             {
-                List<IngredOnHand> savedCabinet = _context.Cabinet.Where(e => e.UserID == UserID).ToList();
-                foreach (IngredOnHand item in savedCabinet)
+                List<int> savedCabinetIds = _context.Cabinet.Where(e => e.UserID == UserID).Select(e => e.IngredID).ToList();
+                List<IngredDb> savedCabinet = new List<IngredDb>();
+                foreach (var id in savedCabinetIds)
                 {
-                    Ingredient response = new Ingredient(await _client.GetStringAsync(_apiKey + "/lookup.php?iid=" + item.IngredID));
-                    IngredOnHand result = new IngredOnHand()
-                    {
-                        UserID = UserID,
-                        IngredID = response.ID
-                    };
-                    cabinetModel.CabinetList.Add(result);
+                    cabinetModel.CabinetList.Add(_context.IngredDb.FirstOrDefault(e => e.Id == id));
                 }
             }
             return View("Cabinet", cabinetModel);
