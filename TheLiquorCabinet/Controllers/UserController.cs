@@ -7,6 +7,7 @@ using System.Runtime.Loader;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.Extensions.Logging;
 using TheLiquorCabinet.Models;
 
@@ -110,8 +111,16 @@ namespace TheLiquorCabinet.Controllers
 
         public IActionResult Cabinet()
         {
-
-            int UserID = int.Parse(HttpContext.Request.Cookies["UserID"]);
+            int UserID;
+            if (HttpContext.Request.Cookies["UserID"] != null)
+            {
+                UserID = int.Parse(HttpContext.Request.Cookies["UserID"]);
+            }
+            else
+            {
+                CabinetViewModel cabinetViewModel = new CabinetViewModel() { UserId = 0};
+                return View("Cabinet", cabinetViewModel);
+            }
             CabinetViewModel cabinetModel = new CabinetViewModel();
             if (UserID != 0)
             {
