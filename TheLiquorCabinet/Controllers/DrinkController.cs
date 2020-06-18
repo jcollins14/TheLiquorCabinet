@@ -28,9 +28,11 @@ namespace TheLiquorCabinet.Controllers
         //Index passes list of ingredients to the view for use in the select2 search bar.
         public async Task<IActionResult> Index()
         {
-            DrinkIndexViewModel model = new DrinkIndexViewModel();
-            model.Ingredients = await GetAllIngredients();
-            model.Drinks = _context.DrinkDb.ToList();
+            DrinkIndexViewModel model = new DrinkIndexViewModel
+            {
+                Ingredients = await GetAllIngredients(),
+                Drinks = _context.DrinkDb.ToList()
+            };
             return View(model);
         }
 
