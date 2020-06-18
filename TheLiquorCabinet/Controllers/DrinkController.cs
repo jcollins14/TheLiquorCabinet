@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using TheLiquorCabinet.Models;
@@ -66,6 +68,20 @@ namespace TheLiquorCabinet.Controllers
         {
             var response = await _client.GetStringAsync(_apiKey + "/lookup.php?i=" + ID);
             Drink result = new Drink(response);
+            for (int i = 0; i < result.Ingredients.Count; i++)
+            {
+                IngredientResponse ingredient = new IngredientResponse(await _client.GetStringAsync(_apiKey + "/search.php?i=" + result.Ingredients[i]));
+                int userID = int.Parse(HttpContext.Request.Cookies["UserID"]);
+                IngredOnHand check = _context.Cabinet.Where(x => x.UserID == userID && x.IngredID == ingredient.ResponseIngred.Id).FirstOrDefault();
+                if (check != null)
+                {
+                    result.IngredAvail.Add(true);
+                }
+                else
+                {
+                    result.IngredAvail.Add(false);
+                }
+            }
             return View(result);
         }
         public async Task<IActionResult> GetDrinkByName(string name)
