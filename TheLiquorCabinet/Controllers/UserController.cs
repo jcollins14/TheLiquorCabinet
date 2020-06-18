@@ -122,6 +122,8 @@ namespace TheLiquorCabinet.Controllers
                     cabinetModel.CabinetList.Add(_context.IngredDb.FirstOrDefault(e => e.Id == id));
                 }
             }
+            cabinetModel.AllIngredients.AddRange(_context.IngredDb.Where(e => e.Name != null ).Select(e => e.Name).ToList());
+            cabinetModel.UserId = int.Parse(HttpContext.Request.Cookies["UserID"]);
             return View("Cabinet", cabinetModel);
         }
         public async Task<IActionResult> AddToCabinet(List<string> ingredients)
