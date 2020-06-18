@@ -7,10 +7,7 @@
 }
 
 <div class="text-center">
-    <p>
-        <img src="~/css/Images/TheLiquorCabinetTitle.png" />
-    </p>
-    
+ 
     <p>Available drinks and ingredients are filtered by Non-Alcoholic only.</p>
    
     <a asp-action="GetDrink" asp-controller="Drink" asp-route-id="@Model.Drink.ID"><img src="@Url.Content(Model.Drink.PictureLink)" height="350 " width="350" /></a>

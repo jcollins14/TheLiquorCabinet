@@ -5,12 +5,14 @@
 }
 
 
+
+
 <div class="text-center">
     <h2>@Model.Name</h2>
     <hr />
     <div class="row">
         <div class="col-md-7">
-            <img src="@Url.Content(Model.PictureLink)" height="350 "width="350" />
+            <img src="@Url.Content(Model.PictureLink)" height="350 " width="350" />
         </div>
         <div class="col-md-5">
             <h3>Ingredients:</h3>
@@ -25,7 +27,7 @@
             <a asp-action="IngredientInfo" asp-controller="Ingredient" asp-route-name="@Model.Ingredients[i]">@Model.Ingredients[i]</a>
             
         </p>
-            }
+    }
         </div>
     </div>
     <hr />
