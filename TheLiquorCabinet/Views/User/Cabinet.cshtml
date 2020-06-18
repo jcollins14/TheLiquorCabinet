@@ -1,7 +1,7 @@
 ﻿@model TheLiquorCabinet.Models.CabinetViewModel
 
 
-@if  (Model.UserId > 0)
+@if  (Model.UserId == 0)
 
 {
     <div class="text-center">
@@ -27,12 +27,18 @@
 <div class="text-center">
     <h2>Usernames's Cabinet</h2>
     <br />
-    <h4>Ingredients Currently in Your Cabinet:</h4>
-    <hr />
-    @foreach (var ingredient in Model.CabinetList)
-    {
-        <option value="@ingredient.Name">@ingredient.Name</option>
-    }
+    <div class="row">
+        <div class="col-md-5">
+            <img src="~/css/Images/CabinetIngredient.jpg" style="height:300px; width:auto" />
+        </div>
+        <div class="col-md-6 col-md-offset-1">
+            <h4>Ingredients Currently in Your Cabinet:</h4>
+            @foreach (var ingredient in Model.CabinetList)
+            {
+                <option value="@ingredient.Name">@ingredient.Name</option>
+            }
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-md-6">
