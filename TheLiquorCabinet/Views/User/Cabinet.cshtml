@@ -1,6 +1,6 @@
 ﻿@model TheLiquorCabinet.Models.CabinetViewModel
 
-@if  (@*UserID == null*@true)
+@if  (Model.UserId > 0)
 {
     <div class="text-center">
         <h2>The Ingredient Cabinet is Currently Empty</h2>
@@ -20,7 +20,7 @@
     
 }
 
-@if @*(UserID != null*@true) { 
+@if (@Model.UserId > 0 ) { 
 <div class="text-center">
     <h2>Usernames's Cabinet</h2>
     <br />
