@@ -131,7 +131,10 @@ namespace TheLiquorCabinet.Controllers
                     cabinetModel.CabinetList.Add(_context.IngredDb.FirstOrDefault(e => e.Id == id));
                 }
             }
-            cabinetModel.AllIngredients.AddRange(_context.IngredDb.Where(e => e.Name != null ).Select(e => e.Name).ToList());
+            //code below takes id list of ingredients in database and filters out those already in the users cabinet.
+            var allIng = _context.IngredDb.Select(e => e.Id).ToList();
+            var notInCabinet = allIng.Except(cabinetModel.CabinetList.Select(e => e.Id)).ToList();
+            cabinetModel.AllIngredients = _context.IngredDb.Where(e => notInCabinet.Contains(e.Id)).Select(e => e.Name).ToList();
             cabinetModel.UserId = int.Parse(HttpContext.Request.Cookies["UserID"]);
             return View("Cabinet", cabinetModel);
         }
