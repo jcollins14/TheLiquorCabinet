@@ -19,11 +19,19 @@
             @for (int i = 0; i < Model.Ingredients.Count; i++)
             {
         <p>
+            @if (Model.IngredAvail[i] == true)
+            {
+                <img src="~/images/yes.png"/>
+            }
+            else
+            {
+                <img src="~/images/no.png" />
+            }
             @if (i < Model.Measurements.Count)
             {
                 @Model.Measurements[i]
             }
-
+          
             <a asp-action="IngredientInfo" asp-controller="Ingredient" asp-route-name="@Model.Ingredients[i]">@Model.Ingredients[i]</a>
             
         </p>

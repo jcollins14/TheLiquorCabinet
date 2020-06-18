@@ -13,6 +13,7 @@ namespace TheLiquorCabinet.Models
         public CabinetViewModel()
         {
             CabinetList = new List<IngredDb>();
+            AllIngredients = new List<string>();
         }
     }
 }
