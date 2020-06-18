@@ -1,6 +1,8 @@
 ﻿@model TheLiquorCabinet.Models.CabinetViewModel
 
+
 @if  (Model.UserId > 0)
+
 {
     <div class="text-center">
         <h2>The Ingredient Cabinet is Currently Empty</h2>
@@ -18,6 +20,7 @@
 
     </div>
     
+
 }
 
 @if (@Model.UserId > 0 ) { 
@@ -43,15 +46,15 @@
                     }
                 </select>
                 <div class="form-group">
+
                     <input asp-controller="Drink" asp-action="DrinksByCabinet"
                            asp-route-ingredients="ingredients"
                            type="submit" value="Submit" class="btn btn-primary" />
-                </div>
-                <div class="col-md-6">
-                    <p>Add ingredients to your cabinet</p>
-                </div>
-            </form>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <p>Add ingredients to your cabinet</p>
+            </div>
         </div>
     </div>
-</div>
 }
