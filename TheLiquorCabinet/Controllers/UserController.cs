@@ -40,7 +40,7 @@ namespace TheLiquorCabinet.Controllers
 
         //Send username to Azure along with DOB from cookie
         [HttpPost]
-        public IActionResult Register(string name, DateTime dateOfBirth)
+        public async Task<IActionResult> Register(string name, DateTime dateOfBirth)
         {
 
             //This took way longer than need be
@@ -62,7 +62,8 @@ namespace TheLiquorCabinet.Controllers
             {
                 return RedirectToAction("HomeNA", "Home");
             }
-
+            List<string> defaults = GetDefaultIngredients();
+            await AddToCabinet(defaults);
             return RedirectToAction("Home", "Home");
         }
 
@@ -149,34 +150,16 @@ namespace TheLiquorCabinet.Controllers
             return RedirectToAction("Index", "Drink");
         }
 
-        public async void AddDefaultIngredients()
+        public List<string> GetDefaultIngredients()
         {
-            List<string> defaults = new List<string>()
+            List<string> defaults = new List<string>();
+            List<IngredDb> response = _context.IngredDb.Where(x => x.Type == "Basic").ToList();
+            foreach (IngredDb iterate in response)
             {
-                "Black Pepper",
-                "Brown Sugar",
-                "Butter",
-                "Cayenne Pepper",
-                "Cinnamon",
-                "Cola",
-                "Cold Water",
-                "Egg White",
-                "Egg Yolk",
-                "Egg",
-                "Honey",
-                "Ice",
-                "Jelly",
-                "Milk",
-                "Nutmeg",
-                "Pepper",
-                "Plain Flour",
-                "Salt",
-                "Soy Sauce",
-                "Sugar",
-                "Sugar Syrup",
-                "Water"
-            };
-            await AddToCabinet(defaults);
+                string name = iterate.Name;
+                defaults.Add(name);
+            }
+            return defaults;
         }
     }
 }
