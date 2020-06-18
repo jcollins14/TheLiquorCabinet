@@ -40,7 +40,7 @@ namespace TheLiquorCabinet.Controllers
 
         //Send username to Azure along with DOB from cookie
         [HttpPost]
-        public IActionResult Register(string name, DateTime dateOfBirth)
+        public async Task<IActionResult> Register(string name, DateTime dateOfBirth)
         {
 
             //This took way longer than need be
@@ -62,7 +62,8 @@ namespace TheLiquorCabinet.Controllers
             {
                 return RedirectToAction("HomeNA", "Home");
             }
-
+            List<string> defaults = GetDefaultIngredients();
+            await AddToCabinet(defaults, userID);
             return RedirectToAction("Home", "Home");
         }
 
@@ -74,11 +75,14 @@ namespace TheLiquorCabinet.Controllers
         public IActionResult LoginUser(string name)
         {
             var user = _context.Users.Where(x => x.Username == name).FirstOrDefault();
+            int userID = _context.Users.FirstOrDefault(n => n.Username == name).UserID;
+            HttpContext.Response.Cookies.Append("UserID", userID.ToString());
+            TimeSpan age = DateTime.Today - user.Birthday;
+            double years = age.TotalDays / 365.25;
+            HttpContext.Response.Cookies.Append("Age", years.ToString());
+
             if (user is object)
             {
-                TimeSpan age = DateTime.Today - user.Birthday;
-                double years = age.TotalDays / 365.25;
-
                 if (years < 21) //Age check validation
                 {
                     return RedirectToAction("HomeNA", "Home");
@@ -99,29 +103,23 @@ namespace TheLiquorCabinet.Controllers
             {
                 BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/")
             };
-            //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
             var response = await client.GetStringAsync("9973533/list.php?i=list");
             IngredientList result = new IngredientList(response);
             return result;
         }
 
-        public async Task<IActionResult> Cabinet()
+        public IActionResult Cabinet()
         {
 
             int UserID = int.Parse(HttpContext.Request.Cookies["UserID"]);
             CabinetViewModel cabinetModel = new CabinetViewModel();
             if (UserID != 0)
             {
-                List<IngredOnHand> savedCabinet = _context.Cabinet.Where(e => e.UserID == UserID).ToList();
-                foreach (IngredOnHand item in savedCabinet)
+                List<int> savedCabinetIds = _context.Cabinet.Where(e => e.UserID == UserID).Select(e => e.IngredID).ToList();
+                List<IngredDb> savedCabinet = new List<IngredDb>();
+                foreach (var id in savedCabinetIds)
                 {
-                    Ingredient response = new Ingredient(await _client.GetStringAsync(_apiKey + "/lookup.php?iid=" + item.IngredID));
-                    IngredOnHand result = new IngredOnHand()
-                    {
-                        UserID = UserID,
-                        IngredID = response.ID
-                    };
-                    cabinetModel.CabinetList.Add(result);
+                    cabinetModel.CabinetList.Add(_context.IngredDb.FirstOrDefault(e => e.Id == id));
                 }
             }
             return View("Cabinet", cabinetModel);
@@ -148,35 +146,39 @@ namespace TheLiquorCabinet.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index", "Drink");
         }
-
-        public async void AddDefaultIngredients()
+        //overloaded method for use in the Register Method - async was causing issues with cookie generation
+        public async Task<IActionResult> AddToCabinet(List<string> ingredients, int userID)
         {
-            List<string> defaults = new List<string>()
+            List<Ingredient> cabinetUpload = new List<Ingredient>();
+            foreach (string ingredient in ingredients)
             {
-                "Black Pepper",
-                "Brown Sugar",
-                "Butter",
-                "Cayenne Pepper",
-                "Cinnamon",
-                "Cola",
-                "Cold Water",
-                "Egg White",
-                "Egg Yolk",
-                "Egg",
-                "Honey",
-                "Ice",
-                "Jelly",
-                "Milk",
-                "Nutmeg",
-                "Pepper",
-                "Plain Flour",
-                "Salt",
-                "Soy Sauce",
-                "Sugar",
-                "Sugar Syrup",
-                "Water"
-            };
-            await AddToCabinet(defaults);
+                var response = await _client.GetStringAsync(_apiKey + "/search.php?i=" + ingredient);
+                Ingredient result = new Ingredient(response);
+                cabinetUpload.Add(result);
+            }
+            foreach (Ingredient item in cabinetUpload)
+            {
+                IngredOnHand upload = new IngredOnHand()
+                {
+                    UserID = userID,
+                    IngredID = item.ID
+                };
+                _context.Cabinet.Add(upload);
+            }
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Drink");
+        }
+
+        public List<string> GetDefaultIngredients()
+        {
+            List<string> defaults = new List<string>();
+            List<IngredDb> response = _context.IngredDb.Where(x => x.Type == "Basic").ToList();
+            foreach (IngredDb iterate in response)
+            {
+                string name = iterate.Name;
+                defaults.Add(name);
+            }
+            return defaults;
         }
     }
 }
