@@ -4,11 +4,9 @@
 }
 
 <h1>Login</h1>
-
-
 <hr />
 
-<form action="Login" method="Post">
+<form asp-controller="User" asp-action="LoginUser">
     <label for="name">Username: </label>
     <input name="name" type="text" placeholder="Username" />
     <input class="btn btn-primary" type="submit" />
