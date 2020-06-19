@@ -68,7 +68,13 @@
             <p>Add ingredients to your cabinet</p>
         </div>
     </div>
-
+    <h3>See all the drinks you can make!</h3>
+    <div>
+         @using (@Html.BeginForm("DrinksByCabinet", "Drink"))
+         {
+            <input class="btn btn-primary" type="submit"/>
+        }
+    </div>
 }
 <script>
         $(document).ready(function () {

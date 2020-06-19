@@ -149,7 +149,8 @@ namespace TheLiquorCabinet.Controllers
             var notInCabinet = allIng.Except(cabinetModel.CabinetList.Select(e => e.Id)).ToList();
             cabinetModel.AllIngredients = _context.IngredDb.Where(e => notInCabinet.Contains(e.Id)).Select(e => e.Name).ToList();
             cabinetModel.AllIngredients.Sort();
-            
+            TempData.Clear();
+            TempData.Add("Cabinet", cabinetModel.CabinetList.Select(e => e.Name).ToList());
             cabinetModel.UserId = int.Parse(HttpContext.Request.Cookies["UserID"]);
             return View("Cabinet", cabinetModel);
         }
