@@ -84,11 +84,6 @@ namespace TheLiquorCabinet.Controllers
         {
             var user = _context.Users.Where(x => x.Username == name).FirstOrDefault();
             int userID = _context.Users.FirstOrDefault(n => n.Username == name).UserID;
-            HttpContext.Response.Cookies.Append("UserID", userID.ToString());
-            TimeSpan age = DateTime.Today - user.Birthday;
-            double years = age.TotalDays / 365.25;
-            HttpContext.Response.Cookies.Append("Age", years.ToString());
-
             if (user is object)
             {
                 TimeSpan age = DateTime.Today - user.Birthday;
@@ -148,6 +143,7 @@ namespace TheLiquorCabinet.Controllers
             var notInCabinet = allIng.Except(cabinetModel.CabinetList.Select(e => e.Id)).ToList();
             cabinetModel.AllIngredients = _context.IngredDb.Where(e => notInCabinet.Contains(e.Id)).Select(e => e.Name).ToList();
             cabinetModel.UserId = int.Parse(HttpContext.Request.Cookies["UserID"]);
+            ViewBag.Username = HttpContext.Request.Cookies["User"];
             return View("Cabinet", cabinetModel);
         }
         public async Task<IActionResult> AddToCabinet(List<string> ingredients)
@@ -211,7 +207,7 @@ namespace TheLiquorCabinet.Controllers
             List<string> cookies = new List<string>() { "Age", "DoB", "User" };
             foreach (string cookieName in cookies)
             {
-                HttpContext.Response.Cookies.Append(cookieName,null);
+                HttpContext.Response.Cookies.Append(cookieName,"0");
             }
             return RedirectToAction("Index", "Home");
         }
