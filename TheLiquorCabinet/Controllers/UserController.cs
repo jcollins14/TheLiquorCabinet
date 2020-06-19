@@ -36,6 +36,8 @@ namespace TheLiquorCabinet.Controllers
 
         public IActionResult Register()
         {
+            string DoB = HttpContext.Request.Cookies["DoB"];
+            ViewBag.Date = DoB;
             return View();
         }
 
@@ -43,28 +45,33 @@ namespace TheLiquorCabinet.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(string name, DateTime dateOfBirth)
         {
-
-            //This took way longer than need be
             var registerUser = new User()
             {
                 Username = name,
                 Birthday = dateOfBirth //make sure this name matches the .cshtml input name="[name]" as well!
             };
 
-            _context.Users.Add(registerUser);
-            _context.SaveChanges();
+            if (_context.Users.Where(x => x.Username == name).FirstOrDefault() != null)
+            {
+                return RedirectToAction("RegisterError");
+            }
+            else
+            {
+                _context.Users.Add(registerUser);
+                _context.SaveChanges();
+            }
             int userID = _context.Users.FirstOrDefault(n => n.Username == name).UserID;
             HttpContext.Response.Cookies.Append("UserID", userID.ToString());
             TimeSpan age = DateTime.Today - dateOfBirth;
             double years = age.TotalDays / 365.25;
             HttpContext.Response.Cookies.Append("Age", years.ToString());
-            
+            HttpContext.Response.Cookies.Append("User", name);
+            List<string> defaults = GetDefaultIngredients();
+            await AddToCabinet(defaults, userID);
             if(years < 21)
             {
                 return RedirectToAction("HomeNA", "Home");
             }
-            List<string> defaults = GetDefaultIngredients();
-            await AddToCabinet(defaults, userID);
             return RedirectToAction("Home", "Home");
         }
 
@@ -84,6 +91,11 @@ namespace TheLiquorCabinet.Controllers
 
             if (user is object)
             {
+                TimeSpan age = DateTime.Today - user.Birthday;
+                double years = age.TotalDays / 365.25;
+                HttpContext.Response.Cookies.Append("UserID",user.UserID.ToString());
+                HttpContext.Response.Cookies.Append("Age", years.ToString());
+                HttpContext.Response.Cookies.Append("User", user.Username);
                 if (years < 21) //Age check validation
                 {
                     return RedirectToAction("HomeNA", "Home");
@@ -193,6 +205,11 @@ namespace TheLiquorCabinet.Controllers
                 defaults.Add(name);
             }
             return defaults;
+        }
+
+        public IActionResult RegisterError()
+        {
+            return View();
         }
     }
 }
