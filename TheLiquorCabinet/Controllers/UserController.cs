@@ -35,7 +35,8 @@ namespace TheLiquorCabinet.Controllers
 
         public IActionResult Register()
         {
-            var DoB = HttpContext.Request.Cookies["DoB"];
+            string DoB = HttpContext.Request.Cookies["DoB"];
+            ViewBag.Date = DoB;
             return View();
         }
 
@@ -63,6 +64,7 @@ namespace TheLiquorCabinet.Controllers
             TimeSpan age = DateTime.Today - dateOfBirth;
             double years = age.TotalDays / 365.25;
             HttpContext.Response.Cookies.Append("Age", years.ToString());
+            HttpContext.Response.Cookies.Append("User", name);
             List<string> defaults = GetDefaultIngredients();
             await AddToCabinet(defaults, userID);
             if(years < 21)
@@ -84,7 +86,9 @@ namespace TheLiquorCabinet.Controllers
             {
                 TimeSpan age = DateTime.Today - user.Birthday;
                 double years = age.TotalDays / 365.25;
-
+                HttpContext.Response.Cookies.Append("UserID",user.UserID.ToString());
+                HttpContext.Response.Cookies.Append("Age", years.ToString());
+                HttpContext.Response.Cookies.Append("User", user.Username);
                 if (years < 21) //Age check validation
                 {
                     return RedirectToAction("HomeNA", "Home");
