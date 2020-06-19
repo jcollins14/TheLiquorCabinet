@@ -33,6 +33,91 @@
         </div>
         <div class="col-md-6 col-md-offset-1">
             <h4>Ingredients Currently in Your Cabinet:</h4>
+            <a data-toggle="modal" data-target="#exampleModalLong" asp-action="IngredientInfo" asp-controller="Drink">
+                Basic Ingredients
+            </a>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Basic Ingredients</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Basil
+                            Beer
+                            Brown Sugar
+                            Butter
+                            Candy
+                            Carbonated Soft Drink
+                            Carbonated Water
+                            Cherries
+                            Cherry
+                            Chocolate Milk
+                            Chocolate Syrup
+                            Chocolate
+                            Club Soda
+                            Coca-Cola
+                            Coffee
+                            Cola
+                            Cold Water
+                            Cornstarch
+                            Cream
+                            Dark Chocolate
+                            Dark Soy Sauce
+                            Egg White
+                            Egg Yolk
+                            Egg
+                            Food Coloring
+                            Fresh Basil
+                            Fresh Lemon Juice
+                            Fruit Juice
+                            Ginger
+                            Granulated Sugar
+                            Honey
+                            Hot Chocolate
+                            Hot Sauce
+                            Lemon Juice
+                            Lemon Peel
+                            lemon
+                            Light Cream
+                            Lime Juice
+                            Lime
+                            Maple syrup
+                            Maraschino cherry juice
+                            Maraschino Cherry
+                            Milk
+                            Orange Juice
+                            Orange
+                            Pepper
+                            Plain Flour
+                            Powdered Sugar
+                            Red Chile Flakes
+                            Red Chili Flakes
+                            Red Hot Chili Flakes
+                            Rock Salt
+                            Roses sweetened lime juice
+                            Salt
+                            Soda Water
+                            Soy Sauce
+                            Sugar
+                            Tabasco Sauce
+                            Vinegar
+                            Water
+                            White Vinegar
+                            Fresh Lime Juice
+                            Rosemary
+                            Habanero Peppers
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             @foreach (var ingredient in Model.CabinetList)
             {
                 <option value="@ingredient.Name">@ingredient.Name</option>
