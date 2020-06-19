@@ -9,12 +9,12 @@
 }
 
 <div class="text-center">
- 
+
     @*<a asp-action="GetDrink" asp-controller="Drink" asp-route-id="@Model.Drink.ID"><img src="@Url.Content(Model.Drink.PictureLink)" height="350 " width="350" /></a>
-    <p>@Model.Drink.Name</p>
+        <p>@Model.Drink.Name</p>
 
-    <hr />*@
-
+        <hr />*@
+    
     <div class="row">
 
         <div class="col-md-3">
@@ -24,7 +24,7 @@
             </p>
             <form id="isearch" asp-controller="Drink" asp-action="SearchMultipleIngredients">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <select class="js-example-basic-multiple" name="ingredients" multiple="multiple" required="required">
+                <select class="js-example-basic-multiple" name="ingredients" multiple="multiple" required="required" style="width: 80%">>
                     @foreach (var ingredient in Model.IngredientList.IngredientNames)
                     {
                         <option value="@ingredient">@ingredient</option>
@@ -44,10 +44,10 @@
                 Use the search bar below to look for one or more specific drinks from the database.
             </p>
 
-            <form id="isearch" asp-controller="Drink" asp-action="DrinkNameSearch" placeholder="Select an option:">
+            <form id="isearch" asp-controller="Drink" asp-action="DrinkNameSearch" style="font-size:medium">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <select class="js-example-basic-multiple" name="names" multiple="multiple" required="required">
-                    
+                <select class="js-example-basic-multiple" name="names" multiple="multiple" required="required" style="width: 80%">>
+
                     @foreach (var drink in Model.DrinksIndex)
                     {
                         <option value="@drink.StrDrink ">@drink.StrDrink</option>
@@ -72,15 +72,18 @@
         <div class="col-md-3">
             @if (true)
             {
-            <h2>Set up a Cabinet</h2>
-            <p>
-                Register a username to save ingredients to your cabinet and get drink recipes based on the ingredients you have! 
-            </p>
-            <a asp-action="Register" class="btn btn-primary"
-               asp-controller="User">Register</a>
+                <h2>Set up a Cabinet</h2>
+                <p>
+                    Register a username to save ingredients to your cabinet and get drink recipes based on the ingredients you have!
+                </p>
+                <a asp-action="Register" class="btn btn-primary"
+                   asp-controller="User">Register</a>
             }
         </div>
 
     </div>
-    <img src="~/css/Images/stefano-ghezzi-wKlvN9z3PCI-unsplash-1.jpg" style="height: 400px; width:auto "/>
+
+
 </div>
+<br />
+<img src="~/css/Images/stefano-ghezzi-wKlvN9z3PCI-unsplash-3.jpg" style="height: auto; width:auto " />

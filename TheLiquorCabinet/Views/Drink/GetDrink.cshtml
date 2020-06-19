@@ -3,13 +3,7 @@
 @{
     ViewData["Title"] = "GetDrink";
 }
-<head>
-    <script>
-        $('#myModal').on('shown.bs.modal', function () {
-      $('#myInput').trigger('focus')
-    })
-    </script>
-</head>
+
 
 
 <div class="text-center">
@@ -23,49 +17,23 @@
             <h3>Ingredients:</h3>
             @for (int i = 0; i < Model.Ingredients.Count; i++)
             {
-        <p>
-            @if (Model.IngredAvail[i] == true)
-            {
-                <img src="~/images/yes.png" />
-            }
-            else
-            {
-                <img src="~/images/no.png" />
-            }
-            @if (i < Model.Measurements.Count)
-            {
-                @Model.Measurements[i]
-            }
+            <p>
+                @if (Model.IngredAvail[i] == true)
+                {
+                    <img src="~/images/yes.png" />
+                }
+                else
+                {
+                    <img src="~/images/no.png" />
+                }
+                @if (i < Model.Measurements.Count)
+                {
+                    @Model.Measurements[i]
+                }
 
-            @*<a asp-action="IngredientInfo" asp-controller="Ingredient" asp-route-name="@Model.Ingredients[i]">@Model.Ingredients[i]</a>*@
+                <a asp-action="IngredientInfo" asp-controller="Ingredient" asp-route-name="@Model.Ingredients[i]">@Model.Ingredients[i]</a>
 
-            <!-- Button trigger modal -->
-        <a  data-toggle="modal" data-target="#exampleModalLong" asp-action="IngredientInfo" asp-controller="Drink">
-            @Model.Ingredients[i]
-        </a>
-
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">@Model.Ingredients[i]</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-            </div>
-                        <div class="modal-body">
-                            ...
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-        </p>
+            </p>
     }
         </div>
     </div>
