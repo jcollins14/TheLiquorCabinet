@@ -9,8 +9,9 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome to The Liquor Cabinet</h1>
-
+    <p>
+        <img src="~/css/Images/TheLiquorCabinetTitle.png" />
+    </p>
     <a asp-action="GetDrink" asp-controller="Drink" asp-route-id="@Model.Drink.ID"><img src="@Url.Content(Model.Drink.PictureLink)" height="350 " width="350" /></a>
     <p>@Model.Drink.Name</p>
 

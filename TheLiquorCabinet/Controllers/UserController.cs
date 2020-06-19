@@ -7,6 +7,7 @@ using System.Runtime.Loader;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.Extensions.Logging;
 using TheLiquorCabinet.Models;
 
@@ -82,6 +83,12 @@ namespace TheLiquorCabinet.Controllers
         public IActionResult LoginUser(string name)
         {
             var user = _context.Users.Where(x => x.Username == name).FirstOrDefault();
+            int userID = _context.Users.FirstOrDefault(n => n.Username == name).UserID;
+            HttpContext.Response.Cookies.Append("UserID", userID.ToString());
+            TimeSpan age = DateTime.Today - user.Birthday;
+            double years = age.TotalDays / 365.25;
+            HttpContext.Response.Cookies.Append("Age", years.ToString());
+
             if (user is object)
             {
                 TimeSpan age = DateTime.Today - user.Birthday;
@@ -114,25 +121,33 @@ namespace TheLiquorCabinet.Controllers
             return result;
         }
 
-        public async Task<IActionResult> Cabinet()
+        public IActionResult Cabinet()
         {
-
-            int UserID = int.Parse(HttpContext.Request.Cookies["UserID"]);
+            int UserID;
+            if (HttpContext.Request.Cookies["UserID"] != null)
+            {
+                UserID = int.Parse(HttpContext.Request.Cookies["UserID"]);
+            }
+            else
+            {
+                CabinetViewModel cabinetViewModel = new CabinetViewModel() { UserId = 0};
+                return View("Cabinet", cabinetViewModel);
+            }
             CabinetViewModel cabinetModel = new CabinetViewModel();
             if (UserID != 0)
             {
-                List<IngredOnHand> savedCabinet = _context.Cabinet.Where(e => e.UserID == UserID).ToList();
-                foreach (IngredOnHand item in savedCabinet)
+                List<int> savedCabinetIds = _context.Cabinet.Where(e => e.UserID == UserID).Select(e => e.IngredID).ToList();
+                List<IngredDb> savedCabinet = new List<IngredDb>();
+                foreach (var id in savedCabinetIds)
                 {
-                    Ingredient response = new Ingredient(await _client.GetStringAsync(_apiKey + "/lookup.php?iid=" + item.IngredID));
-                    IngredOnHand result = new IngredOnHand()
-                    {
-                        UserID = UserID,
-                        IngredID = response.ID
-                    };
-                    cabinetModel.CabinetList.Add(result);
+                    cabinetModel.CabinetList.Add(_context.IngredDb.FirstOrDefault(e => e.Id == id));
                 }
             }
+            //code below takes id list of ingredients in database and filters out those already in the users cabinet.
+            var allIng = _context.IngredDb.Select(e => e.Id).ToList();
+            var notInCabinet = allIng.Except(cabinetModel.CabinetList.Select(e => e.Id)).ToList();
+            cabinetModel.AllIngredients = _context.IngredDb.Where(e => notInCabinet.Contains(e.Id)).Select(e => e.Name).ToList();
+            cabinetModel.UserId = int.Parse(HttpContext.Request.Cookies["UserID"]);
             return View("Cabinet", cabinetModel);
         }
         public async Task<IActionResult> AddToCabinet(List<string> ingredients)

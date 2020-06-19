@@ -1,22 +1,59 @@
 ﻿@model TheLiquorCabinet.Models.CabinetViewModel
-<h1>Add Ingredients to your Cabinet</h1>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form id="isearch" asp-controller="Drink" asp-action="DrinksByCabinet">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <label name="DrinkId" class="control-label">Search all drinks you can make with ingredients on hand: </label>
-            <select class="js-example-basic-multiple" name="ingredients" multiple="multiple" required="required">
-                @foreach (var ingredient in Model.IngredList.IngredientNames)
-                {
-                    <option value="@ingredient">@ingredient</option>
-                }
-            </select>
-            <div class="form-group">
-                <input asp-controller="Drink" asp-action="DrinksByCabinet"
-                       asp-route-ingredients="ingredients"
-                       type="submit" value="Submit" class="btn btn-primary" />
+
+
+@if  (Model.UserId == 0)
+
+{
+    <div class="text-center">
+        <h2>The Ingredient Cabinet is Currently Empty</h2>
+        <p>
+            <img src="~/css/Images/Empty Fridge.jpg" height="350" width="300" />
+        </p>
+        <br />
+        <h6><a asp-action="Register" asp-controller="User">Create</a> an account and start adding ingredients! </h6>
+        <div class="row">
+            <div class="col-md-4">
+                
+
             </div>
-        </form>
+        </div>
+
     </div>
-</div>
+
+}
+
+@if (@Model.UserId > 0 ) { 
+<div class="text-center">
+    <h2>Usernames's Cabinet</h2>
+    <br />
+    <h4>Ingredients Currently in Your Cabinet:</h4>
+    <hr />
+    @foreach (var ingredient in Model.CabinetList)
+    {
+        <option value="@ingredient.Name">@ingredient.Name</option>
+    }
+
+    <div class="row">
+        <div class="col-md-6">
+            <form id="isearch" asp-controller="Drink" asp-action="DrinksByCabinet">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <label name="DrinkId" class="control-label">Search all drinks you can make with ingredients on hand: </label>
+                <select class="js-example-basic-multiple" name="ingredients" multiple="multiple" required="required">
+                    @foreach (var ingredient in Model.AllIngredients)
+                    {
+                        <option value="@ingredient">@ingredient</option>
+                    }
+                </select>
+                <div class="form-group">
+
+                    <input asp-controller="Drink" asp-action="DrinksByCabinet"
+                           asp-route-ingredients="ingredients"
+                           type="submit" value="Submit" class="btn btn-primary" />
+                </form>
+            </div>
+            <div class="col-md-4">
+                <p>Add ingredients to your cabinet</p>
+            </div>
+        </div>
+    </div>
+}
