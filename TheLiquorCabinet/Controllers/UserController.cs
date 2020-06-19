@@ -191,6 +191,15 @@ namespace TheLiquorCabinet.Controllers
             }
             return defaults;
         }
+        public IActionResult LogOut()
+        {
+            List<string> cookies = new List<string>() { "Age", "DoB", "User" };
+            foreach (string cookieName in cookies)
+            {
+                HttpContext.Response.Cookies.Append(cookieName,null);
+            }
+            return RedirectToAction("Index", "Home");
+        }
 
         public IActionResult RegisterError()
         {
