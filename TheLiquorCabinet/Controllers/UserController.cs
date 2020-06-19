@@ -91,8 +91,8 @@ namespace TheLiquorCabinet.Controllers
 
             if (user is object)
             {
-                TimeSpan age = DateTime.Today - user.Birthday;
-                double years = age.TotalDays / 365.25;
+                age = DateTime.Today - user.Birthday;
+                years = age.TotalDays / 365.25;
                 HttpContext.Response.Cookies.Append("UserID",user.UserID.ToString());
                 HttpContext.Response.Cookies.Append("Age", years.ToString());
                 HttpContext.Response.Cookies.Append("User", user.Username);
@@ -143,10 +143,13 @@ namespace TheLiquorCabinet.Controllers
                     cabinetModel.CabinetList.Add(_context.IngredDb.FirstOrDefault(e => e.Id == id));
                 }
             }
+            cabinetModel.CabinetList = cabinetModel.CabinetList.OrderBy(e => e.Name).ToList();
             //code below takes id list of ingredients in database and filters out those already in the users cabinet.
             var allIng = _context.IngredDb.Select(e => e.Id).ToList();
             var notInCabinet = allIng.Except(cabinetModel.CabinetList.Select(e => e.Id)).ToList();
             cabinetModel.AllIngredients = _context.IngredDb.Where(e => notInCabinet.Contains(e.Id)).Select(e => e.Name).ToList();
+            cabinetModel.AllIngredients.Sort();
+            
             cabinetModel.UserId = int.Parse(HttpContext.Request.Cookies["UserID"]);
             return View("Cabinet", cabinetModel);
         }
