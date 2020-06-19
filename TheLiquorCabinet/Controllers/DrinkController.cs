@@ -44,11 +44,15 @@ namespace TheLiquorCabinet.Controllers
             
             return View("DrinkListView", drinks);
         }
+        public IActionResult CabinetDrinkListView(List<Drink> drinks)
+        {
+
+            return View("DrinkListView", drinks);
+        }
         public async Task<IActionResult> DrinksByCabinet(string[] ingredients)
         {
-            List<string> names = GetDrinksByCabinet(ingredients.ToList());
-            List<Drink> drinks = await GetDrinks(names);
-            return View("DrinkListView", drinks);
+            CabinetSearchViewModel drinks = await GetDrinksByCabinet(ingredients.ToList());
+            return View("CabinetDrinkListView", drinks);
         }
         public async Task<List<Drink>> GetDrinks(List<string> search)
         {
@@ -124,10 +128,12 @@ namespace TheLiquorCabinet.Controllers
             return DrinkListView(drinks);
         }
 
-        public List<string> GetDrinksByCabinet(List<string> ings)
+        public async Task<CabinetSearchViewModel> GetDrinksByCabinet(List<string> ings)
         {
             ings = ings.ConvertAll(e => e.ToLower());
-            List<string> result = new List<string>();
+            CabinetSearchViewModel result = new CabinetSearchViewModel();
+            List<string> canMake = new List<string>();
+            List<string> missingOne = new List<string>();
             foreach (DrinkDb drink in 
                 //commented below is test code for manually providing dring to method.
                 //new List<DrinkDb>() { new DrinkDb() { IdDrink = "11011", StrIngredient1 = "Vodka", StrIngredient2 = "Lime Juice", StrIngredient3 = "Ginger Ale", StrDrink = "Moscow Mule"} }
@@ -135,14 +141,21 @@ namespace TheLiquorCabinet.Controllers
                 )
             {
                 List<string> drinkIngs = drink.GetDrinkDbIngredients();
-                if (CabinetContainsDrink(ings, drinkIngs))
+                int numberOfMissingIngredients = CabinetContainsDrink(ings, drinkIngs);
+                if (numberOfMissingIngredients == 0)
                 {
-                    result.Add(drink.StrDrink);
+                    canMake.Add(drink.StrDrink);
+                }
+                else if(numberOfMissingIngredients == 1)
+                {
+                    missingOne.Add(drink.StrDrink);
                 }
             }
+            result.CanMake = await GetDrinks(canMake);
+            result.MissingOne = await GetDrinks(missingOne);
             return result;
         }
-        public bool CabinetContainsDrink(List<string> cabinet, List<string> drinkIngs)
+        public int CabinetContainsDrink(List<string> cabinet, List<string> drinkIngs)
         {
             //this code is injecting the designated basic ingredients from our database into the cabinet during the search.
             //we can comment it out when we include these in the user's cabinet when it's generated.
@@ -153,7 +166,7 @@ namespace TheLiquorCabinet.Controllers
             }
 
             cabinet = ParseGenerics(cabinet);
-            bool check = !drinkIngs.Except(cabinet).Any();
+            int check = drinkIngs.Except(cabinet).Count();
             return check;
         }
         public List<string> ParseGenerics(List<string> cabinet)
