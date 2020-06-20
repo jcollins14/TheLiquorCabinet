@@ -21,6 +21,7 @@
     </div>
 
 
+
 }
 
 @if (@Model.UserId > 0)
@@ -45,6 +46,7 @@
             }
         </div>
     </div>*@
+
     <div class="row">
         <div class="col-md-6">
             <form id="isearch" asp-controller="Drink" asp-action="DrinksByCabinet">
@@ -56,6 +58,7 @@
                         <option value="@ingredient">@ingredient</option>
                     }
                 </select>
+
                 <div class="form-group">
 
                     <input asp-controller="Drink" asp-action="DrinksByCabinet"
@@ -63,6 +66,7 @@
                            type="submit" value="Submit" class="btn btn-primary" />
                 </div>
             </form>
+
         </div>
         <div class="col-md-4">
             <p>Add ingredients to your cabinet</p>
@@ -75,6 +79,7 @@
             <input class="btn btn-primary" type="submit"/>
         }
     </div>
+
 }
 <script>
         $(document).ready(function () {
@@ -86,3 +91,4 @@
         })
     });
 </script>
+
