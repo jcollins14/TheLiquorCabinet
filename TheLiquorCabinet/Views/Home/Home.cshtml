@@ -79,7 +79,7 @@
             <p>
                 If you're feeling adventurous, click the button for a random drink.
             </p>
-            <img src="@Url.Content(Model.Drink.PictureLink)" height="75" width="75" /></a>
+            <a asp-action="GetDrink" asp-controller="Drink" asp-route-id="@Model.Drink.ID"><img src="@Url.Content(Model.Drink.PictureLink)" height="75" width="75" /></a>
             <br />
             <br />
             <a asp-action="FeelingLucky" class="btn btn-primary"
