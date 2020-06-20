@@ -36,6 +36,8 @@ namespace TheLiquorCabinet.Controllers
 
         public IActionResult Register()
         {
+            string DoB = HttpContext.Request.Cookies["DoB"];
+            ViewBag.Date = DoB;
             return View();
         }
 
@@ -43,28 +45,33 @@ namespace TheLiquorCabinet.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(string name, DateTime dateOfBirth)
         {
-
-            //This took way longer than need be
             var registerUser = new User()
             {
                 Username = name,
                 Birthday = dateOfBirth //make sure this name matches the .cshtml input name="[name]" as well!
             };
 
-            _context.Users.Add(registerUser);
-            _context.SaveChanges();
+            if (_context.Users.Where(x => x.Username == name).FirstOrDefault() != null)
+            {
+                return RedirectToAction("RegisterError");
+            }
+            else
+            {
+                _context.Users.Add(registerUser);
+                _context.SaveChanges();
+            }
             int userID = _context.Users.FirstOrDefault(n => n.Username == name).UserID;
             HttpContext.Response.Cookies.Append("UserID", userID.ToString());
             TimeSpan age = DateTime.Today - dateOfBirth;
             double years = age.TotalDays / 365.25;
             HttpContext.Response.Cookies.Append("Age", years.ToString());
-            
+            HttpContext.Response.Cookies.Append("User", name);
+            List<string> defaults = GetDefaultIngredients();
+            await AddToCabinet(defaults, userID);
             if(years < 21)
             {
                 return RedirectToAction("HomeNA", "Home");
             }
-            List<string> defaults = GetDefaultIngredients();
-            await AddToCabinet(defaults, userID);
             return RedirectToAction("Home", "Home");
         }
 
@@ -84,6 +91,11 @@ namespace TheLiquorCabinet.Controllers
 
             if (user is object)
             {
+                age = DateTime.Today - user.Birthday;
+                years = age.TotalDays / 365.25;
+                HttpContext.Response.Cookies.Append("UserID",user.UserID.ToString());
+                HttpContext.Response.Cookies.Append("Age", years.ToString());
+                HttpContext.Response.Cookies.Append("User", user.Username);
                 if (years < 21) //Age check validation
                 {
                     return RedirectToAction("HomeNA", "Home");
@@ -131,10 +143,14 @@ namespace TheLiquorCabinet.Controllers
                     cabinetModel.CabinetList.Add(_context.IngredDb.FirstOrDefault(e => e.Id == id));
                 }
             }
+            cabinetModel.CabinetList = cabinetModel.CabinetList.OrderBy(e => e.Name).ToList();
             //code below takes id list of ingredients in database and filters out those already in the users cabinet.
             var allIng = _context.IngredDb.Select(e => e.Id).ToList();
             var notInCabinet = allIng.Except(cabinetModel.CabinetList.Select(e => e.Id)).ToList();
             cabinetModel.AllIngredients = _context.IngredDb.Where(e => notInCabinet.Contains(e.Id)).Select(e => e.Name).ToList();
+            cabinetModel.AllIngredients.Sort();
+            TempData.Clear();
+            TempData.Add("Cabinet", cabinetModel.CabinetList.Select(e => e.Name).ToList());
             cabinetModel.UserId = int.Parse(HttpContext.Request.Cookies["UserID"]);
             return View("Cabinet", cabinetModel);
         }
@@ -193,6 +209,11 @@ namespace TheLiquorCabinet.Controllers
                 defaults.Add(name);
             }
             return defaults;
+        }
+
+        public IActionResult RegisterError()
+        {
+            return View();
         }
     }
 }

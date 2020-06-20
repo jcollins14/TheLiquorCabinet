@@ -49,8 +49,9 @@ namespace TheLiquorCabinet.Controllers
 
             return View("DrinkListView", drinks);
         }
-        public async Task<IActionResult> DrinksByCabinet(string[] ingredients)
+        public async Task<IActionResult> DrinksByCabinet()
         {
+            string[] ingredients = (string[])TempData["Cabinet"];
             CabinetSearchViewModel drinks = await GetDrinksByCabinet(ingredients.ToList());
             return View("CabinetDrinkListView", drinks);
         }

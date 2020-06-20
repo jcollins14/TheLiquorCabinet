@@ -1,130 +1,52 @@
 ﻿@model TheLiquorCabinet.Models.CabinetViewModel
 
 
-@if  (Model.UserId == 0)
+@if (Model.UserId == 0)
 
 {
     <div class="text-center">
-        <h2>The Ingredient Cabinet is Currently Empty</h2>
-        <p>
-            <img src="~/css/Images/Empty Fridge.jpg" height="350" width="300" />
-        </p>
-        <br />
-        <h6><a asp-action="Register" asp-controller="User">Create</a> an account and start adding ingredients! </h6>
-        <div class="row">
-            <div class="col-md-4">
-                
+            <h2>The Ingredient Cabinet is Currently Empty</h2>
+            <p>
+                <img src="~/css/Images/Empty Fridge.jpg" height="350" width="300" />
+            </p>
+            <br />
+            <h6><a asp-action="Register" asp-controller="User">Create</a> an account and start adding ingredients! </h6>
+            <div class="row">
+                <div class="col-md-4">
 
+
+                </div>
             </div>
-        </div>
 
     </div>
+
+
 
 }
 
-@if (@Model.UserId > 0 ) { 
-<div class="text-center">
-    <h2>Usernames's Cabinet</h2>
-    <br />
-    <hr />
-    <div class="row">
-        <div class="col-md-5">
-            <img src="~/css/Images/CabinetIngredient.jpg" style="height:300px; width:auto" />
-        </div>
-        <div class="col-md-6 col-md-offset-1">
-            <h4>Ingredients Currently in Your Cabinet:</h4>
-            <a data-toggle="modal" data-target="#exampleModalLong" asp-action="IngredientInfo" asp-controller="Drink">
-                Basic Ingredients
-            </a>
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Basic Ingredients</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            Basil
-                            Beer
-                            Brown Sugar
-                            Butter
-                            Candy
-                            Carbonated Soft Drink
-                            Carbonated Water
-                            Cherries
-                            Cherry
-                            Chocolate Milk
-                            Chocolate Syrup
-                            Chocolate
-                            Club Soda
-                            Coca-Cola
-                            Coffee
-                            Cola
-                            Cold Water
-                            Cornstarch
-                            Cream
-                            Dark Chocolate
-                            Dark Soy Sauce
-                            Egg White
-                            Egg Yolk
-                            Egg
-                            Food Coloring
-                            Fresh Basil
-                            Fresh Lemon Juice
-                            Fruit Juice
-                            Ginger
-                            Granulated Sugar
-                            Honey
-                            Hot Chocolate
-                            Hot Sauce
-                            Lemon Juice
-                            Lemon Peel
-                            lemon
-                            Light Cream
-                            Lime Juice
-                            Lime
-                            Maple syrup
-                            Maraschino cherry juice
-                            Maraschino Cherry
-                            Milk
-                            Orange Juice
-                            Orange
-                            Pepper
-                            Plain Flour
-                            Powdered Sugar
-                            Red Chile Flakes
-                            Red Chili Flakes
-                            Red Hot Chili Flakes
-                            Rock Salt
-                            Roses sweetened lime juice
-                            Salt
-                            Soda Water
-                            Soy Sauce
-                            Sugar
-                            Tabasco Sauce
-                            Vinegar
-                            Water
-                            White Vinegar
-                            Fresh Lime Juice
-                            Rosemary
-                            Habanero Peppers
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+@if (@Model.UserId > 0)
+{
+    <div class="megalist" id="myList">
+        <ul>
+            @foreach (var item in Model.CabinetList)
+            {
+                <li>@item.Name</li>
+            }
+        </ul>
+    </div>
+    @*<div class="text-center">
+        <h2>Usernames's Cabinet</h2>
+        <br />
+        <h4>Ingredients Currently in Your Cabinet:</h4>
+        <hr />
+        <div class="card-body">
             @foreach (var ingredient in Model.CabinetList)
             {
-                <option value="@ingredient.Name">@ingredient.Name</option>
+                <p class="text-md-left">@ingredient.Name</p>
             }
         </div>
-    </div>
-    <hr />
+    </div>*@
+
     <div class="row">
         <div class="col-md-6">
             <form id="isearch" asp-controller="Drink" asp-action="DrinksByCabinet">
@@ -144,14 +66,29 @@
                            type="submit" value="Submit" class="btn btn-primary" />
                 </div>
             </form>
+
         </div>
-
-
         <div class="col-md-4">
             <p>Add ingredients to your cabinet</p>
         </div>
     </div>
-</div>
-   
-    
+    <h3>See all the drinks you can make!</h3>
+    <div>
+         @using (@Html.BeginForm("DrinksByCabinet", "Drink"))
+         {
+            <input class="btn btn-primary" type="submit"/>
+        }
+    </div>
+
 }
+<script>
+        $(document).ready(function () {
+        $('#myList').megalist();
+        $('#myList').on('change', function (event) {
+            var message = "selected index: " + event.selectedIndex + "\n" +
+                "selected item: " + event.srcElement.get()[0].outerHTML;
+            alert(message);
+        })
+    });
+</script>
+
