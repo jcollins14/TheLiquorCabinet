@@ -11,17 +11,7 @@
             </p>
             <br />
             <h6><a asp-action="Register" asp-controller="User">Create</a> an account and start adding ingredients! </h6>
-            <div class="row">
-                <div class="col-md-4">
-
-
-                </div>
-            </div>
-
     </div>
-
-
-
 }
 
 @if (@Model.UserId > 0)
@@ -42,40 +32,27 @@
         </ul>
     </div>
 </div>
-
     <div class="row">
         <div class="col-md-6">
-            <form id="isearch" asp-controller="Drink" asp-action="DrinksByCabinet">
+            <form id="isearch" asp-controller="Ingredient" asp-action="RegisterIngredientsToUser">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <label name="DrinkId" class="control-label">Search all drinks you can make with ingredients on hand: </label>
-                <select class="js-example-basic-multiple" name="ingredients" multiple="multiple" required="required">
+                <label name="ingreds" class="control-label">Search ingredients and add them to your cabinet</label>
+                <select class="js-example-basic-multiple" name="ingreds" multiple="multiple" required="required">
                     @foreach (var ingredient in Model.AllIngredients)
                     {
                         <option value="@ingredient">@ingredient</option>
                     }
                 </select>
-
-                <div class="form-group">
-
-                    <input asp-controller="Drink" asp-action="DrinksByCabinet"
-                           asp-route-ingredients="ingredients"
+                    <input asp-controller="Ingredient" asp-action="RegisterIngredientsToUser"
+                           asp-route-ingreds="ingreds"
                            type="submit" value="Submit" class="btn btn-primary" />
-                </div>
             </form>
-
-        </div>
-        <div class="col-md-4">
-            <p>Add ingredients to your cabinet</p>
         </div>
     </div>
     <h3>See all the drinks you can make!</h3>
     <div>
-         @using (@Html.BeginForm("DrinksByCabinet", "Drink"))
-         {
-            <input class="btn btn-primary" type="submit"/>
-        }
+            <a class="btn btn-primary" asp-controller="Drink" asp-action="DrinksByCabinet">Find Recipes</a>
     </div>
-
 }
 <script>
         $(document).ready(function () {

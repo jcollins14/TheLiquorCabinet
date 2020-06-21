@@ -160,11 +160,11 @@ namespace TheLiquorCabinet.Controllers
         {
             //this code is injecting the designated basic ingredients from our database into the cabinet during the search.
             //we can comment it out when we include these in the user's cabinet when it's generated.
-            List<string> basics = _context.IngredDb.Where(e => e.Type == "Basic").Select(e => e.Name.ToLower()).ToList();
-            foreach (var item in basics)
-            {
-                cabinet.Add(item);
-            }
+            //List<string> basics = _context.IngredDb.Where(e => e.Type == "Basic").Select(e => e.Name.ToLower()).ToList();
+            //foreach (var item in basics)
+            //{
+            //    cabinet.Add(item);
+            //}
 
             cabinet = ParseGenerics(cabinet);
             int check = drinkIngs.Except(cabinet).Count();

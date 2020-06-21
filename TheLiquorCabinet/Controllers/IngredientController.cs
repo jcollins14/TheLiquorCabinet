@@ -68,15 +68,15 @@ namespace TheLiquorCabinet.Controllers
             }
             foreach (IngredOnHand save in cabinet)
             {
-                if (!_context.Cabinet.Contains(save))
-                {
-                    _context.Cabinet.Add(save);
-                }
+                _context.Cabinet.Add(save);
+                //if (_context.Cabinet.Contains(save))
+                //{
+                //    _context.Cabinet.Add(save);
+                //}
             }
             _context.SaveChanges();
-            return RedirectToAction("CabinetView", "User");
+            return RedirectToAction("Cabinet", "User");
         }
-
         public async Task<IActionResult> RemoveIngredientsFromUser(List<string> ingreds)
         {
             List<IngredOnHand> cabinet = new List<IngredOnHand>();
