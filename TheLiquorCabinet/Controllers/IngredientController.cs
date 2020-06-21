@@ -101,6 +101,25 @@ namespace TheLiquorCabinet.Controllers
             _context.SaveChanges();
             return RedirectToAction("CabinetView", "User");
         }
+        public async Task<IActionResult> RemoveOneIngredient(string ingred)
+        {
+            int UserID = int.Parse(HttpContext.Request.Cookies["UserID"]);
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri("https://www.thecocktaildb.com/")
+            };
+            var response = await client.GetStringAsync(_apiKey + "/search.php?i=" + ingred);
+            IngredOnHand ingredient = new IngredOnHand(response, UserID);
+            
+            IngredOnHand remove = _context.Cabinet.Where(e => e.UserID == ingredient.UserID).FirstOrDefault(e => e.IngredID == ingredient.IngredID);
+            if (remove != null)
+            {
+                _context.Remove(remove);
+                _context.SaveChanges();
+            }
+            
+            return RedirectToAction("Cabinet", "User");
+        }
 
 
     }

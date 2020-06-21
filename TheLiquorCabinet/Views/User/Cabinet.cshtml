@@ -26,26 +26,22 @@
 
 @if (@Model.UserId > 0)
 {
+<div class="card-body">
+    <h2>These ingredients are currently in your cabinet</h2>
     <div class="megalist" id="myList">
         <ul>
             @foreach (var item in Model.CabinetList)
             {
-                <li>@item.Name</li>
+                <li>
+                    <p>@item.Name
+                    <a class="btn btn-danger" style="float: right" asp-controller="Ingredient" 
+                       asp-action="RemoveOneIngredient" asp-route-ingred="@item.Name">Remove</a>
+                    </p>
+                </li>
             }
         </ul>
     </div>
-    @*<div class="text-center">
-        <h2>Usernames's Cabinet</h2>
-        <br />
-        <h4>Ingredients Currently in Your Cabinet:</h4>
-        <hr />
-        <div class="card-body">
-            @foreach (var ingredient in Model.CabinetList)
-            {
-                <p class="text-md-left">@ingredient.Name</p>
-            }
-        </div>
-    </div>*@
+</div>
 
     <div class="row">
         <div class="col-md-6">
