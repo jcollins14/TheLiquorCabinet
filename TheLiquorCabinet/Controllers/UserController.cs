@@ -86,8 +86,8 @@ namespace TheLiquorCabinet.Controllers
             int userID = _context.Users.FirstOrDefault(n => n.Username == name).UserID;
             if (user is object)
             {
-                age = DateTime.Today - user.Birthday;
-                years = age.TotalDays / 365.25;
+                TimeSpan age = DateTime.Today - user.Birthday;
+                double years = age.TotalDays / 365.25;
                 HttpContext.Response.Cookies.Append("UserID",user.UserID.ToString());
                 HttpContext.Response.Cookies.Append("Age", years.ToString());
                 HttpContext.Response.Cookies.Append("User", user.Username);
