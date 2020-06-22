@@ -125,6 +125,7 @@ namespace TheLiquorCabinet.Controllers
                  string drinkName = (string)parse["drinks"][i]["strDrink"];
                 result.Add(drinkName);
             }
+            ViewBag.IngredientNames = ingredients;
             List<Drink> drinks = await GetDrinks(result);
             return DrinkListView(drinks);
         }
