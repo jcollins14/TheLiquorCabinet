@@ -15,6 +15,9 @@
     margin: 2px;
     display: none; /* Hidden by default */
 }
+.alcoholDiv {
+    display: none; /* Hidden by default */
+}
 
 /* The "show" class is added to the filtered elements */
 .show {
@@ -47,6 +50,11 @@
         background-color: #666;
         color: white;
     }
+    .btn.alcoholActive {
+        background-color: #666;
+        color: white;
+    }
+
 
 #x {
     position: relative;
