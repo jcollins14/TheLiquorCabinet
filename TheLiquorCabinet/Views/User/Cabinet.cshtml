@@ -5,33 +5,35 @@
 
 {
     <div class="text-center">
-            <h2>The Ingredient Cabinet is Currently Empty</h2>
-            <p>
-                <img src="~/css/Images/Empty Fridge.jpg" height="350" width="300" />
-            </p>
-            <br />
-            <h6><a asp-action="Register" asp-controller="User">Create</a> an account and start adding ingredients! </h6>
+        <h2>The Ingredient Cabinet is Currently Empty</h2>
+        <p>
+            <img src="~/css/Images/Empty Fridge.jpg" height="350" width="300" />
+        </p>
+        <br />
+        <h6><a asp-action="Register" asp-controller="User">Create</a> an account and start adding ingredients! </h6>
     </div>
 }
 
 @if (@Model.UserId > 0)
 {
-<div class="card-body">
-    <h2>These ingredients are currently in your cabinet</h2>
-    <div class="megalist" id="myList">
-        <ul>
-            @foreach (var item in Model.CabinetList)
-            {
-                <li>
-                    <p>@item.Name
-                    <a class="btn btn-danger" style="float: right" asp-controller="Ingredient" 
-                       asp-action="RemoveOneIngredient" asp-route-ingred="@item.Name">Remove</a>
-                    </p>
-                </li>
-            }
-        </ul>
+    <div id="myBtnContainer">
+        <button class="btn active" onclick="filterSelection('all')"> Show all</button>
+        <button class="btn" onclick="filterSelection('Basic')"> Basic</button>
+        <button class="btn" onclick="filterSelection('Liqueur')"> Liqueur</button>
     </div>
-</div>
+    <div class="container">
+        @foreach (var item in Model.CabinetList)
+        {
+            <div class="filterDiv @item.Type">
+                <button id="x">
+                    X
+                </button>
+                <p class="center-text">@item.Name</p>
+            </div>
+        }
+    </div>
+
+
     <div class="row">
         <div class="col-md-6">
             <form id="isearch" asp-controller="Ingredient" asp-action="RegisterIngredientsToUser">
@@ -43,25 +45,64 @@
                         <option value="@ingredient">@ingredient</option>
                     }
                 </select>
-                    <input asp-controller="Ingredient" asp-action="RegisterIngredientsToUser"
-                           asp-route-ingreds="ingreds"
-                           type="submit" value="Submit" class="btn btn-primary" />
+                <input asp-controller="Ingredient" asp-action="RegisterIngredientsToUser"
+                       asp-route-ingreds="ingreds"
+                       type="submit" value="Submit" class="btn btn-primary" />
             </form>
         </div>
     </div>
     <h3>See all the drinks you can make!</h3>
     <div>
-            <a class="btn btn-primary" asp-controller="Drink" asp-action="DrinksByCabinet">Find Recipes</a>
+        <a class="btn btn-primary" asp-controller="Drink" asp-action="DrinksByCabinet">Find Recipes</a>
     </div>
 }
 <script>
-        $(document).ready(function () {
-        $('#myList').megalist();
-        $('#myList').on('change', function (event) {
-            var message = "selected index: " + event.selectedIndex + "\n" +
-                "selected item: " + event.srcElement.get()[0].outerHTML;
-            alert(message);
-        })
-    });
+    filterSelection("all")
+    function filterSelection(c) {
+        var x, i;
+        x = document.getElementsByClassName("filterDiv");
+        if (c == "all") c = "";
+        // Add the "show" class (display:block) to the filtered elements, and remove the "show" class from the elements that are not selected
+        for (i = 0; i < x.length; i++) {
+            w3RemoveClass(x[i], "show");
+            if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+        }
+    }
+
+    // Show filtered elements
+    function w3AddClass(element, name) {
+        var i, arr1, arr2;
+        arr1 = element.className.split(" ");
+        arr2 = name.split(" ");
+        for (i = 0; i < arr2.length; i++) {
+            if (arr1.indexOf(arr2[i]) == -1) {
+                element.className += " " + arr2[i];
+            }
+        }
+    }
+
+    // Hide elements that are not selected
+    function w3RemoveClass(element, name) {
+        var i, arr1, arr2;
+        arr1 = element.className.split(" ");
+        arr2 = name.split(" ");
+        for (i = 0; i < arr2.length; i++) {
+            while (arr1.indexOf(arr2[i]) > -1) {
+                arr1.splice(arr1.indexOf(arr2[i]), 1);
+            }
+        }
+        element.className = arr1.join(" ");
+    }
+
+    // Add active class to the current control button (highlight it)
+    var btnContainer = document.getElementById("myBtnContainer");
+    var btns = btnContainer.getElementsByClassName("btn");
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function () {
+            var current = document.getElementsByClassName("active");
+            current[0].className = current[0].className.replace(" active", "");
+            this.className += " active";
+        });
+    }
 </script>
 
