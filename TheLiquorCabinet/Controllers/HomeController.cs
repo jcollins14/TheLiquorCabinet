@@ -55,18 +55,17 @@ namespace TheLiquorCabinet.Controllers
             double years = age.TotalDays / 365.25;
             string birthday = DateManiupulation(dateOfBirth);
             HttpContext.Response.Cookies.Append("DoB", birthday);
-            if (years < 21)
-            {
-                return RedirectToAction("HomeNA");
-            }
-            else
-            {
-                return RedirectToAction("Home");
-            }
+            HttpContext.Response.Cookies.Append("Age", years.ToString());
+            return RedirectToAction("Home");
         }
             
         public async Task<IActionResult> Home()
         {
+            double.TryParse(HttpContext.Request.Cookies["Age"], out double age);
+            if (age < 21)
+            {
+                return RedirectToAction("HomeNA");
+            }
         var client = new HttpClient
         {
             BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/")

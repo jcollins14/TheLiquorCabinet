@@ -68,15 +68,15 @@ namespace TheLiquorCabinet.Controllers
             }
             foreach (IngredOnHand save in cabinet)
             {
-                if (!_context.Cabinet.Contains(save))
-                {
-                    _context.Cabinet.Add(save);
-                }
+                _context.Cabinet.Add(save);
+                //if (_context.Cabinet.Contains(save))
+                //{
+                //    _context.Cabinet.Add(save);
+                //}
             }
             _context.SaveChanges();
-            return RedirectToAction("CabinetView", "User");
+            return RedirectToAction("Cabinet", "User");
         }
-
         public async Task<IActionResult> RemoveIngredientsFromUser(List<string> ingreds)
         {
             List<IngredOnHand> cabinet = new List<IngredOnHand>();
@@ -100,6 +100,25 @@ namespace TheLiquorCabinet.Controllers
             }
             _context.SaveChanges();
             return RedirectToAction("CabinetView", "User");
+        }
+        public async Task<IActionResult> RemoveOneIngredient(string ingred)
+        {
+            int UserID = int.Parse(HttpContext.Request.Cookies["UserID"]);
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri("https://www.thecocktaildb.com/")
+            };
+            var response = await client.GetStringAsync(_apiKey + "/search.php?i=" + ingred);
+            IngredOnHand ingredient = new IngredOnHand(response, UserID);
+            
+            IngredOnHand remove = _context.Cabinet.Where(e => e.UserID == ingredient.UserID).FirstOrDefault(e => e.IngredID == ingredient.IngredID);
+            if (remove != null)
+            {
+                _context.Remove(remove);
+                _context.SaveChanges();
+            }
+            
+            return RedirectToAction("Cabinet", "User");
         }
 
 
