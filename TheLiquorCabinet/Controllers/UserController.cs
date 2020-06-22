@@ -84,11 +84,6 @@ namespace TheLiquorCabinet.Controllers
         {
             var user = _context.Users.Where(x => x.Username == name).FirstOrDefault();
             int userID = _context.Users.FirstOrDefault(n => n.Username == name).UserID;
-            HttpContext.Response.Cookies.Append("UserID", userID.ToString());
-            TimeSpan age = DateTime.Today - user.Birthday;
-            double years = age.TotalDays / 365.25;
-            HttpContext.Response.Cookies.Append("Age", years.ToString());
-
             if (user is object)
             {
                 age = DateTime.Today - user.Birthday;
@@ -152,6 +147,7 @@ namespace TheLiquorCabinet.Controllers
             TempData.Clear();
             TempData.Add("Cabinet", cabinetModel.CabinetList.Select(e => e.Name).ToList());
             cabinetModel.UserId = int.Parse(HttpContext.Request.Cookies["UserID"]);
+            ViewBag.Username = HttpContext.Request.Cookies["User"];
             return View("Cabinet", cabinetModel);
         }
         public async Task<IActionResult> AddToCabinet(List<string> ingredients)
@@ -209,6 +205,15 @@ namespace TheLiquorCabinet.Controllers
                 defaults.Add(name);
             }
             return defaults;
+        }
+        public IActionResult LogOut()
+        {
+            List<string> cookies = new List<string>() { "Age", "DoB", "User" };
+            foreach (string cookieName in cookies)
+            {
+                HttpContext.Response.Cookies.Append(cookieName,"0");
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult RegisterError()
