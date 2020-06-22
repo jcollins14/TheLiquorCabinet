@@ -76,16 +76,23 @@ namespace TheLiquorCabinet.Controllers
             for (int i = 0; i < result.Ingredients.Count; i++)
             {
                 IngredientResponse ingredient = new IngredientResponse(await _client.GetStringAsync(_apiKey + "/search.php?i=" + result.Ingredients[i]));
-                int userID = int.Parse(HttpContext.Request.Cookies["UserID"]);
-                IngredOnHand check = _context.Cabinet.Where(x => x.UserID == userID && x.IngredID == ingredient.ResponseIngred.Id).FirstOrDefault();
-                if (check != null)
-                {
-                    result.IngredAvail.Add(true);
-                }
-                else
+                int.TryParse(HttpContext.Request.Cookies["UserID"], out int userID);
+                if (userID == 0)
                 {
                     result.IngredAvail.Add(false);
                 }
+                else
+                {
+                  IngredOnHand check = _context.Cabinet.Where(x => x.UserID == userID && x.IngredID == ingredient.ResponseIngred.Id).FirstOrDefault();
+                    if (check != null)
+                    {
+                        result.IngredAvail.Add(true);
+                    }
+                    else
+                    {
+                        result.IngredAvail.Add(false);
+                    }
+                }  
             }
             return View(result);
         }
@@ -125,6 +132,7 @@ namespace TheLiquorCabinet.Controllers
                  string drinkName = (string)parse["drinks"][i]["strDrink"];
                 result.Add(drinkName);
             }
+            ViewBag.IngredientNames = ingredients;
             List<Drink> drinks = await GetDrinks(result);
             return DrinkListView(drinks);
         }

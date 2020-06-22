@@ -208,7 +208,7 @@ namespace TheLiquorCabinet.Controllers
         }
         public IActionResult LogOut()
         {
-            List<string> cookies = new List<string>() { "Age", "DoB", "User" };
+            List<string> cookies = new List<string>() { "Age", "DoB", "UserID", "User" };
             foreach (string cookieName in cookies)
             {
                 HttpContext.Response.Cookies.Append(cookieName,"0");
