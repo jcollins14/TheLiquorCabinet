@@ -2,10 +2,19 @@
     var x, i;
     x = document.getElementsByClassName("filterDiv");
     if (c == "all") c = "";
-    // Add the "show" class (display:block) to the filtered elements, and remove the "show" class from the elements that are not selected
-    for (i = 0; i < x.length; i++) {
-        w3RemoveClass(x[i], "show");
-        if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+    if (c == "Others") {
+        for (i = 0; i < x.length; i++) {
+            w3AddClass(x[i], "show");
+            if (x[i].className.indexOf('Basic') > -1) w3RemoveClass(x[i], "show");
+        }
+    }
+    else {
+
+        // Add the "show" class (display:block) to the filtered elements, and remove the "show" class from the elements that are not selected
+        for (i = 0; i < x.length; i++) {
+            w3RemoveClass(x[i], "show");
+            if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+        }
     }
 }
 function alcoholSelection(c) {
