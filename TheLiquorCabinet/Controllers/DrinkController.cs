@@ -49,8 +49,9 @@ namespace TheLiquorCabinet.Controllers
 
             return View("DrinkListView", drinks);
         }
-        public async Task<IActionResult> DrinksByCabinet(string[] ingredients)
+        public async Task<IActionResult> DrinksByCabinet()
         {
+            string[] ingredients = (string[])TempData["Cabinet"];
             CabinetSearchViewModel drinks = await GetDrinksByCabinet(ingredients.ToList());
             return View("CabinetDrinkListView", drinks);
         }
@@ -159,11 +160,11 @@ namespace TheLiquorCabinet.Controllers
         {
             //this code is injecting the designated basic ingredients from our database into the cabinet during the search.
             //we can comment it out when we include these in the user's cabinet when it's generated.
-            List<string> basics = _context.IngredDb.Where(e => e.Type == "Basic").Select(e => e.Name.ToLower()).ToList();
-            foreach (var item in basics)
-            {
-                cabinet.Add(item);
-            }
+            //List<string> basics = _context.IngredDb.Where(e => e.Type == "Basic").Select(e => e.Name.ToLower()).ToList();
+            //foreach (var item in basics)
+            //{
+            //    cabinet.Add(item);
+            //}
 
             cabinet = ParseGenerics(cabinet);
             int check = drinkIngs.Except(cabinet).Count();
@@ -197,5 +198,23 @@ namespace TheLiquorCabinet.Controllers
             IngredientList result = new IngredientList(response);
             return result;
         }
+        public async Task<Ingredient> IngredientInfo(string Name)
+        {
+            Ingredient result = await GetIngredient(Name);
+            return result;
+        }
+        public async Task<Ingredient> GetIngredient(string Name)
+        {
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/")
+            };
+            //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
+            var response = await client.GetStringAsync("9973533/search.php?i=" + Name);
+            Ingredient result = new Ingredient(response);
+            return result;
+        }
     }
+
+
 }

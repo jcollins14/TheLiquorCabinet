@@ -1,59 +1,67 @@
 ﻿@model TheLiquorCabinet.Models.CabinetViewModel
 
 
-@if  (Model.UserId == 0)
+@if (Model.UserId == 0)
 
 {
     <div class="text-center">
-        <h2>The Ingredient Cabinet is Currently Empty</h2>
-        <p>
-            <img src="~/css/Images/Empty Fridge.jpg" height="350" width="300" />
-        </p>
-        <br />
-        <h6><a asp-action="Register" asp-controller="User">Create</a> an account and start adding ingredients! </h6>
-        <div class="row">
-            <div class="col-md-4">
-                
-
-            </div>
-        </div>
-
+            <h2>The Ingredient Cabinet is Currently Empty</h2>
+            <p>
+                <img src="~/css/Images/Empty Fridge.jpg" height="350" width="300" />
+            </p>
+            <br />
+            <h6><a asp-action="Register" asp-controller="User">Create</a> an account and start adding ingredients! </h6>
     </div>
-
 }
 
-@if (@Model.UserId > 0 ) { 
-<div class="text-center">
-    <h2>@ViewBag.Username's Cabinet</h2>
-    <br />
-    <h4>Ingredients Currently in Your Cabinet:</h4>
-    <hr />
-    @foreach (var ingredient in Model.CabinetList)
-    {
-        <option value="@ingredient.Name">@ingredient.Name</option>
-    }
-
+@if (@Model.UserId > 0)
+{
+<div class="card-body">
+    <h2>These ingredients are currently in your cabinet</h2>
+    <div class="megalist" id="myList">
+        <ul>
+            @foreach (var item in Model.CabinetList)
+            {
+                <li>
+                    <p>@item.Name
+                    <a class="btn btn-danger" style="float: right" asp-controller="Ingredient" 
+                       asp-action="RemoveOneIngredient" asp-route-ingred="@item.Name">Remove</a>
+                    </p>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
     <div class="row">
         <div class="col-md-6">
-            <form id="isearch" asp-controller="Drink" asp-action="DrinksByCabinet">
+            <form id="isearch" asp-controller="Ingredient" asp-action="RegisterIngredientsToUser">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <label name="DrinkId" class="control-label">Search all drinks you can make with ingredients on hand: </label>
-                <select class="js-example-basic-multiple" name="ingredients" multiple="multiple" required="required">
+                <label name="ingreds" class="control-label">Search ingredients and add them to your cabinet</label>
+                <select class="js-example-basic-multiple" name="ingreds" multiple="multiple" required="required">
                     @foreach (var ingredient in Model.AllIngredients)
                     {
                         <option value="@ingredient">@ingredient</option>
                     }
                 </select>
-                <div class="form-group">
-
-                    <input asp-controller="Drink" asp-action="DrinksByCabinet"
-                           asp-route-ingredients="ingredients"
+                    <input asp-controller="Ingredient" asp-action="RegisterIngredientsToUser"
+                           asp-route-ingreds="ingreds"
                            type="submit" value="Submit" class="btn btn-primary" />
-                </form>
-            </div>
-            <div class="col-md-4">
-                <p>Add ingredients to your cabinet</p>
-            </div>
+            </form>
         </div>
     </div>
+    <h3>See all the drinks you can make!</h3>
+    <div>
+            <a class="btn btn-primary" asp-controller="Drink" asp-action="DrinksByCabinet">Find Recipes</a>
+    </div>
 }
+<script>
+        $(document).ready(function () {
+        $('#myList').megalist();
+        $('#myList').on('change', function (event) {
+            var message = "selected index: " + event.selectedIndex + "\n" +
+                "selected item: " + event.srcElement.get()[0].outerHTML;
+            alert(message);
+        })
+    });
+</script>
+
