@@ -16,29 +16,31 @@
 
 @if (@Model.UserId > 0)
 {
-<div id="myBtnContainer">
-    <button class="btn active" onclick="filterSelection('all')"> Show all</button>
-    <button class="btn" onclick="filterSelection('Basic')"> Basic</button>
-    <button class="btn" onclick="filterSelection('Liqueur')"> Liqueur</button>
-</div>
-<div id="myBtnContainer2">
-    <button class="btn alcoholActive" onclick="alcoholSelection('all')">Show all</button>
-    <button class="btn" onclick="alcoholSelection('Yes')">Alcohol</button>
-</div>
-<div class="container">
-    @foreach (var item in Model.CabinetList)
-    {
-    <div class="alcoholDiv @item.Alcohol">
-        <div class="filterDiv @item.Type">
-            <button id="x" asp-controller="Ingredient"
-                    asp-action="RemoveOnIngredient"
-                    asp-route-ingred="@item.Name">
-                X
-            </button>
-            <p class="center-text">@item.Name</p>
-        </div>
+<div>
+    <div id="myBtnContainer">
+        <button class="btn active" onclick="filterSelection('all')"> Show all</button>
+        <button class="btn" onclick="filterSelection('Basic')"> Basic</button>
+        <button class="btn" onclick="filterSelection('Basic')"> Additions</button>
     </div>
-    }
+    <div id="myBtnContainer2">
+        <button class="btn alcoholActive" onclick="alcoholSelection('all')">Show all</button>
+        <button class="btn" onclick="alcoholSelection('Yes')">Alcohol</button>
+    </div>
+    <div class="alcContainer">
+        @foreach (var item in Model.CabinetList)
+        {
+            <div class="alcoholDiv @item.Alcohol">
+                <div class="filterDiv @item.Type">
+                    <a id="x" type="submit" value="submit" asp-controller="Ingredient"
+                            asp-action="RemoveOneIngredient"
+                            asp-route-ingred="@item.Name">
+                        X
+                    </a>
+                    <p class="center-text">@item.Name</p>
+                </div>
+            </div>
+        }
+    </div>
 </div>
     <div class="row">
         <div class="col-md-6">
@@ -63,6 +65,7 @@
     </div>
 }
 <script>
+    alcoholSelection("all")
     filterSelection("all")
     function filterSelection(c) {
         var x, i;
@@ -74,7 +77,6 @@
             if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
         }
     }
-    alcoholSelection("all")
     function alcoholSelection(c) {
         var x, i;
         x = document.getElementsByClassName("alcoholDiv");
@@ -85,7 +87,6 @@
             if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
         }
     }
-
     // Show filtered elements
     function w3AddClass(element, name) {
         var i, arr1, arr2;
