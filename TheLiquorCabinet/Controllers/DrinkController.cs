@@ -162,6 +162,33 @@ namespace TheLiquorCabinet.Controllers
             List<Drink> drinks = await GetDrinks(result);
             return DrinkListView(drinks);
         }
+        public async Task<IActionResult> SearchMultipleIngredientsNA(List<string> ingredients)
+        {
+            string endpoint = "";
+            for (int i = 0; i < ingredients.Count; i++)
+            {
+                string add = ingredients[i].Trim();
+                add = add.Replace(' ', '_');
+                if (i != ingredients.Count - 1)
+                {
+                    add += ',';
+                }
+                endpoint += add;
+            }
+
+            var response = await _client.GetStringAsync(_apiKey + "/filter.php?i=" + endpoint);
+            JObject parse = JObject.Parse(response);
+            List<string> result = new List<string>();
+            for (int i = 0; i < parse["drinks"].Count(); i++)
+            {
+                string drinkName = (string)parse["drinks"][i]["strDrink"];
+                result.Add(drinkName);
+            }
+            ViewBag.IngredientNames = ingredients;
+            List<Drink> drinks = await GetDrinks(result);
+            List<Drink> naDrinks = drinks.Where(e => e.IsAlcoholic == false).ToList();
+            return DrinkListView(naDrinks);
+        }
 
         public async Task<CabinetSearchViewModel> GetDrinksByCabinet(List<string> ings)
         {

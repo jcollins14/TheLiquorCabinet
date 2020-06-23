@@ -10,6 +10,7 @@ namespace TheLiquorCabinet.Models
         public Drink Drink { get; set; }
         public IngredientList IngredientList { get; set; }
         public List<DrinkDb> DrinksIndex { get; set; }
-        
+        public List<IngredDb> DbIngreds { get; set; }
+
     }
 }

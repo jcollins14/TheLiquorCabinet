@@ -101,6 +101,7 @@ namespace TheLiquorCabinet.Controllers
             hvm.IngredientList = await GetAllIngredients();
             hvm.Drink = result;
             hvm.DrinksIndex = _context.DrinkDb.ToList();
+            hvm.DbIngreds = _context.IngredDb.ToList();
             return View(hvm);
         }
 
