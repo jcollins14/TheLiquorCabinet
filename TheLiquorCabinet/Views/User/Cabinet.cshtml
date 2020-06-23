@@ -10,7 +10,7 @@
             <img src="~/css/Images/Empty Fridge.jpg" height="350" width="300" class="img-bw" style="-webkit-filter: grayscale(100%); filter: grayscale(100%);" />
         </p>
         <br />
-        <h6><a asp-action="Login" asp-controller="User">Login</a> or <a asp-action="Register" asp-controller="User">Create</a> an account and start adding ingredients! </h6>
+        <h4><a asp-action="Login" asp-controller="User">Login</a> or <a asp-action="Register" asp-controller="User">Create</a> an account and start adding ingredients! </h4>
     </div>
 }
 
@@ -19,11 +19,13 @@
 
 <div class="text-center">
     <h2>@ViewBag.Username's Cabinet</h2>
+    <br />
+    <img src="~/css/Images/Cabinet2.jpg" style="-webkit-filter: grayscale(100%); filter: grayscale(100%);"/>
 </div>   
-<hr />
+<br />
 <div class="row">
     <div class="col-md-6">
-        <h4>Search ingredients and add them to your cabinet:</h4>
+        <h5>Search for ingredients to add to your cabinet:</h5>
         <form id="isearch" asp-controller="Ingredient" asp-action="RegisterIngredientsToUser">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>           
             <select class="js-example-basic-multiple" name="ingreds" multiple="multiple" required="required">
@@ -38,8 +40,8 @@
         </form>
 
     </div>
-    <div class="col-md-6">
-        <h4>See all the drinks you can make with ingredients on hand!</h4>
+    <div class="col-md-6 text-center">
+        <h5>See all the drinks you can make with ingredients on hand</h5>
         <a class="btn btn-primary" asp-controller="Drink" asp-action="DrinksByCabinet">Find Recipes</a>
     </div>
 </div>

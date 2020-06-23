@@ -79,7 +79,8 @@ namespace TheLiquorCabinet.Controllers
         hvm.IngredientList = await GetAllIngredients();
         hvm.Drink = result;
         hvm.DrinksIndex = _context.DrinkDb.ToList();
-        return View(hvm);
+        ViewBag.Username = HttpContext.Request.Cookies["User"];
+            return View(hvm);
         }
 
         //Returns a random drink from thecocktaildb.com
