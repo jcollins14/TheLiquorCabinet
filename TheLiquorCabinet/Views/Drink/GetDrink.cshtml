@@ -68,11 +68,11 @@
                                 {
                                     @if (Model.IngredAvail[i] == true)
                                     {
-                                        <input type="submit" value="Remove from Cabinet" class="btn btn-primary" asp-controller="Ingredient" asp-action="RemoveOneIngredient" asp-route-name="@Model.Ingredients[i]" />
+                                        <a type="submit" value="Remove from Cabinet" class="btn btn-primary" asp-controller="Ingredient" asp-action="RemoveOneIngredient" asp-route-ingred="@Model.Ingredients[i]">Remove From Cabinet</a>
                                     }
                                     else
                                     {
-                                        <input type="button" value="Add to Cabinet" class="btn btn-primary" onclick="location.href='@Url.Action("RegisterOneIngredient", "Ingredient", Model.Ingredients[i].ToString())'" />
+                                        <a type="submit" value="Add to Cabinet" class="btn btn-primary" asp-controller="Ingredient" asp-action="RegisterOneIngredient" asp-route-ingred="@Model.Ingredients[i]">Add to Cabinet</a>
                                     }
                                 }
                             </td>
