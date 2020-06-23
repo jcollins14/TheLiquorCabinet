@@ -16,6 +16,11 @@
 
 @if (@Model.UserId > 0)
 {
+
+<div class="text-center">
+    <h2>@ViewBag.Username's Cabinet</h2>
+</div>   
+<hr />
 <div class="row">
     <div class="col-md-6">
         <h4>Search ingredients and add them to your cabinet:</h4>
@@ -31,6 +36,7 @@
                    asp-route-ingreds="ingreds"
                    type="submit" value="Submit" class="btn btn-primary" />
         </form>
+
     </div>
     <div class="col-md-6">
         <h4>See all the drinks you can make with ingredients on hand!</h4>

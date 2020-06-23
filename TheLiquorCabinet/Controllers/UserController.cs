@@ -83,6 +83,10 @@ namespace TheLiquorCabinet.Controllers
         public IActionResult LoginUser(string name)
         {
             var user = _context.Users.Where(x => x.Username == name).FirstOrDefault();
+            if (user is null)
+            {
+                return RedirectToAction("LoginError");
+            }
             int userID = _context.Users.FirstOrDefault(n => n.Username == name).UserID;
             if (user is object)
             {
@@ -100,8 +104,13 @@ namespace TheLiquorCabinet.Controllers
             }
             else
             {
-                return RedirectToAction("Login");
+                return RedirectToAction("LoginError");
             }
+        }
+
+        public IActionResult LoginError()
+        {
+            return View();
         }
 
         //Pull all ingredients from API and put into list for Select2
@@ -118,10 +127,16 @@ namespace TheLiquorCabinet.Controllers
 
         public IActionResult Cabinet()
         {
+            string Username = HttpContext.Request.Cookies["User"];
+            if (Username != null)
+            {
+                ViewBag.Username = Username;
+            }
             int UserID;
             if (HttpContext.Request.Cookies["UserID"] != null)
             {
                 UserID = int.Parse(HttpContext.Request.Cookies["UserID"]);
+                
             }
             else
             {
@@ -208,10 +223,10 @@ namespace TheLiquorCabinet.Controllers
         }
         public IActionResult LogOut()
         {
-            List<string> cookies = new List<string>() { "Age", "DoB", "User" };
+            List<string> cookies = new List<string>() { "Age", "DoB", "UserID", "User" };
             foreach (string cookieName in cookies)
             {
-                HttpContext.Response.Cookies.Append(cookieName,"0");
+                HttpContext.Response.Cookies.Delete(cookieName);
             }
             return RedirectToAction("Index", "Home");
         }
