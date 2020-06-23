@@ -1,4 +1,7 @@
 ﻿@model TheLiquorCabinet.Models.CabinetViewModel
+@{
+    ViewData["Title"] = "Cabinet";
+}
 
 
 @if (Model.UserId == 0)
@@ -10,41 +13,41 @@
             <img src="~/css/Images/Empty Fridge.jpg" height="350" width="300" class="img-bw" style="-webkit-filter: grayscale(100%); filter: grayscale(100%);" />
         </p>
         <br />
-        <h4><a asp-action="Login" asp-controller="User">Login</a> or <a asp-action="Register" asp-controller="User">Create</a> an account and start adding ingredients! </h4>
+        <h4><a asp-action="Login" asp-controller="User">Login</a> or <a asp-action="Register" asp-controller="User">Create</a> an account to start adding ingredients! </h4>
     </div>
 }
 
 @if (@Model.UserId > 0)
 {
 
-<div class="text-center">
-    <h2>@ViewBag.Username's Cabinet</h2>
+    <div class="text-center">
+        <h2>@ViewBag.Username's Cabinet</h2>
+        <br />
+        <img src="~/css/Images/Cabinet2.jpg" style="-webkit-filter: grayscale(100%); filter: grayscale(100%);" />
+    </div>
     <br />
-    <img src="~/css/Images/Cabinet2.jpg" style="-webkit-filter: grayscale(100%); filter: grayscale(100%);"/>
-</div>   
-<br />
-<div class="row">
-    <div class="col-md-6">
-        <h5>Search for ingredients to add to your cabinet:</h5>
-        <form id="isearch" asp-controller="Ingredient" asp-action="RegisterIngredientsToUser">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>           
-            <select class="js-example-basic-multiple" name="ingreds" multiple="multiple" required="required">
-                @foreach (var ingredient in Model.AllIngredients)
-                {
-                    <option value="@ingredient">@ingredient</option>
-                }
-            </select>
-            <input asp-controller="Ingredient" asp-action="RegisterIngredientsToUser"
-                   asp-route-ingreds="ingreds"
-                   type="submit" value="Submit" class="btn btn-primary" />
-        </form>
+    <div class="row">
+        <div class="col-md-6">
+            <h5>Search for ingredients to add to your cabinet:</h5>
+            <form id="isearch" asp-controller="Ingredient" asp-action="RegisterIngredientsToUser">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <select class="js-example-basic-multiple" name="ingreds" multiple="multiple" required="required">
+                    @foreach (var ingredient in Model.AllIngredients)
+                    {
+                        <option value="@ingredient">@ingredient</option>
+                    }
+                </select>
+                <input asp-controller="Ingredient" asp-action="RegisterIngredientsToUser"
+                       asp-route-ingreds="ingreds"
+                       type="submit" value="Submit" class="btn btn-primary" />
+            </form>
 
+        </div>
+        <div class="col-md-6 text-center">
+            <h5>See all the drinks you can make with ingredients on hand</h5>
+            <a class="btn btn-primary" asp-controller="Drink" asp-action="DrinksByCabinet">Find Recipes</a>
+        </div>
     </div>
-    <div class="col-md-6 text-center">
-        <h5>See all the drinks you can make with ingredients on hand</h5>
-        <a class="btn btn-primary" asp-controller="Drink" asp-action="DrinksByCabinet">Find Recipes</a>
-    </div>
-</div>
     <br />
     <br />
     <h3>Ingredients in your Cabinet:</h3>
