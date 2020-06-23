@@ -10,10 +10,7 @@
 
 <div class="text-center">
 
-    @*<a asp-action="GetDrink" asp-controller="Drink" asp-route-id="@Model.Drink.ID"><img src="@Url.Content(Model.Drink.PictureLink)" height="350 " width="350" /></a>
-        <p>@Model.Drink.Name</p>
-
-        <hr />*@
+   
     
     <div class="row">
 
@@ -61,9 +58,10 @@
                 </button>
             </form>
         </div>
-
+        
+        
         <div class="col-md-3">
-            @if (true)
+            @if (ViewBag.Username == null)
             {
                 <h2>Set up a Cabinet</h2>
                 <p>
@@ -72,24 +70,33 @@
                 <a asp-action="Register" class="btn btn-primary"
                    asp-controller="User">Register</a>
             }
+            @if (ViewBag.Username != null)
+            {
+                <h2>@ViewBag.Username's Cabinet</h2>
+                <p>
+                    View ingredients in your cabinet and search for drinks based on ingredients you have!
+                </p>
+                <a asp-action="Cabinet" class="btn btn-primary"
+                   asp-controller="User">Go to Cabinet</a>
+            }
         </div>
 
-        <div class="col-md-3">
-            <h2>Feeling lucky?</h2>
-            <p>
-                If you're feeling adventurous, click the button for a random drink.
-            </p>
-            <a asp-action="GetDrink" asp-controller="Drink" asp-route-id="@Model.Drink.ID"><img src="@Url.Content(Model.Drink.PictureLink)" height="75" width="75" /></a>
-            <br />
-            <br />
-            <a asp-action="FeelingLucky" class="btn btn-primary"
-               asp-controller="Home">Search for a Drink</a>
+            <div class="col-md-3">
+                <h2>Feeling lucky?</h2>
+                <p>
+                    If you're feeling adventurous, click the button for a random drink.
+                </p>
+                <a asp-action="GetDrink" asp-controller="Drink" asp-route-id="@Model.Drink.ID"><img src="@Url.Content(Model.Drink.PictureLink)" height="75" width="75" /></a>
+                <br />
+                <br />
+                <a asp-action="FeelingLucky" class="btn btn-primary"
+                   asp-controller="Home">Search for a Drink</a>
+
+            </div>
+
+
 
         </div>
-
-
-
-    </div>
 
 
 </div>
