@@ -16,53 +16,58 @@
 
 @if (@Model.UserId > 0)
 {
-<div>
-    <div id="myBtnContainer">
-        <button class="btn active" onclick="filterSelection('all')"> Show all</button>
-        <button class="btn" onclick="filterSelection('Others')"> Cabinet</button>
-        <button class="btn" onclick="filterSelection('Basic')"> Defaults</button>
+<div class="row">
+    <div class="col-md-6">
+        <h4>Search ingredients and add them to your cabinet:</h4>
+        <form id="isearch" asp-controller="Ingredient" asp-action="RegisterIngredientsToUser">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>           
+            <select class="js-example-basic-multiple" name="ingreds" multiple="multiple" required="required">
+                @foreach (var ingredient in Model.AllIngredients)
+                {
+                    <option value="@ingredient">@ingredient</option>
+                }
+            </select>
+            <input asp-controller="Ingredient" asp-action="RegisterIngredientsToUser"
+                   asp-route-ingreds="ingreds"
+                   type="submit" value="Submit" class="btn btn-primary" />
+        </form>
     </div>
-    <div id="myBtnContainer2">
-        <button class="btn alcoholActive" onclick="alcoholSelection('all')">Show all</button>
-        <button class="btn" onclick="alcoholSelection('Yes')">Alcohol</button>
-    </div>
-    <div class="alcContainer">
-        @foreach (var item in Model.CabinetList)
-        {
-            <div class="alcoholDiv @item.Alcohol">
-                <div class="filterDiv @item.Type">
-                    <a id="x" type="submit" value="submit" asp-controller="Ingredient"
-                            asp-action="RemoveOneIngredient"
-                            asp-route-ingred="@item.Name">
-                        X
-                    </a>
-                    <p class="center-text">@item.Name</p>
-                </div>
-            </div>
-        }
-    </div>
-</div>
-    <div class="row">
-        <div class="col-md-6">
-            <form id="isearch" asp-controller="Ingredient" asp-action="RegisterIngredientsToUser">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <label name="ingreds" class="control-label">Search ingredients and add them to your cabinet</label>
-                <select class="js-example-basic-multiple" name="ingreds" multiple="multiple" required="required">
-                    @foreach (var ingredient in Model.AllIngredients)
-                    {
-                        <option value="@ingredient">@ingredient</option>
-                    }
-                </select>
-                <input asp-controller="Ingredient" asp-action="RegisterIngredientsToUser"
-                       asp-route-ingreds="ingreds"
-                       type="submit" value="Submit" class="btn btn-primary" />
-            </form>
-        </div>
-    </div>
-    <h3>See all the drinks you can make!</h3>
-    <div>
+    <div class="col-md-6">
+        <h4>See all the drinks you can make with ingredients on hand!</h4>
         <a class="btn btn-primary" asp-controller="Drink" asp-action="DrinksByCabinet">Find Recipes</a>
     </div>
+</div>
+    <br />
+    <br />
+    <h3>Ingredients in your Cabinet:</h3>
+    <hr />
+    <div>
+        <div id="myBtnContainer">
+            <button class="btn active" onclick="filterSelection('all')"> Show all</button>
+            <button class="btn" onclick="filterSelection('Others')"> Cabinet</button>
+            <button class="btn" onclick="filterSelection('Basic')"> Defaults</button>
+        </div>
+        <div id="myBtnContainer2">
+            <button class="btn alcoholActive" onclick="alcoholSelection('all')">Show all</button>
+            <button class="btn" onclick="alcoholSelection('Yes')">Alcohol</button>
+        </div>
+        <div class="alcContainer">
+            @foreach (var item in Model.CabinetList)
+            {
+                <div class="alcoholDiv @item.Alcohol">
+                    <div class="filterDiv @item.Type">
+                        <a id="x" type="submit" value="submit" asp-controller="Ingredient"
+                           asp-action="RemoveOneIngredient"
+                           asp-route-ingred="@item.Name">
+                            X
+                        </a>
+                        <p class="center-text">@item.Name</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
 }
 <script>
     alcoholSelection("all")
