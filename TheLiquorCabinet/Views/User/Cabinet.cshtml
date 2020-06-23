@@ -1,21 +1,158 @@
-﻿<h1>Add Ingredients to your Cabinet</h1>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form id="isearch" asp-controller="Drink" asp-action="DrinksByCabinet">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <label name="DrinkId" class="control-label">Search all drinks you can make with ingredients on hand: </label>
-            <select class="js-example-basic-multiple" name="ingredients" multiple="multiple" required="required">
-                @foreach (var ingredient in Model.IngredientNames)
-                {
-                    <option value="@ingredient">@ingredient</option>
-                }
-            </select>
-            <div class="form-group">
-                <input asp-controller="Drink" asp-action="DrinksByCabinet"
-                       asp-route-ingredients="ingredients"
-                       type="submit" value="Submit" class="btn btn-primary" />
+﻿@model TheLiquorCabinet.Models.CabinetViewModel
+
+
+@if (Model.UserId == 0)
+
+{
+    <div class="text-center">
+        <h2>The Ingredient Cabinet is Currently Empty</h2>
+        <p>
+            <img src="~/css/Images/Empty Fridge.jpg" height="350" width="300" />
+        </p>
+        <br />
+        <h6><a asp-action="Register" asp-controller="User">Create</a> an account and start adding ingredients! </h6>
+    </div>
+}
+
+@if (@Model.UserId > 0)
+{
+<div>
+    <div id="myBtnContainer">
+        <button class="btn active" onclick="filterSelection('all')"> Show all</button>
+        <button class="btn" onclick="filterSelection('Others')"> Cabinet</button>
+        <button class="btn" onclick="filterSelection('Basic')"> Defaults</button>
+    </div>
+    <div id="myBtnContainer2">
+        <button class="btn alcoholActive" onclick="alcoholSelection('all')">Show all</button>
+        <button class="btn" onclick="alcoholSelection('Yes')">Alcohol</button>
+    </div>
+    <div class="alcContainer">
+        @foreach (var item in Model.CabinetList)
+        {
+            <div class="alcoholDiv @item.Alcohol">
+                <div class="filterDiv @item.Type">
+                    <a id="x" type="submit" value="submit" asp-controller="Ingredient"
+                            asp-action="RemoveOneIngredient"
+                            asp-route-ingred="@item.Name">
+                        X
+                    </a>
+                    <p class="center-text">@item.Name</p>
+                </div>
             </div>
-        </form>
+        }
     </div>
 </div>
+    <div class="row">
+        <div class="col-md-6">
+            <form id="isearch" asp-controller="Ingredient" asp-action="RegisterIngredientsToUser">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <label name="ingreds" class="control-label">Search ingredients and add them to your cabinet</label>
+                <select class="js-example-basic-multiple" name="ingreds" multiple="multiple" required="required">
+                    @foreach (var ingredient in Model.AllIngredients)
+                    {
+                        <option value="@ingredient">@ingredient</option>
+                    }
+                </select>
+                <input asp-controller="Ingredient" asp-action="RegisterIngredientsToUser"
+                       asp-route-ingreds="ingreds"
+                       type="submit" value="Submit" class="btn btn-primary" />
+            </form>
+        </div>
+    </div>
+    <h3>See all the drinks you can make!</h3>
+    <div>
+        <a class="btn btn-primary" asp-controller="Drink" asp-action="DrinksByCabinet">Find Recipes</a>
+    </div>
+}
+<script>
+    alcoholSelection("all")
+    filterSelection("all")
+    function filterSelection(c) {
+        var x, i;
+        x = document.getElementsByClassName("filterDiv");
+        if (c == "all") c = "";
+        // Add the "show" class (display:block) to the filtered elements, and remove the "show" class from the elements that are not selected
+        for (i = 0; i < x.length; i++) {
+            w3RemoveClass(x[i], "show");
+            if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+        }
+    }
+    function alcoholSelection(c) {
+        var x, i;
+        x = document.getElementsByClassName("alcoholDiv");
+        if (c == "all") c = "";
+        // Add the "show" class (display:block) to the filtered elements, and remove the "show" class from the elements that are not selected
+        for (i = 0; i < x.length; i++) {
+            alcoholRemoveClass(x[i], "show");
+            if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+        }
+    }
+    // Show filtered elements
+    function w3AddClass(element, name) {
+        var i, arr1, arr2;
+        arr1 = element.className.split(" ");
+        arr2 = name.split(" ");
+        for (i = 0; i < arr2.length; i++) {
+            if (arr1.indexOf(arr2[i]) == -1) {
+                element.className += " " + arr2[i];
+            }
+        }
+    }
+
+    // Hide elements that are not selected
+    function w3RemoveClass(element, name) {
+        var i, arr1, arr2;
+        arr1 = element.className.split(" ");
+        arr2 = name.split(" ");
+        for (i = 0; i < arr2.length; i++) {
+            while (arr1.indexOf(arr2[i]) > -1) {
+                arr1.splice(arr1.indexOf(arr2[i]), 1);
+            }
+        }
+        element.className = arr1.join(" ");
+    }
+    function alcoholAddClass(element, name) {
+        var i, arr1, arr2;
+        arr1 = element.className.split(" ");
+        arr2 = name.split(" ");
+        for (i = 0; i < arr2.length; i++) {
+            if (arr1.indexOf(arr2[i]) == -1) {
+                element.className += " " + arr2[i];
+            }
+        }
+    }
+
+    // Hide elements that are not selected
+    function alcoholRemoveClass(element, name) {
+        var i, arr1, arr2;
+        arr1 = element.className.split(" ");
+        arr2 = name.split(" ");
+        for (i = 0; i < arr2.length; i++) {
+            while (arr1.indexOf(arr2[i]) > -1) {
+                arr1.splice(arr1.indexOf(arr2[i]), 1);
+            }
+        }
+        element.className = arr1.join(" ");
+    }
+
+    // Add active class to the current control button (highlight it)
+    var btnContainer = document.getElementById("myBtnContainer");
+    var btns = btnContainer.getElementsByClassName("btn");
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function () {
+            var current = document.getElementsByClassName("active");
+            current[0].className = current[0].className.replace(" active", "");
+            this.className += " active";
+        });
+    }
+    var btnContainer = document.getElementById("myBtnContainer2");
+    var btns = btnContainer.getElementsByClassName("btn");
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function () {
+            var current = document.getElementsByClassName("alcoholActive");
+            current[0].className = current[0].className.replace("alcoholActive", "");
+            this.className += " alcoholActive";
+        });
+    }
+</script>
+

@@ -28,7 +28,23 @@ namespace TheLiquorCabinet.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Date = DateManiupulation(DateTime.Now);
             return View();
+        }
+
+        public string DateManiupulation(DateTime manip)
+        {
+            string[] split = manip.ToString("d").Split('/');
+            if (split[0].Length == 1)
+            {
+                split[0] = split[0].Insert(0, "0");
+            }
+            if (split[1].Length == 1)
+            {
+                split[1] = split[1].Insert(0, "0");
+            }
+            string date = split[2] + '-' + split[0] + '-' + split[1];
+            return date;
         }
 
         [HttpPost]
@@ -37,19 +53,19 @@ namespace TheLiquorCabinet.Controllers
             var currentDate = DateTime.Now;
             TimeSpan age = currentDate - dateOfBirth;
             double years = age.TotalDays / 365.25;
-
-            if (years < 21.00)
-            {
-                return RedirectToAction("HomeNA");
-            }
-            else
-            {
-                return RedirectToAction("Home");
-            }
+            string birthday = DateManiupulation(dateOfBirth);
+            HttpContext.Response.Cookies.Append("DoB", birthday);
+            HttpContext.Response.Cookies.Append("Age", years.ToString());
+            return RedirectToAction("Home");
         }
             
         public async Task<IActionResult> Home()
         {
+            double.TryParse(HttpContext.Request.Cookies["Age"], out double age);
+            if (age < 21)
+            {
+                return RedirectToAction("HomeNA");
+            }
         var client = new HttpClient
         {
             BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/")

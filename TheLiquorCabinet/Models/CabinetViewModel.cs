@@ -7,7 +7,13 @@ namespace TheLiquorCabinet.Models
 {
     public class CabinetViewModel
     {
-        public IngredientList IngredList { get; set; }
-        public List<IngredOnHand> CabinetList { get; set; }
+        public List<IngredDb> CabinetList { get; set; }
+        public int UserId { get; set; }
+        public List<string> AllIngredients { get; set; }
+        public CabinetViewModel()
+        {
+            CabinetList = new List<IngredDb>();
+            AllIngredients = new List<string>();
+        }
     }
 }

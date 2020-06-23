@@ -1,52 +1,55 @@
-﻿@model TheLiquorCabinet.Models.HomeViewModel
+﻿@using (Html.BeginForm())
+    @model TheLiquorCabinet.Models.HomeViewModel
 @{
     ViewData["Title"] = "Home";
-    <head>
-        <script src="https://kit.fontawesome.com/7a92ca4a68.js" crossorigin="anonymous"></script>
-    </head>
+<head>
+    <script src="https://kit.fontawesome.com/7a92ca4a68.js" crossorigin="anonymous"></script>
+
+</head>
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome to The Liquor Cabinet</h1>
-    
-    <p>Available drinks and ingredients are filtered by Non-Alcoholic only.</p>
-   
-    <a asp-action="GetDrink" asp-controller="Drink" asp-route-id="@Model.Drink.ID"><img src="@Url.Content(Model.Drink.PictureLink)" height="350 " width="350" /></a>
-    <p>@Model.Drink.Name</p>
 
-    <hr />
+    @*<a asp-action="GetDrink" asp-controller="Drink" asp-route-id="@Model.Drink.ID"><img src="@Url.Content(Model.Drink.PictureLink)" height="350 " width="350" /></a>
+        <p>@Model.Drink.Name</p>
+
+        <hr />*@
 
     <div class="row">
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <h2>Search By Ingredients</h2>
             <p>
                 Use the search bar below to look for a drink by a certain ingredient or by multiple ingredients.
             </p>
             <form id="isearch" asp-controller="Drink" asp-action="SearchMultipleIngredients">
-                <select class="js-example-basic-multiple" name="ingredients" multiple="multiple" required="required">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <select class="js-example-basic-multiple" name="ingredients" multiple="multiple" required="required" style="width: 80%">
+                    >
                     @foreach (var ingredient in Model.IngredientList.IngredientNames)
                     {
                         <option value="@ingredient">@ingredient</option>
                     }
                 </select>
 
-                <button asp-controller="Drink" asp-action="SearchMultipleIngredients" asp-route-ingredients="ingredients"
+                <button asp-action="SearchMultipleIngredients" asp-controller="Drink" asp-route-ingredients="ingredients"
                         class="btn btn-primary" type="submit">
                     <i class="fas fa-search"></i>
                 </button>
             </form>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <h2>Search for a Drink</h2>
             <p>
                 Use the search bar below to look for one or more specific drinks from the database.
             </p>
 
-            <form id="isearch" asp-controller="Drink" asp-action="DrinkNameSearch">
+            <form id="isearch" asp-controller="Drink" asp-action="DrinkNameSearch" style="font-size:medium">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <select class="js-example-basic-multiple" name="names" multiple="multiple" required="required">
+                <select class="js-example-basic-multiple" name="names" multiple="multiple" required="required" style="width: 80%">
+                    >
+
                     @foreach (var drink in Model.DrinksIndex)
                     {
                         <option value="@drink.StrDrink ">@drink.StrDrink</option>
@@ -58,15 +61,37 @@
                 </button>
             </form>
         </div>
-        <div class="col-md-4">
+
+        <div class="col-md-3">
+            @if (true)
+            {
+                <h2>Set up a Cabinet</h2>
+                <p>
+                    Register a username to save ingredients to your cabinet and get drink recipes based on the ingredients you have!
+                </p>
+                <a asp-action="Register" class="btn btn-primary"
+                   asp-controller="User">Register</a>
+            }
+        </div>
+
+        <div class="col-md-3">
             <h2>Feeling lucky?</h2>
             <p>
                 If you're feeling adventurous, click the button for a random drink.
             </p>
-            <a asp-action="FeelingLucky" class="btn btn-primary"
+            <a asp-action="GetDrink" asp-controller="Drink" asp-route-id="@Model.Drink.ID"><img src="@Url.Content(Model.Drink.PictureLink)" height="75" width="75" /></a>
+            <br />
+            <br />
+            <a asp-action="FeelingLuckyNA" class="btn btn-primary"
                asp-controller="Home">Search for a Drink</a>
+
         </div>
 
 
+
     </div>
+
+
 </div>
+<br />
+<img src="~/css/Images/stefano-ghezzi-wKlvN9z3PCI-unsplash-3.jpg" style="height: auto; width:auto " />
