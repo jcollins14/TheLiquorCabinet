@@ -100,7 +100,7 @@ namespace TheLiquorCabinet.Controllers
         {
             if (name.Contains('&'))
             {
-                name.Replace("&", "%26");
+                name = name.Replace("&", "%26");
             }
             var response = await _client.GetStringAsync(_apiKey + "/search.php?s=" + name.Trim().ToLower().Replace(' ', '_'));
             Drink result = new Drink(response);
