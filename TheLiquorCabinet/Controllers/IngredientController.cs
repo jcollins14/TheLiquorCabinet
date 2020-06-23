@@ -69,11 +69,29 @@ namespace TheLiquorCabinet.Controllers
             foreach (IngredOnHand save in cabinet)
             {
                 _context.Cabinet.Add(save);
-                //if (_context.Cabinet.Contains(save))
+                //if (!_context.Cabinet.Contains(save))
                 //{
                 //    _context.Cabinet.Add(save);
                 //}
             }
+            _context.SaveChanges();
+            return RedirectToAction("Cabinet", "User");
+        }
+
+        public async Task<IActionResult> RegisterOneIngredientToUser(string ingred)
+        {
+            int UserID = int.Parse(HttpContext.Request.Cookies["UserID"]);
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri("https://www.thecocktaildb.com/")
+            };
+            var response = await client.GetStringAsync(_apiKey + "/search.php?i=" + ingred);
+            IngredOnHand ingredient = new IngredOnHand(response, UserID);
+            _context.Cabinet.Add(ingredient);
+            //if (!_context.Cabinet.Contains(ingredient))
+            //{
+            //    _context.Cabinet.Add(ingredient);
+            //}
             _context.SaveChanges();
             return RedirectToAction("Cabinet", "User");
         }
@@ -101,6 +119,7 @@ namespace TheLiquorCabinet.Controllers
             _context.SaveChanges();
             return RedirectToAction("CabinetView", "User");
         }
+
         public async Task<IActionResult> RemoveOneIngredient(string ingred)
         {
             int UserID = int.Parse(HttpContext.Request.Cookies["UserID"]);
