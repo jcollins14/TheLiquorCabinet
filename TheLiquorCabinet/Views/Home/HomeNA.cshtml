@@ -46,11 +46,14 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <select class="js-example-basic-multiple" name="names" multiple="multiple" required="required" style="width: 80%">
                     >
-
-                    @foreach (var drink in Model.DrinksIndex)
+                    @for (int i = 0; i < Model.DrinksNA.Name.Count; i++)
                     {
-                        <option value="@drink.StrDrink ">@drink.StrDrink</option>
+                    <option value="@Model.DrinksNA.Name[i]">@Model.DrinksNA.Name[i]</option>
                     }
+                    @*@foreach (var drink in Model.DrinksNA.Name)
+                    {
+                        <option value="@drink.Name ">@</option>
+                    }*@
                 </select>
                 <button asp-action="DrinkNameSearch" asp-controller="Drink" asp-route-names="names"
                         class="btn btn-primary" type="submit">

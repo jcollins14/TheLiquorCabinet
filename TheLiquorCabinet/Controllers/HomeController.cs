@@ -100,8 +100,18 @@ namespace TheLiquorCabinet.Controllers
             HomeViewModel hvm = new HomeViewModel();
             hvm.IngredientList = await GetAllIngredients();
             hvm.Drink = result;
-            hvm.DrinksIndex = _context.DrinkDb.ToList();
+            hvm.DrinksNA = await DrinkFilterByNA();
+
             return View(hvm);
+        }
+      
+        public async Task<DrinkListSearch> DrinkFilterByNA()
+        {
+           
+            DrinkListSearch searchResult = new DrinkListSearch(await _client.GetStringAsync(_apiKey + "/filter.php?a=Non_Alcoholic"));
+
+            return searchResult;
+
         }
 
         //Returns a random non-alcoholic drink from thecocktaildb.com
@@ -113,7 +123,7 @@ namespace TheLiquorCabinet.Controllers
             Drink result = new Drink(await _client.GetStringAsync(_apiKey + "/lookup.php?i=" + id));
             return result;
         }
-        
+
 
         public async Task<IActionResult> FeelingLuckyNA()
         {
