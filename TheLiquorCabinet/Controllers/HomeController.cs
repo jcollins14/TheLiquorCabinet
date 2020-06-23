@@ -100,13 +100,9 @@ namespace TheLiquorCabinet.Controllers
             HomeViewModel hvm = new HomeViewModel();
             hvm.IngredientList = await GetAllIngredients();
             hvm.Drink = result;
-<<<<<<< HEAD
             hvm.DrinksNA = await DrinkFilterByNA();
-
-=======
-            hvm.DrinksIndex = _context.DrinkDb.ToList();
             hvm.DbIngreds = _context.IngredDb.ToList();
->>>>>>> 9fa81e0e7cc66cff98d0f80e361c7ae2893fa814
+
             return View(hvm);
         }
       
