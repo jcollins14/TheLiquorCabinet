@@ -4,10 +4,14 @@
     ViewData["Title"] = "DrinkListView";
 }
 <div class="text-center">
-    <img src="~/css/Images/DrinkResults.png"/>
+    <img src="~/css/Images/DrinkResults.png" />
 </div>
 <br />
-<h3>Results found: @Model.Count</h3>
+<h3>Number of results found: @Model.Count</h3>
+<br />
+<h4>
+    Filtering results using the following ingredients: @ViewBag.IngredientNames
+</h4>
 <br />
 <div class="text-center">
     @foreach (var item in Model)

@@ -76,23 +76,55 @@ namespace TheLiquorCabinet.Controllers
             for (int i = 0; i < result.Ingredients.Count; i++)
             {
                 IngredientResponse ingredient = new IngredientResponse(await _client.GetStringAsync(_apiKey + "/search.php?i=" + result.Ingredients[i]));
-                int userID = int.Parse(HttpContext.Request.Cookies["UserID"]);
-                IngredOnHand check = _context.Cabinet.Where(x => x.UserID == userID && x.IngredID == ingredient.ResponseIngred.Id).FirstOrDefault();
-                if (check != null)
-                {
-                    result.IngredAvail.Add(true);
-                }
-                else
+                int.TryParse(HttpContext.Request.Cookies["UserID"], out int userID);
+                if (userID == 0)
                 {
                     result.IngredAvail.Add(false);
                 }
+                else
+                {
+                  IngredOnHand check = _context.Cabinet.Where(x => x.UserID == userID && x.IngredID == ingredient.ResponseIngred.Id).FirstOrDefault();
+                    if (check != null)
+                    {
+                        result.IngredAvail.Add(true);
+                    }
+                    else
+                    {
+                        result.IngredAvail.Add(false);
+                    }
+                }  
             }
             return View(result);
         }
         public async Task<IActionResult> GetDrinkByName(string name)
         {
+            if (name.Contains('&'))
+            {
+                name = name.Replace("&", "%26");
+            }
             var response = await _client.GetStringAsync(_apiKey + "/search.php?s=" + name.Trim().ToLower().Replace(' ', '_'));
             Drink result = new Drink(response);
+            for (int i = 0; i < result.Ingredients.Count; i++)
+            {
+                IngredientResponse ingredient = new IngredientResponse(await _client.GetStringAsync(_apiKey + "/search.php?i=" + result.Ingredients[i]));
+                int.TryParse(HttpContext.Request.Cookies["UserID"], out int userID);
+                if (userID == 0)
+                {
+                    result.IngredAvail.Add(false);
+                }
+                else
+                {
+                    IngredOnHand check = _context.Cabinet.Where(x => x.UserID == userID && x.IngredID == ingredient.ResponseIngred.Id).FirstOrDefault();
+                    if (check != null)
+                    {
+                        result.IngredAvail.Add(true);
+                    }
+                    else
+                    {
+                        result.IngredAvail.Add(false);
+                    }
+                }
+            }
             return View("GetDrink", result);
         }
         public async Task<IActionResult> DrinkNameSearch(string[] names)
@@ -125,6 +157,8 @@ namespace TheLiquorCabinet.Controllers
                  string drinkName = (string)parse["drinks"][i]["strDrink"];
                 result.Add(drinkName);
             }
+            string joined = String.Join(", ", ingredients);
+            ViewBag.IngredientNames = joined;
             List<Drink> drinks = await GetDrinks(result);
             return DrinkListView(drinks);
         }
