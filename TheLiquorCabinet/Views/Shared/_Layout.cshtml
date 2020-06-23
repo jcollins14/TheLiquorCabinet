@@ -40,26 +40,43 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <div allign="right">
                         <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                @if (int.Parse(Html.Raw(httpContextAccessor.HttpContext.Request.Cookies["UserID"]).ToString()) > 0)
-                                {
-                                    <p class="nav-link text-white-50">@Html.Raw(httpContextAccessor.HttpContext.Request.Cookies["User"]).ToString()</p>
+                            @if (Html.Raw(httpContextAccessor.HttpContext.Request.Cookies["UserID"]).ToString() != "")
+                            {
+                                <li class="nav-item">
+                                    @if (int.Parse(Html.Raw(httpContextAccessor.HttpContext.Request.Cookies["UserID"]).ToString()) > 0)
+                                    {
+                                        <p class="nav-link text-white-50">@Html.Raw(httpContextAccessor.HttpContext.Request.Cookies["User"]).ToString()</p>
+                                    }
+                                    else
+                                    {
+                                        <a class="nav-link text-white-50" asp-area="" asp-controller="User" asp-action="Login">Login</a>
+                                    }
+                                </li>
+                                <li class="nav-item">
+                                    @if (int.Parse(Html.Raw(httpContextAccessor.HttpContext.Request.Cookies["UserID"]).ToString()) <= 0)
+                                    {
+                                        <a class="nav-link text-white-50" asp-area="" asp-controller="User" asp-action="Register">Register</a>
+                                    }
+                                </li>
+                                <li class="nav-item">
+                                    @if (int.Parse(Html.Raw(httpContextAccessor.HttpContext.Request.Cookies["UserID"]).ToString()) > 0)
+                                    {
+
+                                        <a class="nav-link text-white-50" asp-area="" asp-controller="User" asp-action="LogOut">Log Out</a>
+
+                                    }
+                                    </li>
                                 }
-                                else
-                                { 
+                             else
+                                {
+                                <li>
                                     <a class="nav-link text-white-50" asp-area="" asp-controller="User" asp-action="Login">Login</a>
-                                }
-                            </li>
-                            <li class="nav-item">
-                                @if (int.Parse(Html.Raw(httpContextAccessor.HttpContext.Request.Cookies["UserID"]).ToString()) <= 0)
-                                {
+                                </li>
+                                <li>
                                     <a class="nav-link text-white-50" asp-area="" asp-controller="User" asp-action="Register">Register</a>
+                                </li>
                                 }
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white-50" asp-area="" asp-controller="User" asp-action="LogOut">Log Out</a>
-                            </li>
-                        </ul>
+                            </ul>
                         @*<input type="button" value="Log Out" class="btn btn-primary" onclick="location.href='@Url.Action("Logout")'" />*@
                     </div>
                 </div>

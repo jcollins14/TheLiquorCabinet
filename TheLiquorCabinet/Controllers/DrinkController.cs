@@ -104,6 +104,27 @@ namespace TheLiquorCabinet.Controllers
             }
             var response = await _client.GetStringAsync(_apiKey + "/search.php?s=" + name.Trim().ToLower().Replace(' ', '_'));
             Drink result = new Drink(response);
+            for (int i = 0; i < result.Ingredients.Count; i++)
+            {
+                IngredientResponse ingredient = new IngredientResponse(await _client.GetStringAsync(_apiKey + "/search.php?i=" + result.Ingredients[i]));
+                int.TryParse(HttpContext.Request.Cookies["UserID"], out int userID);
+                if (userID == 0)
+                {
+                    result.IngredAvail.Add(false);
+                }
+                else
+                {
+                    IngredOnHand check = _context.Cabinet.Where(x => x.UserID == userID && x.IngredID == ingredient.ResponseIngred.Id).FirstOrDefault();
+                    if (check != null)
+                    {
+                        result.IngredAvail.Add(true);
+                    }
+                    else
+                    {
+                        result.IngredAvail.Add(false);
+                    }
+                }
+            }
             return View("GetDrink", result);
         }
         public async Task<IActionResult> DrinkNameSearch(string[] names)
