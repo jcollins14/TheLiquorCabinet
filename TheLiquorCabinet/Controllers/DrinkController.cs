@@ -125,6 +125,7 @@ namespace TheLiquorCabinet.Controllers
                     }
                 }
             }
+            ViewBag.loggedIn = HttpContext.Request.Cookies["User"];
             return View("GetDrink", result);
         }
         public async Task<IActionResult> DrinkNameSearch(string[] names)
