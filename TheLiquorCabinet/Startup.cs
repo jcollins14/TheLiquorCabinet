@@ -25,7 +25,7 @@ namespace TheLiquorCabinet
         {
             services.AddControllersWithViews();
             services.AddDbContext<LiquorDBContext>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

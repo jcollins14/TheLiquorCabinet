@@ -1,11 +1,10 @@
 ﻿@model TheLiquorCabinet.Models.CabinetSearchViewModel
 
 @{
-    ViewData["Title"] = "DrinkListView";
+    ViewData["Title"] = "Cabinet Drink Results";
 }
 
-<h3>Results found: @Model.CanMake.Count</h3>
-<h2>Results missing one ingredient: @Model.MissingOne.Count</h2>
+<h3>Number of drinks you can make with ingredients on hand: @Model.CanMake.Count</h3>
 <br />
 <div class="text-center">
     @foreach (var item in Model.CanMake)
@@ -27,7 +26,10 @@
 
     }
 </div>
-<h2>You're one ingredient away from making the following drinks</h2>
+<hr />
+<h3>Number of results missing one ingredient: @Model.MissingOne.Count</h3>
+<h4>You're one ingredient away from making the following drinks:</h4>
+<br />
 <div class="text-center">
     @foreach (var item in Model.MissingOne)
     {

@@ -5,7 +5,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
+using RestSharp;
 using TheLiquorCabinet.Models;
 
 namespace TheLiquorCabinet.Controllers
@@ -77,7 +79,8 @@ namespace TheLiquorCabinet.Controllers
         hvm.IngredientList = await GetAllIngredients();
         hvm.Drink = result;
         hvm.DrinksIndex = _context.DrinkDb.ToList();
-        return View(hvm);
+        ViewBag.Username = HttpContext.Request.Cookies["User"];
+            return View(hvm);
         }
 
         //Returns a random drink from thecocktaildb.com
@@ -97,8 +100,23 @@ namespace TheLiquorCabinet.Controllers
             HomeViewModel hvm = new HomeViewModel();
             hvm.IngredientList = await GetAllIngredients();
             hvm.Drink = result;
+<<<<<<< HEAD
+            hvm.DrinksNA = await DrinkFilterByNA();
+
+=======
             hvm.DrinksIndex = _context.DrinkDb.ToList();
+            hvm.DbIngreds = _context.IngredDb.ToList();
+>>>>>>> 9fa81e0e7cc66cff98d0f80e361c7ae2893fa814
             return View(hvm);
+        }
+      
+        public async Task<DrinkListSearch> DrinkFilterByNA()
+        {
+           
+            DrinkListSearch searchResult = new DrinkListSearch(await _client.GetStringAsync(_apiKey + "/filter.php?a=Non_Alcoholic"));
+
+            return searchResult;
+
         }
 
         //Returns a random non-alcoholic drink from thecocktaildb.com
@@ -110,7 +128,7 @@ namespace TheLiquorCabinet.Controllers
             Drink result = new Drink(await _client.GetStringAsync(_apiKey + "/lookup.php?i=" + id));
             return result;
         }
-        
+
 
         public async Task<IActionResult> FeelingLuckyNA()
         {

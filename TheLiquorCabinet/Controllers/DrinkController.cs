@@ -100,7 +100,7 @@ namespace TheLiquorCabinet.Controllers
         {
             if (name.Contains('&'))
             {
-                name.Replace("&", "%26");
+                name = name.Replace("&", "%26");
             }
             var response = await _client.GetStringAsync(_apiKey + "/search.php?s=" + name.Trim().ToLower().Replace(' ', '_'));
             Drink result = new Drink(response);
@@ -125,6 +125,7 @@ namespace TheLiquorCabinet.Controllers
                     }
                 }
             }
+            ViewBag.loggedIn = HttpContext.Request.Cookies["User"];
             return View("GetDrink", result);
         }
         public async Task<IActionResult> DrinkNameSearch(string[] names)
@@ -157,9 +158,38 @@ namespace TheLiquorCabinet.Controllers
                  string drinkName = (string)parse["drinks"][i]["strDrink"];
                 result.Add(drinkName);
             }
-            ViewBag.IngredientNames = ingredients;
+            string joined = String.Join(", ", ingredients);
+            ViewBag.IngredientNames = joined;
             List<Drink> drinks = await GetDrinks(result);
             return DrinkListView(drinks);
+        }
+        public async Task<IActionResult> SearchMultipleIngredientsNA(List<string> ingredients)
+        {
+            string endpoint = "";
+            for (int i = 0; i < ingredients.Count; i++)
+            {
+                string add = ingredients[i].Trim();
+                add = add.Replace(' ', '_');
+                if (i != ingredients.Count - 1)
+                {
+                    add += ',';
+                }
+                endpoint += add;
+            }
+
+            var response = await _client.GetStringAsync(_apiKey + "/filter.php?i=" + endpoint);
+            JObject parse = JObject.Parse(response);
+            List<string> result = new List<string>();
+            for (int i = 0; i < parse["drinks"].Count(); i++)
+            {
+                string drinkName = (string)parse["drinks"][i]["strDrink"];
+                result.Add(drinkName);
+            }
+            string joined = String.Join(", ", ingredients);
+            ViewBag.IngredientNames = joined;
+            List<Drink> drinks = await GetDrinks(result);
+            List<Drink> naDrinks = drinks.Where(e => e.IsAlcoholic == false).ToList();
+            return DrinkListView(naDrinks);
         }
 
         public async Task<CabinetSearchViewModel> GetDrinksByCabinet(List<string> ings)
