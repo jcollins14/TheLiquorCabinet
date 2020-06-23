@@ -136,7 +136,6 @@ namespace TheLiquorCabinet.Controllers
                 _context.Remove(remove);
                 _context.SaveChanges();
             }
-            
             return RedirectToAction("Cabinet", "User");
         }
 
