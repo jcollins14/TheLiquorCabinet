@@ -125,6 +125,7 @@ namespace TheLiquorCabinet.Controllers
                     }
                 }
             }
+            ViewBag.loggedIn = HttpContext.Request.Cookies["User"];
             return View("GetDrink", result);
         }
         public async Task<IActionResult> DrinkNameSearch(string[] names)
@@ -184,7 +185,8 @@ namespace TheLiquorCabinet.Controllers
                 string drinkName = (string)parse["drinks"][i]["strDrink"];
                 result.Add(drinkName);
             }
-            ViewBag.IngredientNames = ingredients;
+            string joined = String.Join(", ", ingredients);
+            ViewBag.IngredientNames = joined;
             List<Drink> drinks = await GetDrinks(result);
             List<Drink> naDrinks = drinks.Where(e => e.IsAlcoholic == false).ToList();
             return DrinkListView(naDrinks);
