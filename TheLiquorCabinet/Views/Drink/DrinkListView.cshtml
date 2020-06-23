@@ -9,10 +9,13 @@
 <br />
 <h3>Number of results found: @Model.Count</h3>
 <br />
+@if (ViewBag.IngredientNames != null)
+{
 <h4>
     Filtering results using the following ingredients: @ViewBag.IngredientNames
 </h4>
 <br />
+}
 <div class="text-center">
     @foreach (var item in Model)
     {
