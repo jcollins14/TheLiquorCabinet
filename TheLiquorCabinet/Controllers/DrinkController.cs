@@ -98,6 +98,10 @@ namespace TheLiquorCabinet.Controllers
         }
         public async Task<IActionResult> GetDrinkByName(string name)
         {
+            if (name.Contains('&'))
+            {
+                name = name.Replace("&", "%26");
+            }
             var response = await _client.GetStringAsync(_apiKey + "/search.php?s=" + name.Trim().ToLower().Replace(' ', '_'));
             Drink result = new Drink(response);
             for (int i = 0; i < result.Ingredients.Count; i++)
@@ -153,7 +157,8 @@ namespace TheLiquorCabinet.Controllers
                  string drinkName = (string)parse["drinks"][i]["strDrink"];
                 result.Add(drinkName);
             }
-            ViewBag.IngredientNames = ingredients;
+            string joined = String.Join(", ", ingredients);
+            ViewBag.IngredientNames = joined;
             List<Drink> drinks = await GetDrinks(result);
             return DrinkListView(drinks);
         }

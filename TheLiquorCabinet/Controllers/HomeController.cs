@@ -5,7 +5,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
+using RestSharp;
 using TheLiquorCabinet.Models;
 
 namespace TheLiquorCabinet.Controllers
@@ -77,7 +79,8 @@ namespace TheLiquorCabinet.Controllers
         hvm.IngredientList = await GetAllIngredients();
         hvm.Drink = result;
         hvm.DrinksIndex = _context.DrinkDb.ToList();
-        return View(hvm);
+        ViewBag.Username = HttpContext.Request.Cookies["User"];
+            return View(hvm);
         }
 
         //Returns a random drink from thecocktaildb.com

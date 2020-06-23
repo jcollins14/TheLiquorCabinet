@@ -68,14 +68,34 @@ namespace TheLiquorCabinet.Controllers
             }
             foreach (IngredOnHand save in cabinet)
             {
-                _context.Cabinet.Add(save);
-                //if (_context.Cabinet.Contains(save))
-                //{
-                //    _context.Cabinet.Add(save);
-                //}
+                if (_context.Cabinet.Where(e => e.UserID == save.UserID && e.IngredID == save.IngredID).FirstOrDefault() is null)
+                {
+                    _context.Cabinet.Add(save);
+                }
             }
             _context.SaveChanges();
             return RedirectToAction("Cabinet", "User");
+        }
+
+        public async Task<IActionResult> RegisterOneIngredient(string ingred)
+        {
+            int UserID = int.Parse(HttpContext.Request.Cookies["UserID"]);
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri("https://www.thecocktaildb.com/")
+            };
+            var response = await client.GetStringAsync(_apiKey + "/search.php?i=" + ingred);
+            IngredOnHand ingredient = new IngredOnHand(response, UserID);
+            if (_context.Cabinet.Contains(ingredient))
+            {
+                return RedirectToAction("Cabinet", "User");
+            }
+            else
+            {
+                _context.Cabinet.Add(ingredient);
+                _context.SaveChanges();
+                return RedirectToAction("Cabinet", "User");
+            }
         }
         public async Task<IActionResult> RemoveIngredientsFromUser(List<string> ingreds)
         {
@@ -101,6 +121,7 @@ namespace TheLiquorCabinet.Controllers
             _context.SaveChanges();
             return RedirectToAction("CabinetView", "User");
         }
+
         public async Task<IActionResult> RemoveOneIngredient(string ingred)
         {
             int UserID = int.Parse(HttpContext.Request.Cookies["UserID"]);
@@ -110,7 +131,6 @@ namespace TheLiquorCabinet.Controllers
             };
             var response = await client.GetStringAsync(_apiKey + "/search.php?i=" + ingred);
             IngredOnHand ingredient = new IngredOnHand(response, UserID);
-            
             IngredOnHand remove = _context.Cabinet.Where(e => e.UserID == ingredient.UserID).FirstOrDefault(e => e.IngredID == ingredient.IngredID);
             if (remove != null)
             {

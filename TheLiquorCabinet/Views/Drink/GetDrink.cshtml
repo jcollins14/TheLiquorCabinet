@@ -1,10 +1,8 @@
 ﻿@model TheLiquorCabinet.Models.Drink
 
 @{
-    ViewData["Title"] = "GetDrink";
+    ViewData["Title"] = "Drink Information";
 }
-
-
 
 <div class="text-center">
     <h2>@Model.Name</h2>
@@ -13,41 +11,68 @@
         <div class="col-md-7">
             <img src="@Url.Content(Model.PictureLink)" height="350 " width="350" />
         </div>
-        <div class="col-md-5">
-            <h3>Ingredients:</h3>
-            @for (int i = 0; i < Model.Ingredients.Count; i++)
-            {
-            <p>
-                @if (Model.IngredAvail[i] == true)
-                {
-                    <img src="~/images/yes.png" />
-                }
-                else
-                {
-                    <img src="~/images/no.png" />
-                }
-                @if (i < Model.Measurements.Count)
-                {
-                    @Model.Measurements[i]
-                }
-
-                <a asp-action="IngredientInfo" asp-controller="Ingredient" asp-route-name="@Model.Ingredients[i]">@Model.Ingredients[i]</a>
-
-            </p>
-    }
+        <div class="col-md-5">            
+            <h3>Ingredients:</h3>           
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Available?
+                        </th>
+                        <th>
+                            Amount
+                        </th>
+                        <th>
+                            Add/Remove
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Ingredients.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @if (Model.IngredAvail[i] == true)
+                                {
+                                    <img src="~/images/yes.png" />
+                                }
+                                else
+                                {
+                                    <img src="~/images/no.png" />
+                                }
+                            </td>
+                            <td>
+                                @if (i < Model.Measurements.Count)
+                                {
+                                    @Model.Measurements[i]
+                                }
+                                <a asp-action="IngredientInfo" asp-controller="Ingredient" asp-route-name="@Model.Ingredients[i]">@Model.Ingredients[i]</a>
+                            </td>
+                            <td>
+                                @if (Model.IngredAvail[i] == true)
+                                {
+                                   <input type="submit" value="Remove from Cabinet" class="btn btn-primary" asp-controller="Ingredient"asp-action="RemoveOneIngredient" asp-route-name="@Model.Ingredients[i]" />
+                                }
+                                else
+                                {
+                                    <input type="button" value="Add to Cabinet" class="btn btn-primary" onclick="location.href='@Url.Action("RegisterOneIngredient","Ingredient", Model.Ingredients[i].ToString())'" />
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
     <hr />
     <h3>Instructions:</h3>
     <p>@Model.Instructions</p>
-
-    </div>
-    @*<hr />
-    <dl class="row">
-    </dl>
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>*@
-
+@*<hr />
+        <dl class="row">
+        </dl>
+    </div>
+    <div>
+        @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+        <a asp-action="Index">Back to List</a>
+    </div>*@
