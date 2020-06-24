@@ -53,6 +53,12 @@ namespace TheLiquorCabinet.Controllers
         {
             string[] ingredients = (string[])TempData["Cabinet"];
             CabinetSearchViewModel drinks = await GetDrinksByCabinet(ingredients.ToList());
+            double.TryParse(HttpContext.Request.Cookies["Age"], out double age);
+            if (age < 21)
+            {
+                drinks.CanMake = drinks.CanMake.Where(e => !e.IsAlcoholic).ToList();
+                drinks.MissingOne = drinks.MissingOne.Where(e => !e.IsAlcoholic).ToList();
+            }
             return View("CabinetDrinkListView", drinks);
         }
         public async Task<List<Drink>> GetDrinks(List<string> search)
