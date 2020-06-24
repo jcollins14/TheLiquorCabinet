@@ -88,7 +88,6 @@ namespace TheLiquorCabinet.Controllers
         {
             var response = await _client.GetStringAsync(_apiKey + "/random.php");
             Drink result = new Drink(response);
-
             return RedirectToAction("GetDrink", "Drink", result);
         }
         
