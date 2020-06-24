@@ -196,6 +196,7 @@ namespace TheLiquorCabinet.Controllers
         public async Task<CabinetSearchViewModel> GetDrinksByCabinet(List<string> ings)
         {
             ings = ings.ConvertAll(e => e.ToLower());
+            ings = ParseGenerics(ings);
             CabinetSearchViewModel result = new CabinetSearchViewModel();
             List<string> canMake = new List<string>();
             List<string> missingOne = new List<string>();
@@ -230,7 +231,7 @@ namespace TheLiquorCabinet.Controllers
             //    cabinet.Add(item);
             //}
 
-            cabinet = ParseGenerics(cabinet);
+            //cabinet = ParseGenerics(cabinet);
             int check = drinkIngs.Except(cabinet).Count();
             return check;
         }
