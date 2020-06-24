@@ -68,18 +68,18 @@ namespace TheLiquorCabinet.Controllers
             {
                 return RedirectToAction("HomeNA");
             }
-        var client = new HttpClient
-        {
-            BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/")
-        };
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/")
+            };
         //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
-        var response = await client.GetStringAsync("1/random.php");
-        Drink result = new Drink(response);
-        HomeViewModel hvm = new HomeViewModel();
-        hvm.IngredientList = await GetAllIngredients();
-        hvm.Drink = result;
-        hvm.DrinksIndex = _context.DrinkDb.ToList();
-        ViewBag.Username = HttpContext.Request.Cookies["User"];
+            var response = await client.GetStringAsync("1/random.php");
+            Drink result = new Drink(response);
+            HomeViewModel hvm = new HomeViewModel();
+            hvm.IngredientList = await GetAllIngredients();
+            hvm.Drink = result;
+            hvm.DrinksIndex = _context.DrinkDb.ToList();
+            ViewBag.Username = HttpContext.Request.Cookies["User"];
             return View(hvm);
         }
 
@@ -88,7 +88,6 @@ namespace TheLiquorCabinet.Controllers
         {
             var response = await _client.GetStringAsync(_apiKey + "/random.php");
             Drink result = new Drink(response);
-
             return RedirectToAction("GetDrink", "Drink", result);
         }
         
@@ -103,6 +102,7 @@ namespace TheLiquorCabinet.Controllers
             hvm.DrinksNA = await DrinkFilterByNA();
             hvm.DrinksIndex = _context.DrinkDb.ToList();
             hvm.DbIngreds = _context.IngredDb.ToList();
+            ViewBag.Username = HttpContext.Request.Cookies["User"];
             return View(hvm);
         }
       
