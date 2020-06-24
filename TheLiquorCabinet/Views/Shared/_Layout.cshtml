@@ -39,30 +39,28 @@
                         <ul class="navbar-nav flex-grow-1">
                             @if (Html.Raw(httpContextAccessor.HttpContext.Request.Cookies["UserID"]).ToString() != "")
                             {
-                                <li class="nav-item">
+                                <li>
                                     @if (int.Parse(Html.Raw(httpContextAccessor.HttpContext.Request.Cookies["UserID"]).ToString()) > 0)
                                     {
-                                        <p class="nav-link text-white-50">@Html.Raw(httpContextAccessor.HttpContext.Request.Cookies["User"]).ToString()</p>
+                                        <a class="nav-link text-white-50">@Html.Raw(httpContextAccessor.HttpContext.Request.Cookies["User"]).ToString()</a>
                                     }
                                     else
                                     {
                                         <a class="nav-link text-white-50" asp-area="" asp-controller="User" asp-action="Login">Login</a>
                                     }
                                 </li>
-                                <li class="nav-item">
+                                <li>
                                     @if (int.Parse(Html.Raw(httpContextAccessor.HttpContext.Request.Cookies["UserID"]).ToString()) <= 0)
                                     {
                                         <a class="nav-link text-white-50" asp-area="" asp-controller="User" asp-action="Register">Register</a>
                                     }
                                 </li>
-                                <li class="nav-item">
+                                <li>
                                     @if (int.Parse(Html.Raw(httpContextAccessor.HttpContext.Request.Cookies["UserID"]).ToString()) > 0)
                                     {
-
                                         <a class="nav-link text-white-50" asp-area="" asp-controller="User" asp-action="LogOut">Log Out</a>
-
                                     }
-                                    </li>
+                                </li>
                                 }
                              else
                                 {
