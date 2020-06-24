@@ -1,13 +1,15 @@
 ﻿.alcContainer {
     overflow: hidden;
+    color: white;
+    position: center;
 }
 
 .filterDiv {
     float: left;
-    background-color: #2196F3;
+    background-color: dimgray;
     width: 100px;
     height: 100px;
-    color: black;
+    color: white;
     line-height: normal;
     text-align: center;
     align-items: center;
@@ -62,4 +64,13 @@
     color: white;
     top: 0px;
     right: -45px;
+}
+.cabinet-image {
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+    background-image: url("Images/Cabinet2.jpg"); /* The image used */
+    height: 800px; /* You must set a specified height */
+    background-position: center; /* Center the image */
+    background-repeat: repeat; /* Do not repeat the image */
+    background-size: auto; /* Resize the background image to cover the entire container */
 }
