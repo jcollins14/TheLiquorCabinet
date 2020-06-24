@@ -23,9 +23,7 @@
     <div class="text-center">
         <h2>@ViewBag.Username's Cabinet</h2>
         <br />
-        <img src="~/css/Images/Cabinet2.jpg" style="-webkit-filter: grayscale(100%); filter: grayscale(100%);" />
     </div>
-    <br />
     <div class="row">
         <div class="col-md-6">
             <h5>Search for ingredients to add to your cabinet:</h5>
@@ -62,7 +60,7 @@
             <button class="btn alcoholActive" onclick="alcoholSelection('all')">Show all</button>
             <button class="btn" onclick="alcoholSelection('Yes')">Alcohol</button>
         </div>
-        <div class="alcContainer">
+        <div class="alcContainer cabinet-image">
             @foreach (var item in Model.CabinetList)
             {
                 <div class="alcoholDiv @item.Alcohol">
@@ -78,6 +76,7 @@
             }
         </div>
     </div>
+    <br/>
 
 }
 <script>

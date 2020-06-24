@@ -28,6 +28,5 @@ namespace TheLiquorCabinet.Models
                 this.Name.Add(item["strDrink"].ToString());
             }
         }
-
     }
 }
