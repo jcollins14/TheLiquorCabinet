@@ -11,7 +11,15 @@
             <img src="@Url.Content(Model.PictureLink)" height="350 " width="350" />
         </div>
         <div class="col-md-5">
-            <h3 style="text-align:left">Ingredients:</h3>
+            @if (loggedIn)
+            {
+                <h3 style="text-align:center">Ingredients:</h3>
+            }
+            else
+            {
+                <h3 style="text-align:left">Ingredients:</h3>
+            }
+
             <table>
                 <thead>
                     <tr>
@@ -19,12 +27,15 @@
                         <th>
                             @if (loggedIn)
                             {
-                                <p>Available?</p>
+                                <p>In Cabinet?</p>
                             }
                         </th>
 
                         <th>
-                            <p>Amount</p>
+                            @if (loggedIn)
+                            {
+                                <p>Amount</p>
+                            }
                         </th>
 
                         <th>
@@ -93,11 +104,3 @@
     <h3>Instructions:</h3>
     <p>@Model.Instructions</p>
 </div>
-@*<hr />
-        <dl class="row">
-        </dl>
-    </div>
-    <div>
-        @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-        <a asp-action="Index">Back to List</a>
-    </div>*@

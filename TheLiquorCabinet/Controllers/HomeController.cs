@@ -100,9 +100,11 @@ namespace TheLiquorCabinet.Controllers
             hvm.IngredientList = await GetAllIngredients();
             hvm.Drink = result;
             hvm.DrinksNA = await DrinkFilterByNA();
+
             hvm.DrinksIndex = _context.DrinkDb.ToList();
             hvm.DbIngreds = _context.IngredDb.ToList();
             ViewBag.Username = HttpContext.Request.Cookies["User"];
+
             return View(hvm);
         }
       

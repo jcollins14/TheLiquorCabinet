@@ -10,8 +10,7 @@
 
 <div class="text-center">
 
-   
-
+   <p class="text-warning">Results are filtered to show only non-Alcoholic drinks and ingredients.</p>
     <div class="row">
 
         <div class="col-md-3">
@@ -50,10 +49,7 @@
                     {
                     <option value="@Model.DrinksNA.Name[i]">@Model.DrinksNA.Name[i]</option>
                     }
-                    @*@foreach (var drink in Model.DrinksNA.Name)
-                    {
-                        <option value="@drink.Name ">@</option>
-                    }*@
+                   
                 </select>
                 <button asp-action="DrinkNameSearch" asp-controller="Drink" asp-route-names="names"
                         class="btn btn-primary" type="submit">
