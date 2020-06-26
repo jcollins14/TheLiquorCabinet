@@ -15,6 +15,8 @@
 
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 
+    <PackageReference Include="RestSharp" Version="106.11.4" />
+
     <PackageReference Include="Select2.js" Version="4.0.13" />
 
   </ItemGroup>

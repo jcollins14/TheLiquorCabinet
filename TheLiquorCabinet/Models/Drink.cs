@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -24,6 +25,8 @@ namespace TheLiquorCabinet.Models
         public string PictureLink { get; set; }
         public List<string> Ingredients { get; set; }
         public List<string> Measurements { get; set; }
+        [NotMapped]
+        public List<bool> IngredAvail { get; set; }
         public string DateModified { get; set; }
 
         public Drink(string APItext)
@@ -63,6 +66,7 @@ namespace TheLiquorCabinet.Models
                 }
             }
             this.DateModified = (string)parse["drinks"][0]["dateModified"];
+            this.IngredAvail = new List<bool>();
         }
     }
 }

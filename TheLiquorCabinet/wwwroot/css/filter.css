@@ -1,0 +1,76 @@
+﻿.alcContainer {
+    overflow: hidden;
+    color: white;
+    position: center;
+}
+
+.filterDiv {
+    float: left;
+    background-color: dimgray;
+    width: 100px;
+    height: 100px;
+    color: white;
+    line-height: normal;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin: 2px;
+    display: none; /* Hidden by default */
+}
+.alcoholDiv {
+    display: none; /* Hidden by default */
+}
+
+/* The "show" class is added to the filtered elements */
+.show {
+    display: block;
+}
+.center-text {
+    display: flex;
+    width: 50%;
+    height: 50%;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Style the buttons */
+.btn {
+    border: none;
+    outline: none;
+    padding: 12px 16px;
+    cursor: pointer;
+}
+
+    /* Add a light grey background on mouse-over */
+    .btn:hover {
+        background-color: #ddd;
+    }
+
+    /* Add a dark background to the active button */
+    .btn.active {
+        background-color: #666;
+        color: white;
+    }
+    .btn.alcoholActive {
+        background-color: #666;
+        color: white;
+    }
+
+
+#x {
+    position: relative;
+    background-color: #1b6ec2;
+    color: white;
+    top: 0px;
+    right: -45px;
+}
+.cabinet-image {
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+    background-image: url("Images/Cabinet2.jpg"); /* The image used */
+    height: 800px; /* You must set a specified height */
+    background-position: center; /* Center the image */
+    background-repeat: repeat; /* Do not repeat the image */
+    background-size: auto; /* Resize the background image to cover the entire container */
+}

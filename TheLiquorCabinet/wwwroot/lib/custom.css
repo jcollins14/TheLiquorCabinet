@@ -212,6 +212,7 @@ img {
     border-style: none;
 }
 
+
 svg {
     overflow: hidden;
     vertical-align: middle;
@@ -374,6 +375,7 @@ h1, h2, h3, h4, h5, h6,
     margin-bottom: 0.5rem;
     font-weight: 500;
     line-height: 1.2;
+  
 }
 
 h1, .h1 {
@@ -4760,7 +4762,7 @@ input[type="button"].btn-block {
 .nav-link {
     display: block;
     padding: 0.5rem 1rem;
-    font-size: 15px;
+    font-size: 18px;
 }
 
     .nav-link:hover, .nav-link:focus {
@@ -11923,4 +11925,3 @@ label,
 .modal-header, .modal-footer {
     background-color: rgba(255, 255, 255, 0.075);
 }
-

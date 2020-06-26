@@ -5,7 +5,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
+using RestSharp;
 using TheLiquorCabinet.Models;
 
 namespace TheLiquorCabinet.Controllers
@@ -28,7 +30,23 @@ namespace TheLiquorCabinet.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Date = DateManiupulation(DateTime.Now);
             return View();
+        }
+
+        public string DateManiupulation(DateTime manip)
+        {
+            string[] split = manip.ToString("d").Split('/');
+            if (split[0].Length == 1)
+            {
+                split[0] = split[0].Insert(0, "0");
+            }
+            if (split[1].Length == 1)
+            {
+                split[1] = split[1].Insert(0, "0");
+            }
+            string date = split[2] + '-' + split[0] + '-' + split[1];
+            return date;
         }
 
         [HttpPost]
@@ -37,31 +55,32 @@ namespace TheLiquorCabinet.Controllers
             var currentDate = DateTime.Now;
             TimeSpan age = currentDate - dateOfBirth;
             double years = age.TotalDays / 365.25;
-
-            if (years < 21.00)
-            {
-                return RedirectToAction("HomeNA");
-            }
-            else
-            {
-                return RedirectToAction("Home");
-            }
+            string birthday = DateManiupulation(dateOfBirth);
+            HttpContext.Response.Cookies.Append("DoB", birthday);
+            HttpContext.Response.Cookies.Append("Age", years.ToString());
+            return RedirectToAction("Home");
         }
             
         public async Task<IActionResult> Home()
         {
-        var client = new HttpClient
-        {
-            BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/")
-        };
+            double.TryParse(HttpContext.Request.Cookies["Age"], out double age);
+            if (age < 21)
+            {
+                return RedirectToAction("HomeNA");
+            }
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri("https://www.thecocktaildb.com/api/json/v2/")
+            };
         //client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; GrandCircus/1.0)");
-        var response = await client.GetStringAsync("1/random.php");
-        Drink result = new Drink(response);
-        HomeViewModel hvm = new HomeViewModel();
-        hvm.IngredientList = await GetAllIngredients();
-        hvm.Drink = result;
-        hvm.DrinksIndex = _context.DrinkDb.ToList();
-        return View(hvm);
+            var response = await client.GetStringAsync("1/random.php");
+            Drink result = new Drink(response);
+            HomeViewModel hvm = new HomeViewModel();
+            hvm.IngredientList = await GetAllIngredients();
+            hvm.Drink = result;
+            hvm.DrinksIndex = _context.DrinkDb.ToList();
+            ViewBag.Username = HttpContext.Request.Cookies["User"];
+            return View(hvm);
         }
 
         //Returns a random drink from thecocktaildb.com
@@ -69,7 +88,6 @@ namespace TheLiquorCabinet.Controllers
         {
             var response = await _client.GetStringAsync(_apiKey + "/random.php");
             Drink result = new Drink(response);
-
             return RedirectToAction("GetDrink", "Drink", result);
         }
         
@@ -81,8 +99,22 @@ namespace TheLiquorCabinet.Controllers
             HomeViewModel hvm = new HomeViewModel();
             hvm.IngredientList = await GetAllIngredients();
             hvm.Drink = result;
+            hvm.DrinksNA = await DrinkFilterByNA();
+
             hvm.DrinksIndex = _context.DrinkDb.ToList();
+            hvm.DbIngreds = _context.IngredDb.ToList();
+            ViewBag.Username = HttpContext.Request.Cookies["User"];
+
             return View(hvm);
+        }
+      
+        public async Task<DrinkListSearch> DrinkFilterByNA()
+        {
+           
+            DrinkListSearch searchResult = new DrinkListSearch(await _client.GetStringAsync(_apiKey + "/filter.php?a=Non_Alcoholic"));
+
+            return searchResult;
+
         }
 
         //Returns a random non-alcoholic drink from thecocktaildb.com
@@ -94,7 +126,7 @@ namespace TheLiquorCabinet.Controllers
             Drink result = new Drink(await _client.GetStringAsync(_apiKey + "/lookup.php?i=" + id));
             return result;
         }
-        
+
 
         public async Task<IActionResult> FeelingLuckyNA()
         {

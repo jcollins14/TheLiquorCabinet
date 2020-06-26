@@ -1,0 +1,11 @@
+﻿@{
+    ViewData["Title"] = "Register Error";
+}
+
+@{
+}
+<h1>Error</h1>
+<hr />
+<p>This username has already been taken.</p>
+<br />
+<input type="button" value="Click here to return to register again" class="btn btn-primary" onclick="location.href='@Url.Action("Register","User")'" />
