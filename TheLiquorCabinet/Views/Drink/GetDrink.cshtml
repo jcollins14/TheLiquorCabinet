@@ -44,51 +44,57 @@
                                 <p>Add/Remove</p>
                             }
                         </th>
-
                     </tr>
                 </thead>
                 <tbody>
                     @for (int i = 0; i < Model.Ingredients.Count; i++)
                     {
-                        <tr>
-
-                            <td>
-                                @if (loggedIn)
-                                {
-                                    @if (Model.IngredAvail[i] == true)
-                                    {
-                                        <img src="~/images/yes.png" />
-                                    }
-                                    else
-                                    {
-                                        <img src="~/images/no.png" />
-                                    }
+                        if (Model.Ingredients[i] == "" || Model.Ingredients[i] == null)
+                        {
+                            continue;
                                 }
-                            </td>
+                        else
+                        {
 
-                            <td>
-                                @if (i < Model.Measurements.Count)
-                                {
-                                    @Model.Measurements[i]
-                                }
-                                <a asp-action="IngredientInfo" asp-controller="Ingredient" asp-route-name="@Model.Ingredients[i]">@Model.Ingredients[i]</a>
-                            </td>
+                            <tr>
 
-                            <td>
-                                @if (loggedIn)
-                                {
-                                    @if (Model.IngredAvail[i] == true)
+                                <td>
+                                    @if (loggedIn)
                                     {
-                                        <a type="submit" value="Remove from Cabinet" class="btn btn-primary" asp-controller="Ingredient" asp-action="RemoveOneIngredient" asp-route-ingred="@Model.Ingredients[i]">Remove From Cabinet</a>
+                                        @if (Model.IngredAvail[i] == true)
+                                        {
+                                            <img src="~/images/yes.png" />
+                                        }
+                                        else
+                                        {
+                                            <img src="~/images/no.png" />
+                                        }
                                     }
-                                    else
-                                    {
-                                        <a type="submit" value="Add to Cabinet" class="btn btn-primary" asp-controller="Ingredient" asp-action="RegisterOneIngredient" asp-route-ingred="@Model.Ingredients[i]">Add to Cabinet</a>
-                                    }
-                                }
-                            </td>
+                                </td>
 
-                        </tr>
+                                <td>
+                                    @if (i < Model.Measurements.Count)
+                                    {
+                                        @Model.Measurements[i]
+                                    }
+                                    <a asp-action="IngredientInfo" asp-controller="Ingredient" asp-route-name="@Model.Ingredients[i]">@Model.Ingredients[i]</a>
+                                </td>
+
+                                <td>
+                                    @if (loggedIn)
+                                    {
+                                        @if (Model.IngredAvail[i] == true)
+                                        {
+                                            <a type="submit" value="Remove from Cabinet" class="btn btn-primary" asp-controller="Ingredient" asp-action="RemoveOneIngredient" asp-route-ingred="@Model.Ingredients[i]">Remove From Cabinet</a>
+                                        }
+                                        else
+                                        {
+                                            <a type="submit" value="Add to Cabinet" class="btn btn-primary" asp-controller="Ingredient" asp-action="RegisterOneIngredient" asp-route-ingred="@Model.Ingredients[i]">Add to Cabinet</a>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
                     }
                 </tbody>
             </table>

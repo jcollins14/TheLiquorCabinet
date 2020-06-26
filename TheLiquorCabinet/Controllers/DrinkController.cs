@@ -53,6 +53,12 @@ namespace TheLiquorCabinet.Controllers
         {
             string[] ingredients = (string[])TempData["Cabinet"];
             CabinetSearchViewModel drinks = await GetDrinksByCabinet(ingredients.ToList());
+            double.TryParse(HttpContext.Request.Cookies["Age"], out double age);
+            if (age < 21)
+            {
+                drinks.CanMake = drinks.CanMake.Where(e => !e.IsAlcoholic).ToList();
+                drinks.MissingOne = drinks.MissingOne.Where(e => !e.IsAlcoholic).ToList();
+            }
             return View("CabinetDrinkListView", drinks);
         }
         public async Task<List<Drink>> GetDrinks(List<string> search)
@@ -199,6 +205,7 @@ namespace TheLiquorCabinet.Controllers
         public async Task<CabinetSearchViewModel> GetDrinksByCabinet(List<string> ings)
         {
             ings = ings.ConvertAll(e => e.ToLower());
+            ings = ParseGenerics(ings);
             CabinetSearchViewModel result = new CabinetSearchViewModel();
             List<string> canMake = new List<string>();
             List<string> missingOne = new List<string>();
@@ -233,7 +240,7 @@ namespace TheLiquorCabinet.Controllers
             //    cabinet.Add(item);
             //}
 
-            cabinet = ParseGenerics(cabinet);
+            //cabinet = ParseGenerics(cabinet);
             int check = drinkIngs.Except(cabinet).Count();
             return check;
         }

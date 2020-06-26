@@ -37,8 +37,29 @@ namespace TheLiquorCabinet.Controllers
         public IActionResult Register()
         {
             string DoB = HttpContext.Request.Cookies["DoB"];
-            ViewBag.Date = DoB;
+            if (DoB == null)
+            {
+                ViewBag.Date = DateManiupulation(DateTime.Now);
+            }
+            else
+            {
+                ViewBag.Date = DoB;
+            }
             return View();
+        }
+        public string DateManiupulation(DateTime manip)
+        {
+            string[] split = manip.ToString("d").Split('/');
+            if (split[0].Length == 1)
+            {
+                split[0] = split[0].Insert(0, "0");
+            }
+            if (split[1].Length == 1)
+            {
+                split[1] = split[1].Insert(0, "0");
+            }
+            string date = split[2] + '-' + split[0] + '-' + split[1];
+            return date;
         }
 
         //Send username to Azure along with DOB from cookie
@@ -54,6 +75,10 @@ namespace TheLiquorCabinet.Controllers
             if (_context.Users.Where(x => x.Username == name).FirstOrDefault() != null)
             {
                 return RedirectToAction("RegisterError");
+            }
+            if(name == null)
+            {
+                return RedirectToAction("Register");
             }
             else
             {
@@ -155,9 +180,18 @@ namespace TheLiquorCabinet.Controllers
             }
             cabinetModel.CabinetList = cabinetModel.CabinetList.OrderBy(e => e.Name).ToList();
             //code below takes id list of ingredients in database and filters out those already in the users cabinet.
+            double.TryParse(HttpContext.Request.Cookies["Age"], out double age);
+            
             var allIng = _context.IngredDb.Select(e => e.Id).ToList();
             var notInCabinet = allIng.Except(cabinetModel.CabinetList.Select(e => e.Id)).ToList();
-            cabinetModel.AllIngredients = _context.IngredDb.Where(e => notInCabinet.Contains(e.Id)).Select(e => e.Name).ToList();
+            if (age > 21 )
+            {
+                cabinetModel.AllIngredients = _context.IngredDb.Where(e => notInCabinet.Contains(e.Id)).Select(e => e.Name).ToList();
+            }
+            else
+            {
+                cabinetModel.AllIngredients = _context.IngredDb.Where(e => notInCabinet.Contains(e.Id) && e.Alcohol != "Yes").Select(e => e.Name).ToList();
+            }
             cabinetModel.AllIngredients.Sort();
             TempData.Clear();
             TempData.Add("Cabinet", cabinetModel.CabinetList.Select(e => e.Name).ToList());
